@@ -6,6 +6,7 @@ CFLAGS = -Wall -Wextra -Werror
 LFLAGS = -framework OpenGL -framework AppKit
 MLX = minilibx_macos/libmlx.a 
 LIBFT = libft/libft.a
+INC = -I inc/
 OBJ = $(SRC:.c=.o)
 SRC = main.c
 
@@ -16,8 +17,8 @@ Doom_Nukem : $(LIBFT) $(MLX) $(OBJ)
 	@$(CC) -o $@ $^ $(LFLAGS)
 	@echo "\x1b[32;01m$(NAME) SUCCESSFULLY CREATED !\x1b[32;00m"
 
-%.o %.c :
-	@$(CC) -o $@ -c $< $(CFLAGS)
+%.o: %.c
+	@$(CC) -o $@ -c $< $(CFLAGS) $(INC)
 	@echo "\x1b[32;01m.\x1b[32;00m\c"
 
 

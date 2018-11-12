@@ -1,6 +1,6 @@
 
 
-NAME = Doom_Nukem
+NAME = doom-nukem
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 LFLAGS = -framework OpenGL -framework AppKit

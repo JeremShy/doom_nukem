@@ -1,5 +1,3 @@
-
-
 NAME = doom-nukem
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
@@ -12,7 +10,7 @@ SRC = main.c
 
 all : $(NAME)
 
-Doom_Nukem : $(LIBFT) $(MLX) $(OBJ)
+$(NAME) : $(LIBFT) $(MLX) $(OBJ)
 	@echo ""
 	@$(CC) -o $@ $^ $(LFLAGS)
 	@echo "\x1b[32;01m$(NAME) SUCCESSFULLY CREATED !\x1b[32;00m"

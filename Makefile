@@ -1,15 +1,21 @@
-SRC_GAME_NAME = main.c
+SRC_EDITOR_NAME = main.c \
+					loop_hook.c \
+					mouse_hook.c \
+					rectangle.c
 
-SRC_EDITOR_NAME = main.c
+SRC_GAME_NAME = main.c
 
 NAME_GAME = doom-nukem
 NAME_EDITOR = editor
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror
-LFLAGS = -framework OpenGL -framework AppKit
+
+# CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra
+
 MLX = minilibx_macos/libmlx.a 
 LIBFT = libft/libft.a
+LFLAGS = -framework OpenGL -framework AppKit $(LIBFT) $(MLX)
 INC = -I libft/ -I includes/
 
 OBJ_GAME_PATH = obj/game/

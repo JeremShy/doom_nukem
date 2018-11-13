@@ -1,25 +1,25 @@
 #include <editor.h>
 
-int		min(int a, int b)
+uint32_t		min(uint32_t a, uint32_t b)
 {
 	return (a < b ? a : b);
 }
 
-int		max(int a, int b)
+uint32_t		max(uint32_t a, uint32_t b)
 {
 	return (a > b ? a : b);
 }
 
 void	draw_line(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color)
 {
-	int x;
-	int y;
+	uint32_t x;
+	uint32_t y;
 
-	y = fmin(p1.y, p2.y);
-	x = fmin(p1.x, p2.x);
+	y = min(p1.y, p2.y);
+	x = min(p1.x, p2.x);
 	if (p1.x == p2.x)
 	{
-		while (y <= (int)fmax(p1.y, p2.y))
+		while (y <= (uint32_t)fmax(p1.y, p2.y))
 		{
 			put_pixel_to_image(img, x, y, color);
 			y++;

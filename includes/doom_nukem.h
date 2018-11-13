@@ -14,8 +14,8 @@ typedef struct	s_vec2 {
 }				t_vec2;
 
 typedef struct	s_ivec2 {
-	float	x;
-	float	y;
+	int	x;
+	int	y;
 }				t_ivec2;
 
 typedef struct	s_vec3 {

@@ -49,9 +49,21 @@ int main()
 	mlx_loop_hook(data.mlx.mlx_ptr, loop_hook, &data);
 	mlx_mouse_hook(data.mlx.win_ptr, mouse_hook, &data);
 
-	data.nb_params = 1;
+	data.nb_elements = 1;
 
-	fill_img(&data.imgs[0], get_color_code(255, 255, 0, 0));
+	fill_img(&data.imgs[0], get_color_code(50, 50, 50, 0));
+
+	t_ivec2 a1 = {1216, 483};
+	t_ivec2 a2 = {1299, 608};
+	t_ivec2 a3 = {1125, 682};
+
+	printf("%d\n", 
+		is_intersect(a1, a2, a2, a3));
+
+	put_pixel_to_image(&data.imgs[0], a1.x, a1.y, get_color_code(0, 255, 0, 0));
+	put_pixel_to_image(&data.imgs[0], a2.x, a2.y, get_color_code(255, 0, 255, 0));
+	put_pixel_to_image(&data.imgs[0], a3.x, a3.y, get_color_code(255, 255, 255, 0));
+
 
 	mlx_put_image_to_window(data.mlx.mlx_ptr, data.mlx.win_ptr, data.imgs[0].ptr, 0, 0);
 

@@ -4,7 +4,8 @@ SRC_EDITOR_NAME =	main.c \
 					polygon.c \
 					mlx_img_func.c \
 					bresenham.c \
-					bresenham_quadrants.c
+					bresenham_quadrants.c \
+					segment.c
 
 SRC_GAME_NAME = main.c
 

@@ -16,6 +16,12 @@
 struct			s_data;
 struct			s_polygon;
 
+typedef enum	e_wall
+{
+	SOLID,
+	PORTAL
+}				t_wall;
+
 typedef struct	s_mlx
 {
 	void	*mlx_ptr;
@@ -34,9 +40,12 @@ typedef struct	s_img
 
 typedef struct	s_polygon
 {
-	uint8_t	enabled;
-	uint32_t	id;
-	t_ivec2		edges[MAX_POLYGON_EDGES];
+	uint32_t		id;
+	t_wall			type;
+	uint8_t			clickable;
+	uint8_t			existing;
+	uint32_t		num_edges;
+	t_ivec2			edges[MAX_POLYGON_EDGES];
 	on_click_func	func;
 }				t_polygon;
 

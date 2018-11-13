@@ -70,10 +70,12 @@ SRC = ft_atoi.c \
 
 OBJ = $(SRC:.c=.o)
 
+IFLAGS = -I.
+
 all : $(NAME)
 
 $(NAME) :
-	@gcc -Wall -Wextra -Werror -c $(SRC)
+	@gcc -Wall -Wextra -Werror -c $(SRC) $(IFLAGS)
 	@ar rc $(NAME) $(OBJ)
 	@ranlib $(NAME)
 

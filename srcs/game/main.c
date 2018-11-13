@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <doom_nukem.h>
 
 int main()
 {

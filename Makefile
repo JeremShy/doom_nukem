@@ -10,7 +10,7 @@ CFLAGS = -Wall -Wextra -Werror
 LFLAGS = -framework OpenGL -framework AppKit
 MLX = minilibx_macos/libmlx.a 
 LIBFT = libft/libft.a
-INC = -I libft/
+INC = -I libft/ -I includes/
 
 OBJ_GAME_PATH = obj/game/
 OBJ_EDITOR_PATH = obj/editor/
@@ -31,30 +31,31 @@ all : $(NAME_GAME) $(NAME_EDITOR)
 
 $(NAME_GAME) : $(LIBFT) $(MLX) $(OBJ_GAME_PATH) $(OBJ_GAME)
 	@echo ""
-	@$(CC) -o $(NAME_GAME) $(OBJ_GAME) $(LFLAGS)
-	@echo "\x1b[32;01m$(NAME_GAME) SUCCESSFULLY CREATED !\x1b[32;00m"
+	@$(CC) $(OBJ_GAME) $(LFLAGS) -o $@ 
+	@echo "\x1b[32;01m$@ SUCCESSFULLY CREATED !\x1b[32;00m"
 
 $(NAME_EDITOR) : $(LIBFT) $(MLX) $(OBJ_EDITOR_PATH) $(OBJ_EDITOR)
 	@echo ""
-	@$(CC) -o $(NAME_EDITOR) $(OBJ_EDITOR) $(LFLAGS)
-	@echo "\x1b[32;01m$(NAME_EDITOR) SUCCESSFULLY CREATED !\x1b[32;00m"
+	@$(CC) $(OBJ_EDITOR) $(LFLAGS) -o $@ 
+	@echo "\x1b[32;01m$@ SUCCESSFULLY CREATED !\x1b[32;00m"
 
 $(OBJ_GAME_PATH):
-	mkdir -p $(OBJ_GAME_PATH)
+	@mkdir -p $@
 
 $(OBJ_EDITOR_PATH):
-	mkdir -p $(OBJ_EDITOR_PATH)
+	@mkdir -p $@
 
 
 $(OBJ_GAME_PATH)%.o: $(SRC_GAME_PATH)%.c
-	$(CC) $(CFLAGS) $(INC) -o $@ -c $<
+	@echo "\x1b[32;01m.\x1b[32;00m\c"
+	@$(CC) $(CFLAGS) $(INC) -o $@ -c $<
 
 $(OBJ_EDITOR_PATH)%.o: $(SRC_EDITOR_PATH)%.c
-	$(CC) $(CFLAGS) $(INC) -o $@ -c $<
+	@echo "\x1b[32;01m.\x1b[32;00m\c"
+	@$(CC) $(CFLAGS) $(INC) -o $@ -c $<
 
 $(LIBFT) :
 	@make -C libft/
-	@make -C minilibx_macos/
 	@echo "\033[32mLibrairies compiled\033[0m"
 
 $(MLX) :
@@ -72,6 +73,7 @@ fclean : clean
 	@make -C libft/ fclean
 	@rm -rf $(NAME_EDITOR)
 	@rm -rf $(NAME_GAME)
-	@echo "\033[32m$(NAME) deleted\033[0m"
+	@echo "\033[32m$(NAME_EDITOR) deleted\033[0m"
+	@echo "\033[32m$(NAME_GAME) deleted\033[0m"
 
 re : fclean all

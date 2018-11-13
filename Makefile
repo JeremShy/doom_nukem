@@ -6,7 +6,7 @@ CFLAGS = -Wall -Wextra -Werror
 LFLAGS = -framework OpenGL -framework AppKit
 MLX = minilibx_macos/libmlx.a 
 LIBFT = libft/libft.a
-INC = -I inc/
+INC = -I libft/
 OBJ = $(SRC:.c=.o)
 SRC = main.c
 

@@ -2,6 +2,7 @@
 
 /*
 ** Format de fichier des maps :
+** v0.1
 */
 
 typedef struct	s_vec2 {
@@ -17,6 +18,15 @@ typedef struct	s_vec3 {
 
 struct			s_texture
 {
+	uint16_t	id;
+	t_vec2		size;
+//	uint32_t		data[size.x * size.y]; // r,g,b,a
+};
+
+struct			s_audio
+{
+	uint16_t	id;
+	uint32_t	size;
 };
 
 struct	s_header {
@@ -30,13 +40,15 @@ struct	s_header {
 	uint16_t		sprites_number;
 
 	uint32_t		offset_walls;
+	uint32_t		offset_texture;
+	uint32_t		offset_audio;
 };
 
 struct		s_wall {
 			uint16_t	id;
 			t_vec2		point;
 			uint16_t	texture;
-			uint16_t	next_sector;
+			uint16_t	next_sector; // -1 if a portal
 };
 
 struct	s_sector {
@@ -60,15 +72,13 @@ struct	s_sector {
 	// uint16_t			walls[walls_number];
 };
 
-
+/*
 struct s_map {
-	int64_t			magic_number;
 	struct s_header	header;
 
-	struct s_sector	*sectors;
-/*
-** Liste des secteurs entrecoupe des walls de chaque secteurs.
-*/
-
-	struct s_wall	*walls;
+	struct s_sector	sectors[]; Liste des secteurs entrecoupe des walls de chaque secteurs.
+	struct s_wall	walls[]; Donnees des murs
+	struct s_texture texture[];
+	struct s_audio	audio[];
 };
+*/

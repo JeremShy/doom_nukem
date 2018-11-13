@@ -1,7 +1,10 @@
-SRC_EDITOR_NAME = main.c \
+SRC_EDITOR_NAME =	main.c \
 					loop_hook.c \
 					mouse_hook.c \
-					rectangle.c
+					polygon.c \
+					mlx_img_func.c \
+					bresenham.c \
+					bresenham_quadrants.c
 
 SRC_GAME_NAME = main.c
 
@@ -11,7 +14,7 @@ NAME_EDITOR = editor
 CC = gcc
 
 # CFLAGS = -Wall -Wextra -Werror
-CFLAGS = -Wall -Wextra
+CFLAGS = -Wall -Wextra -g
 
 MLX = minilibx_macos/libmlx.a 
 LIBFT = libft/libft.a
@@ -81,5 +84,8 @@ fclean : clean
 	@rm -rf $(NAME_GAME)
 	@echo "\033[32m$(NAME_EDITOR) deleted\033[0m"
 	@echo "\033[32m$(NAME_GAME) deleted\033[0m"
+
+fake_clean :
+	@rm -rf obj/
 
 re : fclean all

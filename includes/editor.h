@@ -6,10 +6,15 @@
 # define WIN_SIZE_X 1600
 # define WIN_SIZE_Y 900 // /!\ Can't modify
 
-# define MAX_RECTANGLE_NBR 4096
+# define IMAGE_TEST 0
+
+# define MAX_IMAGE (IMAGE_TEST + 1)
+
+# define MAX_POLYGON_NBR 4096
+# define MAX_POLYGON_EDGES 64
 
 struct			s_data;
-struct			s_rectangle;
+struct			s_polygon;
 
 typedef struct	s_mlx
 {
@@ -19,30 +24,49 @@ typedef struct	s_mlx
 
 typedef void (*on_click_func)(struct s_data *data, int id);
 
-typedef struct	s_rectangle
+typedef struct	s_img
+{
+	void		*ptr;
+	int			w;
+	int			h;
+	uint32_t	*addr;
+}				t_img;
+
+typedef struct	s_polygon
 {
 	uint8_t	enabled;
 	uint32_t	id;
-	t_vec2	bottom_left;
-	t_vec2	up_right;
+	t_ivec2		edges[MAX_POLYGON_EDGES];
 	on_click_func	func;
-}				t_rectangle;
+}				t_polygon;
 
 typedef struct	s_data
 {
 	t_mlx		mlx;
 
-	int			nb_params;
-	t_rectangle	params[MAX_RECTANGLE_NBR];
-}				t_data;
+	t_img		imgs[MAX_IMAGE];
 
+
+	int			nb_params;
+	t_polygon	params[MAX_POLYGON_NBR];
+}				t_data;
 
 
 int	loop_hook(t_data *data);
 int	mouse_hook(int button, int x,int y, t_data *data);
 
-void	rectangle_on_click(t_data *data, int id);
-int8_t	in_rectangle(int x, int y, t_rectangle rect);
+void	clicked_polygon(t_data *data, int id);
+int8_t	is_in_polygon(int x, int y, t_polygon rect);
 
+uint32_t	get_color_code(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+void	put_pixel_to_image(t_img *img, int x, int y, uint32_t color);
+void	fill_img(t_img *img, uint32_t color);
+
+
+void	bresenham_quadrant1(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
+void	bresenham_quadrant2(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
+void	bresenham_quadrant3(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
+void	bresenham_quadrant4(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
+void	draw_line(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
 
 #endif

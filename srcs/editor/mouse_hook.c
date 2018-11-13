@@ -9,7 +9,7 @@ static void	loop_rectangles(int button, int x,int y, t_data *data)
 	{
 		if (data->params[i].enabled)
 		{
-			if (in_rectangle(x, y, data->params[i]))
+			if (is_in_polygon(x, y, data->params[i]))
 			{
 				data->params[i].func(data, i);
 			}

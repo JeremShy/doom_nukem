@@ -1,0 +1,147 @@
+draw wall : 
+	start point :
+		x = 1087
+		y = 144
+	size of image :
+		w = 285
+		h = 110
+
+draw portal : 
+	start point :
+		x = 1087
+		y = 144
+	size of image :
+		w = 296
+		h = 110
+
+texture wall :
+	start point :
+		x = 1434
+		y = 162
+	size of image :
+		w = 54
+		h = 51
+
+sector:
+
+	celling texture:
+		start point :
+			x = 1439
+			y = 375
+		size of image :
+			w = 54
+			h = 51
+
+	floor texture:
+		start point :
+			x = 1439
+			y = 501
+		size of image :
+			w = 54
+			h = 51
+
+	up texture:
+		start point :
+			x = 1148
+			y = 631
+		size of image :
+			w = 54
+			h = 51
+
+	down texture:
+		start point :
+			x = 1298
+			y = 631
+		size of image :
+			w = 54
+			h = 51
+
+objects:
+
+	collectable texture:
+		start point :
+			x = 1449
+			y = 793
+		size of image :
+			w = 49
+			h = 49
+
+	scenary texture:
+		start point :
+			x = 1304
+			y = 793
+		size of image :
+			w = 49
+			h = 49
+
+	PNG texture:
+		start point :
+			x = 1458
+			y = 793
+		size of image :
+			w = 49
+			h = 49
+
+sector:
+	
+	number :
+		start point :
+			x = 1389
+			y = 301
+		size of image :
+			w = 20
+			h = 19
+
+	celling:
+		angle_y :
+			start point :
+				x = 1183
+				y = 380
+			size of image :
+				w = 23
+				h = 19
+		angle_x :
+			start point :
+				x = 1183
+				y = 406
+			size of image :
+				w = 23
+				h = 19
+		height:
+			start point :
+				x = 1308
+				y = 382
+			size of image :
+				w = 42
+				h = 36
+
+	floor:
+		angle_y :
+			start point :
+				x = 1183
+				y = 508
+			size of image :
+				w = 23
+				h = 19
+		angle_x :
+			start point :
+				x = 1183
+				y = 534
+			size of image :
+				w = 23
+				h = 19
+		height:
+			start point :
+				x = 1308
+				y = 508
+			size of image :
+				w = 42
+				h = 36
+
+	light:
+		start point :
+			x = 1454
+			y = 639
+		size of image :
+			w = 42
+			h = 36

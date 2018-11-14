@@ -8,6 +8,9 @@
 # include <stdint.h>
 # include <math.h>
 
+# define KEY_ESCAPE 53
+# define KEY_BACKQUOTE 50
+
 typedef struct	s_vec2 {
 	float	x;
 	float	y;

@@ -52,6 +52,7 @@ int main()
 	printf("in editor\n");
 	mlx_loop_hook(data.mlx.mlx_ptr, loop_hook, &data);
 	mlx_mouse_hook(data.mlx.win_ptr, mouse_hook, &data);
+	mlx_key_hook(data.mlx.win_ptr, key_hook, &data);
 
 	data.nb_elements = 1;
 

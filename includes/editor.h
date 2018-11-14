@@ -95,12 +95,14 @@ typedef struct	s_data
 	t_element	elements[MAX_ELEMENT_NBR];
 }				t_data;
 
+int		loop_hook(t_data *data);
+int		mouse_hook(int button, int x,int y, t_data *data);
+int		key_hook(int keycode, t_data *data);
 
-int	loop_hook(t_data *data);
-int	mouse_hook(int button, int x,int y, t_data *data);
+void		clicked_polygon(t_data *data, int id);
+int8_t		is_in_polygon(int x, int y, const t_element *rect);
+uint32_t	get_color_from_typewall(t_edge_type t);
 
-void	clicked_polygon(t_data *data, int id);
-int8_t	is_in_polygon(int x, int y, const t_element *rect);
 
 uint32_t	get_color_code(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 void	put_pixel_to_image(t_img *img, int x, int y, uint32_t color);

@@ -1,6 +1,7 @@
 SRC_EDITOR_NAME =	main.c \
 					loop_hook.c \
 					mouse_hook.c \
+					key_hook.c \
 					polygon.c \
 					mlx_img_func.c \
 					bresenham.c \

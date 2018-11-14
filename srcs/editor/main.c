@@ -35,7 +35,10 @@ static uint8_t	ft_init(t_data *data)
 	else if (!create_image(data, IMAGE_TEST, 1600, 900))
 		return (0);
 	else
+	{
+		data->input.id_current_element = -1;
 		return (1);
+	}
 	return (0);
 }
 
@@ -43,6 +46,7 @@ int main()
 {
 	t_data	data;
 
+	ft_bzero(&data, sizeof(t_data));
 	if (!ft_init(&data))
 		return (1);
 	printf("in editor\n");
@@ -51,21 +55,24 @@ int main()
 
 	data.nb_elements = 1;
 
-	fill_img(&data.imgs[0], get_color_code(50, 50, 50, 0));
+	fill_img(&data.imgs[IMAGE_TEST], get_color_code(50, 50, 50, 0));
 
-	t_ivec2 a1 = {1216, 483};
-	t_ivec2 a2 = {1299, 608};
-	t_ivec2 a3 = {1125, 682};
+	// {{261, 234}, {502, 233}} and {{337, 418}, {555, 73}}
 
-	printf("%d\n", 
-		is_intersect(a1, a2, a2, a3));
+	t_ivec2 p1 = {261, 234}; // rouge
+	t_ivec2 p2 = {502, 233}; // vert
+	t_ivec2 p3 = {337, 418}; // rose
+	t_ivec2 p4 = {555, 73}; // blanc
 
-	put_pixel_to_image(&data.imgs[0], a1.x, a1.y, get_color_code(0, 255, 0, 0));
-	put_pixel_to_image(&data.imgs[0], a2.x, a2.y, get_color_code(255, 0, 255, 0));
-	put_pixel_to_image(&data.imgs[0], a3.x, a3.y, get_color_code(255, 255, 255, 0));
+	put_pixel_to_image(&data.imgs[0], p1.x, p1.y, get_color_code(255, 0, 0, 0));
+	put_pixel_to_image(&data.imgs[0], p2.x, p2.y, get_color_code(0, 255, 0, 0));
+	put_pixel_to_image(&data.imgs[0], p3.x, p3.y, get_color_code(255, 0, 255, 0));
+	put_pixel_to_image(&data.imgs[0], p4.x, p4.y, get_color_code(255, 255, 255, 0));
+	printf("%d\n", is_intersect(p2, p1, p3, p4));
 
 
-	mlx_put_image_to_window(data.mlx.mlx_ptr, data.mlx.win_ptr, data.imgs[0].ptr, 0, 0);
+	mlx_put_image_to_window(data.mlx.mlx_ptr, data.mlx.win_ptr, data.imgs[IMAGE_TEST].ptr, 0, 0);
+
 
 	mlx_loop(data.mlx.mlx_ptr);
 	return (0);

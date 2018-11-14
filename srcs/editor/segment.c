@@ -23,6 +23,11 @@ void swap(int *a, int *b)
 	*b = tmp;
 }
 
+uint8_t	is_commun_point(t_ivec2 *a1, t_ivec2 *a2, t_ivec2 *b1, t_ivec2 *b2)
+{
+	return (is_equ_ivec2(a1, b1) || is_equ_ivec2(a1, b2) || is_equ_ivec2(a2, b1) || is_equ_ivec2(a2, b2));
+}
+
 uint8_t	is_intersect(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec2 b2)
 {
 	float ma;
@@ -31,6 +36,8 @@ uint8_t	is_intersect(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec2 b2)
 	float kb;
 	float x;
 
+	if (is_commun_point(&a1, &a2, &b1, &b2))
+		return (0);
 	if (a1.x == a2.x || b1.x == b2.x)
 	{
 		swap(&a1.x, &a1.y);

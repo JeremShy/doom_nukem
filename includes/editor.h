@@ -11,7 +11,7 @@
 # define MAX_IMAGE (IMAGE_TEST + 1)
 
 # define MAX_ELEMENT_NBR 4096
-# define MAX_POLYGON_EDGES 10
+# define MAX_POLYGON_EDGES 64
 
 struct			s_data;
 struct			s_element;
@@ -54,7 +54,7 @@ typedef struct	s_edge
 typedef struct	s_polygon
 {
 	uint32_t		nb_points;
-	uint8_t			finished;
+	int8_t			finished;
 
 	t_ivec2			points[MAX_POLYGON_EDGES];
 	t_edge			edges[MAX_POLYGON_EDGES];
@@ -68,7 +68,7 @@ typedef struct	s_element
 	t_elem_type		type;
 
 	uint8_t			printable;
-	uint8_t			id_texture;
+	uint16_t		id_texture;
 
 	uint8_t			clickable;
 	t_on_click_func	on_click_func;
@@ -78,8 +78,9 @@ typedef struct	s_element
 
 typedef struct	s_input
 {
-	uint16_t	id_texture;
-	t_edge_type	wall_type;
+	uint16_t		id_texture;
+	t_edge_type		wall_type;
+	int32_t			id_current_element;
 }				t_input;
 
 typedef struct	s_data
@@ -90,7 +91,7 @@ typedef struct	s_data
 
 	t_input		input;
 
-	int			nb_elements;
+	uint32_t	nb_elements;
 	t_element	elements[MAX_ELEMENT_NBR];
 }				t_data;
 
@@ -99,7 +100,7 @@ int	loop_hook(t_data *data);
 int	mouse_hook(int button, int x,int y, t_data *data);
 
 void	clicked_polygon(t_data *data, int id);
-int8_t	is_in_polygon(int x, int y, t_element rect);
+int8_t	is_in_polygon(int x, int y, const t_element *rect);
 
 uint32_t	get_color_code(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 void	put_pixel_to_image(t_img *img, int x, int y, uint32_t color);
@@ -112,8 +113,11 @@ void	bresenham_quadrant1(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
 void	bresenham_quadrant2(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
 void	bresenham_quadrant3(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
 void	bresenham_quadrant4(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
-void	draw_line(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
+void	draw_line(const t_ivec2 *p1, const t_ivec2 *p2, t_img *img, uint32_t color);
 
-t_polygon	draw_edge(t_data *data, t_ivec2 new_point);
+void		draw_edge(t_data *data, t_ivec2 new_point);
 uint8_t		is_intersect(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec2 b2);
+
+uint8_t		is_equ_ivec2(const t_ivec2 *p1, const t_ivec2 *p2);
+
 #endif

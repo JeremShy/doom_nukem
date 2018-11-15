@@ -8,7 +8,8 @@ SRC_EDITOR_NAME =	main.c \
 					bresenham_quadrants.c \
 					segment.c
 
-SRC_GAME_NAME = main.c
+SRC_GAME_NAME =		main.c \
+					print_memory.c
 
 NAME_GAME = doom-nukem
 NAME_EDITOR = editor

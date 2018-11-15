@@ -13,10 +13,12 @@ static int8_t	loop_elems(int button, int x,int y, t_data *data)
 		return (0);
 	while (i < data->nb_elements)
 	{
-		if (data->elements[i].enabled)
+		if (data->elements[i].enabled && data->elements[i].clickable)
 		{
-			if (is_in_polygon(x, y, &data->elements[i]))
+			printf("1\n");
+			if (is_in_polygon(x, y, &(data->elements[i].polygon)))
 			{
+				printf("2\n");
 				data->elements[i].on_click_func(data, i);
 				return (1);
 			}
@@ -64,12 +66,22 @@ int	mouse_hook(int button, int x,int y, t_data *data)
 	printf("paramters : {button : %d, {%d, %d}}\n", button, x, y);
 	if (x < 0 || y < 0 || x >= WIN_SIZE_X || y >= WIN_SIZE_Y)
 		return (0);
-	if (loop_elems(button, x, y, data))
-		return (0);
-	if (data->input.id_current_element == -1)
-		data->input.id_current_element = find_free_element(data);
-	draw_edge(data, (t_ivec2){x, y});
-	if (data->elements[data->input.id_current_element].polygon.finished)
-		data->input.id_current_element = -1;
+	if (data->input.input_mode == SELECTING)
+	{
+		if (loop_elems(button, x, y, data))
+			return (0);
+	}
+	else if (data->input.input_mode == DRAWING)
+	{
+		if (data->input.id_current_element == -1)
+			data->input.id_current_element = find_free_element(data);
+		draw_edge(data, (t_ivec2){x, y});
+		if (data->elements[data->input.id_current_element].polygon.finished)
+		{
+			data->elements[data->input.id_current_element].clickable = 1;
+			data->elements[data->input.id_current_element].on_click_func = print_click;
+			data->input.id_current_element = -1;
+		}
+	}
 	return (0);
 }

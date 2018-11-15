@@ -31,22 +31,34 @@ typedef struct	s_img
 	uint32_t	*addr;
 }				t_img;
 
-typedef enum	e_elem_type
+enum	e_elem_type
 {
 	WALL,
 	BUTTON
-}				t_elem_type;
+};
 
-typedef enum	e_edge_type
+enum	e_edge_type
 {
 	SOLID,
 	PORTAL,
 	UI
-}				t_edge_type;
+};
+
+enum	e_input_mode
+{
+	DRAWING,
+	SELECTING
+};
+
+typedef struct	s_intersection
+{
+	uint8_t		intersect;
+	t_ivec2		intersection_point;
+}				t_intersection;
 
 typedef struct	s_edge
 {
-	t_edge_type	type;
+	enum e_edge_type	type;
 
 	uint16_t	id_texture;
 }				t_edge;
@@ -65,7 +77,7 @@ typedef struct	s_element
 	uint8_t			enabled;
 	uint16_t		id;
 
-	t_elem_type		type;
+	enum e_elem_type	type;
 
 	uint8_t			printable;
 	uint16_t		id_texture;
@@ -78,9 +90,10 @@ typedef struct	s_element
 
 typedef struct	s_input
 {
-	uint16_t		id_texture;
-	t_edge_type		wall_type;
-	int32_t			id_current_element;
+	uint16_t			id_texture;
+	enum e_edge_type	wall_type;
+	int32_t				id_current_element;
+	enum e_input_mode	input_mode;
 }				t_input;
 
 typedef struct	s_data
@@ -100,8 +113,8 @@ int		mouse_hook(int button, int x,int y, t_data *data);
 int		key_hook(int keycode, t_data *data);
 
 void		clicked_polygon(t_data *data, int id);
-int8_t		is_in_polygon(int x, int y, const t_element *rect);
-uint32_t	get_color_from_typewall(t_edge_type t);
+int8_t		is_in_polygon(int x, int y, const t_polygon *poly);
+uint32_t	get_color_from_typewall(enum e_edge_type t);
 
 
 uint32_t	get_color_code(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
@@ -117,9 +130,13 @@ void	bresenham_quadrant3(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
 void	bresenham_quadrant4(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
 void	draw_line(const t_ivec2 *p1, const t_ivec2 *p2, t_img *img, uint32_t color);
 
-void		draw_edge(t_data *data, t_ivec2 new_point);
-uint8_t		is_intersect(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec2 b2);
+void			draw_edge(t_data *data, t_ivec2 new_point);
+t_intersection	is_intersect(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec2 b2);
+uint32_t		nb_intersec_in_poly(const t_polygon *polygon,
+	const t_ivec2 *new_point, const t_ivec2 *last_point);
 
 uint8_t		is_equ_ivec2(const t_ivec2 *p1, const t_ivec2 *p2);
+
+void	print_click(t_data *data, uint16_t id);
 
 #endif

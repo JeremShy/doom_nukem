@@ -37,6 +37,7 @@ static uint8_t	ft_init(t_data *data)
 	else
 	{
 		data->input.id_current_element = -1;
+		data->input.input_mode = DRAWING;
 		return (1);
 	}
 	return (0);
@@ -60,16 +61,16 @@ int main()
 
 	// {{261, 234}, {502, 233}} and {{337, 418}, {555, 73}}
 
-	t_ivec2 p1 = {261, 234}; // rouge
-	t_ivec2 p2 = {502, 233}; // vert
-	t_ivec2 p3 = {337, 418}; // rose
-	t_ivec2 p4 = {555, 73}; // blanc
+	// t_ivec2 p1 = {261, 234}; // rouge
+	// t_ivec2 p2 = {502, 233}; // vert
+	// t_ivec2 p3 = {337, 418}; // rose
+	// t_ivec2 p4 = {555, 73}; // blanc
 
-	put_pixel_to_image(&data.imgs[0], p1.x, p1.y, get_color_code(255, 0, 0, 0));
-	put_pixel_to_image(&data.imgs[0], p2.x, p2.y, get_color_code(0, 255, 0, 0));
-	put_pixel_to_image(&data.imgs[0], p3.x, p3.y, get_color_code(255, 0, 255, 0));
-	put_pixel_to_image(&data.imgs[0], p4.x, p4.y, get_color_code(255, 255, 255, 0));
-	printf("%d\n", is_intersect(p2, p1, p3, p4));
+	// put_pixel_to_image(&data.imgs[0], p1.x, p1.y, get_color_code(255, 0, 0, 0));
+	// put_pixel_to_image(&data.imgs[0], p2.x, p2.y, get_color_code(0, 255, 0, 0));
+	// put_pixel_to_image(&data.imgs[0], p3.x, p3.y, get_color_code(255, 0, 255, 0));
+	// put_pixel_to_image(&data.imgs[0], p4.x, p4.y, get_color_code(255, 255, 255, 0));
+	// printf("%d\n", is_intersect(p2, p1, p3, p4));
 
 
 	mlx_put_image_to_window(data.mlx.mlx_ptr, data.mlx.win_ptr, data.imgs[IMAGE_TEST].ptr, 0, 0);

@@ -10,6 +10,10 @@
 
 # define KEY_ESCAPE 53
 # define KEY_BACKQUOTE 50
+# define KEY_S 1
+# define KEY_D 2
+# define KEY_E 14
+# define KEY_P 35
 
 typedef struct	s_vec2 {
 	float	x;

@@ -1,18 +1,45 @@
 #include <editor.h>
 
-void	clicked_polygon(t_data *data, int id)
+void	print_click(t_data *data, uint16_t id)
 {
 	(void)data;
-	(void)id;
-	printf("in polygon_on_click.\n");
+	printf("clicked element  : %u\n", id);
 }
 
-int8_t	is_in_polygon(int x, int y, const t_element *rect)
+int8_t	is_in_polygon(int x, int y, const t_polygon *polygon)
 {
-	(void)x;
-	(void)y;
-	(void)rect;
+	if ((nb_intersec_in_poly(polygon, &(t_ivec2){x, y}, &(t_ivec2){-1, -1}) & 1) == 1)
+		return (1);
 	return (0);
+}
+
+uint32_t nb_intersec_in_poly(const t_polygon *polygon, const t_ivec2 *new_point, const t_ivec2 *last_point)
+{
+	uint32_t		current_edge;
+	const t_ivec2	*p1;
+	const t_ivec2	*p2;
+	uint32_t		nb_intersec;
+	t_intersection	intersec;
+
+	current_edge = 0;
+	nb_intersec = 0;
+	while (current_edge < polygon->nb_points)
+	{
+		if (current_edge == polygon->nb_points - 1 && polygon->finished)
+		{
+			p1 = &polygon->points[current_edge];
+			p2 = &polygon->points[0];
+		}
+		else
+		{
+			p1 = &polygon->points[current_edge];
+			p2 = &polygon->points[current_edge + 1];
+		}
+		if ((intersec = is_intersect(*p1, *p2, *last_point, *new_point)).intersect)
+			nb_intersec++;
+		current_edge++;
+	}
+	return (nb_intersec);
 }
 
 uint32_t	find_next_available(t_data *data)
@@ -43,7 +70,7 @@ void	add_edge(const t_data *data, t_polygon *polygon, const t_ivec2 *new_point)
 	(polygon->nb_points)++;
 }
 
-uint32_t	get_color_from_typewall(t_edge_type t)
+uint32_t	get_color_from_typewall(enum e_edge_type t)
 {
 	uint32_t color;
 
@@ -58,42 +85,15 @@ uint32_t	get_color_from_typewall(t_edge_type t)
 
 uint8_t check_segment(const t_data *data, const t_ivec2 *new_point, const t_ivec2 *last_point)
 {
-	uint32_t		current_edge;
 	uint32_t		j;
-	const t_polygon	*polygon;
-	const t_ivec2	*p1;
-	const t_ivec2	*p2;
 
 	j = 0;
 	while (j < data->nb_elements)
 	{
 		if (data->elements[j].enabled)
 		{
-			polygon = &data->elements[j].polygon;
-			current_edge = 0;
-			while (current_edge < polygon->nb_points)
-			{
-				if (current_edge == polygon->nb_points - 1 && polygon->finished)
-				{
-					p1 = &polygon->points[current_edge];
-					p2 = &polygon->points[0];
-				}
-				else
-				{
-					p1 = &polygon->points[current_edge];
-					p2 = &polygon->points[current_edge + 1];
-				}
-				if (is_intersect(*p1, *p2, *last_point, *new_point))
-				{
-					printf("Intersection error between {{%d, %d}, {%d, %d}} and {{%d, %d}, {%d, %d}}\n", 
-						p1->x, p1->y,
-						p2->x, p2->y,
-						last_point->x, last_point->y,
-						new_point->x, new_point->y);
-					return (0);
-				}
-				current_edge++;
-			}
+			if (nb_intersec_in_poly(&data->elements[j].polygon, new_point, last_point))
+				return (0);
 		}
 		j++;
 	}
@@ -172,7 +172,8 @@ void		draw_edge(t_data *data, t_ivec2 new_point)
 	else if (polygon->nb_points > 2 && is_equ_ivec2(&polygon->points[0], &new_point) && check_segment(data, &polygon->points[0], &polygon->points[polygon->nb_points - 1]))
 	{
 		polygon->finished = 1;
-		polygon->edges[polygon->nb_points] = (t_edge){data->input.wall_type, data->input.id_texture};
+		polygon->edges[polygon->nb_points - 1] = (t_edge){data->input.wall_type, data->input.id_texture};
+
 		draw_line(&polygon->points[polygon->nb_points - 1], &polygon->points[0], &data->imgs[IMAGE_TEST],
 			get_color_from_typewall(data->input.wall_type));
 	}

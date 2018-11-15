@@ -7,24 +7,29 @@
 static int8_t	loop_elems(int button, int x,int y, t_data *data)
 {
 	uint32_t		i;
+	float			dist;
+	int				id;
+	float			tmp_dist;
 
 	i = 0;
+	dist = -1;
 	if (button != 1)
 		return (0);
 	while (i < data->nb_elements)
 	{
-		if (data->elements[i].enabled && data->elements[i].clickable)
+		if (data->elements[i].enabled && data->elements[i].clickable && data->elements[i].polygon.finished)
 		{
-			printf("1\n");
-			if (is_in_polygon(x, y, &(data->elements[i].polygon)))
+			tmp_dist = is_in_polygon(x, y, &(data->elements[i].polygon));
+			if (tmp_dist != -1 && (tmp_dist < dist || dist == -1))
 			{
-				printf("2\n");
-				data->elements[i].on_click_func(data, i);
-				return (1);
+				dist = tmp_dist;
+				id = i;
 			}
 		}
 		i++;
 	}
+	if (dist != -1)
+		data->elements[id].on_click_func(data, id);
 	return (0);
 }
 
@@ -56,6 +61,8 @@ uint16_t	find_free_element(t_data *data)
 	}
 	e->id = i;
 	e->enabled = 1;
+	e->polygon.points = data->points;
+	e->polygon.edges = data->edges;
 	return (e->id);
 }
 

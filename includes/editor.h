@@ -31,6 +31,14 @@ typedef struct	s_img
 	uint32_t	*addr;
 }				t_img;
 
+enum	e_edge_position
+{
+	BEGIN,
+	MIDDLE,
+	END
+};
+
+
 enum	e_elem_type
 {
 	WALL,
@@ -63,30 +71,30 @@ typedef struct	s_edge
 	uint16_t	id_texture;
 }				t_edge;
 
-typedef struct	s_polygon
+typedef struct		s_polygon
 {
 	uint32_t		nb_points;
 	int8_t			finished;
 
-	t_ivec2			points[MAX_POLYGON_EDGES];
-	t_edge			edges[MAX_POLYGON_EDGES];
-}				t_polygon;
+	t_edge			*points[MAX_POLYGON_EDGES];
+	t_ivec2			*edges[MAX_POLYGON_EDGES];
+}					t_polygon;
 
-typedef struct	s_element
+typedef struct			s_element
 {
-	uint8_t			enabled;
-	uint16_t		id;
+	uint8_t				enabled;
+	uint16_t			id;
 
 	enum e_elem_type	type;
 
-	uint8_t			printable;
-	uint16_t		id_texture;
+	uint8_t				printable;
+	uint16_t			id_texture;
 
-	uint8_t			clickable;
-	t_on_click_func	on_click_func;
+	uint8_t				clickable;
+	t_on_click_func		on_click_func;
 
-	t_polygon		polygon;
-}				t_element;
+	t_polygon			polygon;
+}						t_element;
 
 typedef struct	s_input
 {
@@ -106,6 +114,10 @@ typedef struct	s_data
 
 	uint32_t	nb_elements;
 	t_element	elements[MAX_ELEMENT_NBR];
+
+	t_edge		edges[MAX_POLYGON_EDGES * MAX_ELEMENT_NBR];
+	t_ivec2		points[MAX_POLYGON_EDGES * MAX_ELEMENT_NBR];
+	uint8_t		free_seg[MAX_POLYGON_EDGES * MAX_ELEMENT_NBR];
 }				t_data;
 
 int		loop_hook(t_data *data);
@@ -113,7 +125,7 @@ int		mouse_hook(int button, int x,int y, t_data *data);
 int		key_hook(int keycode, t_data *data);
 
 void		clicked_polygon(t_data *data, int id);
-int8_t		is_in_polygon(int x, int y, const t_polygon *poly);
+float		is_in_polygon(int x, int y, const t_polygon *poly);
 uint32_t	get_color_from_typewall(enum e_edge_type t);
 
 
@@ -123,6 +135,7 @@ void	fill_img(t_img *img, uint32_t color);
 
 uint32_t	min(uint32_t a, uint32_t b);
 uint32_t	max(uint32_t a, uint32_t b);
+float	get_idist(const t_ivec2 *p1, const t_ivec2 *p2);
 
 void	bresenham_quadrant1(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
 void	bresenham_quadrant2(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
@@ -134,6 +147,7 @@ void			draw_edge(t_data *data, t_ivec2 new_point);
 t_intersection	is_intersect(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec2 b2);
 uint32_t		nb_intersec_in_poly(const t_polygon *polygon,
 	const t_ivec2 *new_point, const t_ivec2 *last_point);
+float	dist_first_intersect(const t_polygon *polygon, const t_ivec2 *new_point, const t_ivec2 *last_point);
 
 uint8_t		is_equ_ivec2(const t_ivec2 *p1, const t_ivec2 *p2);
 

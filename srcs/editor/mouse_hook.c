@@ -61,8 +61,6 @@ uint16_t	find_free_element(t_data *data)
 	}
 	e->id = i;
 	e->enabled = 1;
-	e->polygon.points = data->points;
-	e->polygon.edges = data->edges;
 	return (e->id);
 }
 

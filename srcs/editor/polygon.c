@@ -25,18 +25,23 @@ uint32_t nb_intersec_in_poly(const t_polygon *polygon, const t_ivec2 *new_point,
 
 	current_edge = 0;
 	nb_intersec = 0;
-	while (current_edge < polygon->nb_points)
+
+	while (current_edge < polygon->nb_points - (polygon->finished ? 0: 1))
 	{
 		if (current_edge == polygon->nb_points - 1 && polygon->finished)
 		{
-			p1 = &polygon->points[polygon->id_points[current_edge]];
-			p2 = &polygon->points[polygon->id_points[0]];
+			printf("1\n");
+			p1 = polygon->points[current_edge];
+			p2 = polygon->points[0];
 		}
 		else
 		{
-			p1 = &polygon->points[polygon->id_points[current_edge]];
-			p2 = &polygon->points[polygon->id_points[current_edge + 1]];
+			printf("2\n");
+			p1 = polygon->points[current_edge];
+			p2 = polygon->points[current_edge + 1];
 		}
+		printf("current : %d nb_pomit : %d\n", current_edge, polygon->nb_points);
+		printf("p1: %d,%d 	p2: %d,%d\n", p1->x, p1->y, p2->x, p2->y);
 		if ((intersec = is_intersect(*p1, *p2, *last_point, *new_point)).intersect)
 			nb_intersec++;
 		current_edge++;
@@ -58,13 +63,13 @@ float	dist_first_intersect(const t_polygon *polygon, const t_ivec2 *new_point, c
 	{
 		if (current_edge == polygon->nb_points - 1 && polygon->finished)
 		{
-			p1 = &polygon->points[polygon->id_points[current_edge]];
-			p2 = &polygon->points[polygon->id_points[0]];
+			p1 = polygon->points[current_edge];
+			p2 = polygon->points[0];
 		}
 		else
 		{
-			p1 = &polygon->points[polygon->id_points[current_edge]];
-			p2 = &polygon->points[polygon->id_points[current_edge + 1]];
+			p1 = polygon->points[current_edge];
+			p2 = polygon->points[current_edge + 1];
 		}
 		if ((intersec = is_intersect(*p1, *p2, *last_point, *new_point)).intersect)
 		{
@@ -162,8 +167,8 @@ t_ivec2 get_near_point(const t_element *elem, uint32_t nb_element, const t_ivec2
 			j = 0;
 			while (j < elem[i].polygon.nb_points)
 			{
-				if (get_idist(new_point, &(elem[i].polygon.points[elem[i].polygon.id_points[j]])) < 10)
-					return (elem[i].polygon.points[elem[i].polygon.id_points[j]]);
+				if (get_idist(new_point, elem[i].polygon.points[j]) < 10)
+					return (*elem[i].polygon.points[j]);
 				j++;
 			}
 		}
@@ -184,7 +189,7 @@ uint8_t		is_point_in_polygon(const t_ivec2 *point, const t_polygon *polygon)
 	i = 0;
 	while (i < polygon->nb_points)
 	{
-		if (is_equ_ivec2(point, &polygon->points[polygon->id_points[i]]))
+		if (is_equ_ivec2(point, polygon->points[i]))
 			return (1);
 		i++;
 	}
@@ -208,28 +213,69 @@ uint8_t		draw_edge_error(t_data *data, t_polygon	**polygon)
 	return (0);
 }
 
-void	add_edge(t_data *data, t_polygon *polygon, const t_ivec2 *new_point, enum e_edge_position p)
+t_ivec2	*add_points(t_data *data, const t_ivec2 *new_point)
+{
+	uint32_t i;
+
+	i = 0;
+	while (i < MAX_POLYGON_EDGES * MAX_ELEMENT_NBR)
+	{
+		if (!data->used_point[i])
+		{
+			data->points[i] = *new_point;
+			data->used_point[i] = 1;
+			printf("data->point[i] = %d, %d\n", data->points[i].x, data->points[i].y);	
+			printf("new_point = %d, %d\n", new_point->x, new_point->y);
+			return (&data->points[i]);
+		}
+		i++;
+	}
+	ft_putendl_fd("Error : No space left on Points", 2);
+	exit(EXIT_FAILURE);
+}
+
+t_edge	*add_edge(t_data *data, const t_edge new_edge)
+{
+	uint32_t i;
+
+	i = 0;
+	while (i < MAX_POLYGON_EDGES * MAX_ELEMENT_NBR)
+	{
+		if (!data->used_edge[i])
+		{
+			data->edges[i] = new_edge;
+			data->used_edge[i] = 1;
+			return (&data->edges[i]);
+		}
+		i++;
+	}
+	ft_putendl_fd("Error : No space left on Edge", 2);
+	exit(EXIT_FAILURE);
+}
+
+void	add_seg(t_data *data, t_polygon *polygon, const t_ivec2 *new_point, enum e_edge_position p)
 {
 	if (p == BEGIN)
 	{
-		polygon->points[polygon->id_points[0]] = *new_point;
+		polygon->points[0] = add_points(data, new_point);
 		(polygon->nb_points)++;
 		put_pixel_to_image(&data->imgs[IMAGE_TEST], new_point->x,
 			new_point->y, get_color_from_typewall(data->input.wall_type));
+		printf("poli = %d : %d, %d\n", polygon->nb_points, (*polygon->points[0]).x, (*polygon->points[0]).y);
 		return ;
 	}
 	else if (p == MIDDLE)
 	{
-		polygon->points[polygon->id_points[polygon->nb_points]] = *new_point;
-		polygon->edges[polygon->id_edges[polygon->nb_points - 1]] = (t_edge){data->input.wall_type, data->input.id_texture};
+		polygon->points[polygon->nb_points] = add_points(data, new_point);
+		polygon->edges[polygon->nb_points - 1] = add_edge(data, (t_edge){data->input.wall_type, data->input.id_texture});
 		(polygon->nb_points)++;
 	}
 	else if (p == END)
 	{
 		polygon->finished = 1;
-		polygon->edges[polygon->id_edges[polygon->nb_points - 1]] = (t_edge){data->input.wall_type, data->input.id_texture};
+		polygon->edges[polygon->nb_points - 1] = add_edge(data, (t_edge){data->input.wall_type, data->input.id_texture});
 	}
-	draw_line(&polygon->points[polygon->id_points[polygon->nb_points - (p == MIDDLE ? 2 : 1)]], new_point, &data->imgs[IMAGE_TEST],
+	draw_line(polygon->points[polygon->nb_points - (p == MIDDLE ? 2 : 1)], new_point, &data->imgs[IMAGE_TEST],
 		get_color_from_typewall(data->input.wall_type));
 }
 
@@ -237,21 +283,24 @@ void		draw_edge(t_data *data, t_ivec2 new_point)
 {
 	uint32_t	last_nbr;
 	t_polygon	*polygon;
+	t_ivec2		point;
 
 	if (draw_edge_error(data, &polygon))
 		return ;
 	last_nbr = polygon->nb_points;
 	new_point = get_near_point(data->elements, data->nb_elements, &new_point);
 	if (polygon->nb_points + 1 == MAX_POLYGON_EDGES)
-		new_point = polygon->points[polygon->id_points[0]];
+		new_point = *polygon->points[0];
 	if (polygon->nb_points == 0)
-		add_edge(data, polygon, &new_point, BEGIN);
-	if (check_segment(data, &new_point, &polygon->points[polygon->id_points[polygon->nb_points - 1]]))
+		add_seg(data, polygon, &new_point, BEGIN);
+	point = *(polygon->points[polygon->nb_points - 1]);
+	printf("%d %d\n", point.x, point.y);
+	if (check_segment(data, &new_point, polygon->points[polygon->nb_points - 1]))
 	{
-		if (polygon->nb_points > 2 && is_equ_ivec2(&polygon->points[polygon->id_points[0]], &new_point))
-			add_edge(data, polygon, &new_point, END);
+		if (polygon->nb_points > 2 && is_equ_ivec2(polygon->points[0], &new_point))
+			add_seg(data, polygon, &new_point, END);
 		else if (!is_point_in_polygon(&new_point, polygon))
-			add_edge(data, polygon, &new_point, MIDDLE);
+			add_seg(data, polygon, &new_point, MIDDLE);
 	}
 	if (polygon->nb_points == last_nbr)
 		printf("No point was added.\n");

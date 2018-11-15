@@ -10,7 +10,7 @@
 
 # define MAX_IMAGE (IMAGE_TEST + 1)
 
-# define MAX_ELEMENT_NBR 4096
+# define MAX_ELEMENT_NBR 1024
 # define MAX_POLYGON_EDGES 64
 
 struct			s_data;
@@ -76,8 +76,8 @@ typedef struct		s_polygon
 	uint32_t		nb_points;
 	int8_t			finished;
 
-	t_edge			*points[MAX_POLYGON_EDGES];
-	t_ivec2			*edges[MAX_POLYGON_EDGES];
+	t_ivec2			*points[MAX_POLYGON_EDGES];
+	t_edge			*edges[MAX_POLYGON_EDGES];
 }					t_polygon;
 
 typedef struct			s_element
@@ -117,7 +117,8 @@ typedef struct	s_data
 
 	t_edge		edges[MAX_POLYGON_EDGES * MAX_ELEMENT_NBR];
 	t_ivec2		points[MAX_POLYGON_EDGES * MAX_ELEMENT_NBR];
-	uint8_t		free_seg[MAX_POLYGON_EDGES * MAX_ELEMENT_NBR];
+	uint8_t		used_point[MAX_POLYGON_EDGES * MAX_ELEMENT_NBR];
+	uint8_t		used_edge[MAX_POLYGON_EDGES * MAX_ELEMENT_NBR];
 }				t_data;
 
 int		loop_hook(t_data *data);

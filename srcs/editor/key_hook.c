@@ -11,15 +11,15 @@ void	draw_polygon(t_polygon *polygon, t_data *data)
 	{
 		if (edge == polygon->nb_points - 1)
 		{
-			p1 = &polygon->points[polygon->id_points[edge]];
-			p2 = &polygon->points[polygon->id_points[0]];
+			p1 = polygon->points[edge];
+			p2 = polygon->points[0];
 		}
 		else
 		{
-			p1 = &polygon->points[polygon->id_points[edge]];
-			p2 = &polygon->points[polygon->id_points[edge + 1]];
+			p1 = polygon->points[edge];
+			p2 = polygon->points[edge + 1];
 		}
-		draw_line(p1, p2, &data->imgs[IMAGE_TEST], get_color_from_typewall(polygon->edges[polygon->id_edges[edge]].type));
+		draw_line(p1, p2, &data->imgs[IMAGE_TEST], get_color_from_typewall(polygon->edges[edge]->type));
 		edge++;
 	}
 }

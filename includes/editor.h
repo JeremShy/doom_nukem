@@ -13,6 +13,8 @@
 # define MAX_ELEMENT_NBR 1024
 # define MAX_POLYGON_EDGES 64
 
+# define MAX_POINTS_NBR MAX_ELEMENT_NBR * MAX_POLYGON_EDGES
+
 struct			s_data;
 struct			s_element;
 typedef void (*t_on_click_func)(struct s_data *data, uint16_t id);
@@ -66,9 +68,10 @@ typedef struct	s_intersection
 
 typedef struct	s_edge
 {
+	uint8_t				used;
 	enum e_edge_type	type;
 
-	uint16_t	id_texture;
+	uint16_t			id_texture;
 }				t_edge;
 
 typedef struct		s_polygon
@@ -115,43 +118,49 @@ typedef struct	s_data
 	uint32_t	nb_elements;
 	t_element	elements[MAX_ELEMENT_NBR];
 
-	t_edge		edges[MAX_POLYGON_EDGES * MAX_ELEMENT_NBR];
-	t_ivec2		points[MAX_POLYGON_EDGES * MAX_ELEMENT_NBR];
-	uint8_t		used_point[MAX_POLYGON_EDGES * MAX_ELEMENT_NBR];
-	uint8_t		used_edge[MAX_POLYGON_EDGES * MAX_ELEMENT_NBR];
+	t_edge		edges[MAX_POINTS_NBR];
+
+	t_ivec2		points[MAX_POINTS_NBR];
+	uint8_t		used_point[MAX_POINTS_NBR];
 }				t_data;
 
-int		loop_hook(t_data *data);
-int		mouse_hook(int button, int x,int y, t_data *data);
-int		key_hook(int keycode, t_data *data);
+int				loop_hook(t_data *data);
+int				mouse_hook(int button, int x,int y, t_data *data);
+int				key_hook(int keycode, t_data *data);
 
-void		clicked_polygon(t_data *data, int id);
-float		is_in_polygon(int x, int y, const t_polygon *poly);
-uint32_t	get_color_from_typewall(enum e_edge_type t);
+uint32_t		get_color_code(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+void			put_pixel_to_image(t_img *img, int x, int y, uint32_t color);
+void			fill_img(t_img *img, uint32_t color);
+
+uint32_t		min(uint32_t a, uint32_t b);
+uint32_t		max(uint32_t a, uint32_t b);
 
 
-uint32_t	get_color_code(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
-void	put_pixel_to_image(t_img *img, int x, int y, uint32_t color);
-void	fill_img(t_img *img, uint32_t color);
+void			bresenham_quadrant1(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
+void			bresenham_quadrant2(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
+void			bresenham_quadrant3(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
+void			bresenham_quadrant4(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
+void			draw_line(const t_ivec2 *p1, const t_ivec2 *p2, t_img *img, uint32_t color);
 
-uint32_t	min(uint32_t a, uint32_t b);
-uint32_t	max(uint32_t a, uint32_t b);
-float	get_idist(const t_ivec2 *p1, const t_ivec2 *p2);
 
-void	bresenham_quadrant1(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
-void	bresenham_quadrant2(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
-void	bresenham_quadrant3(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
-void	bresenham_quadrant4(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
-void	draw_line(const t_ivec2 *p1, const t_ivec2 *p2, t_img *img, uint32_t color);
+float			is_in_polygon(int x, int y, const t_polygon *poly);
+uint32_t		get_color_from_typewall(enum e_edge_type t);
+void			swap(int *a, int *b);
+t_ivec2			*get_near_point(t_data *data, t_ivec2 *new_point);
+uint8_t			is_equ_ivec2(const t_ivec2 *p1, const t_ivec2 *p2);
+uint8_t			is_point_in_polygon(const t_ivec2 *point, const t_polygon *polygon);
+float			get_idist(const t_ivec2 *p1, const t_ivec2 *p2);
+uint8_t			is_common_point(const t_ivec2 *a1, const t_ivec2 *a2, const t_ivec2 *b1, const t_ivec2 *b2);
 
 void			draw_edge(t_data *data, t_ivec2 new_point);
+
+uint32_t		nb_intersec_in_poly(const t_polygon *polygon, const t_ivec2 *new_point, const t_ivec2 *last_point);
+float			first_intersect_dist_in_poly(const t_polygon *polygon, const t_ivec2 *new_point, const t_ivec2 *last_point);
+
+uint8_t			check_segment(const t_data *data, const t_ivec2 *new_point, const t_ivec2 *last_point);
+void			print_click(t_data *data, uint16_t id);
+
 t_intersection	is_intersect(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec2 b2);
-uint32_t		nb_intersec_in_poly(const t_polygon *polygon,
-	const t_ivec2 *new_point, const t_ivec2 *last_point);
-float	dist_first_intersect(const t_polygon *polygon, const t_ivec2 *new_point, const t_ivec2 *last_point);
 
-uint8_t		is_equ_ivec2(const t_ivec2 *p1, const t_ivec2 *p2);
-
-void	print_click(t_data *data, uint16_t id);
-
+void			print_points_list(const t_data *data);
 #endif

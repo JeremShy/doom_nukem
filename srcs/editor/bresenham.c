@@ -1,15 +1,5 @@
 #include <editor.h>
 
-uint32_t		min(uint32_t a, uint32_t b)
-{
-	return (a < b ? a : b);
-}
-
-uint32_t		max(uint32_t a, uint32_t b)
-{
-	return (a > b ? a : b);
-}
-
 void	draw_line(const t_ivec2 *p1, const t_ivec2 *p2, t_img *img, uint32_t color)
 {
 	uint32_t x;

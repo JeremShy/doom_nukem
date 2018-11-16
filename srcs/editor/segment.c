@@ -1,6 +1,6 @@
 #include <editor.h>
 
-t_intersection	interval_intersect(uint32_t a1, uint32_t a2, uint32_t b1, uint32_t b2)
+static t_intersection	interval_intersect(uint32_t a1, uint32_t a2, uint32_t b1, uint32_t b2)
 {
 	uint32_t		mini;
 	uint32_t		maxi;
@@ -14,26 +14,10 @@ t_intersection	interval_intersect(uint32_t a1, uint32_t a2, uint32_t b1, uint32_
 	if (b1 > maxi && b2 > maxi)
 		return (ret);
 	ret.intersect = 1;
-	// mini = ;
-	// ret.interval_intersect.x = 
 	return (ret);
 }
 
-void swap(int *a, int *b)
-{
-	int tmp;
-
-	tmp = *a;
-	*a = *b;
-	*b = tmp;
-}
-
-uint8_t	is_commun_point(t_ivec2 *a1, t_ivec2 *a2, t_ivec2 *b1, t_ivec2 *b2)
-{
-	return (is_equ_ivec2(a1, b1) || is_equ_ivec2(a1, b2) || is_equ_ivec2(a2, b1) || is_equ_ivec2(a2, b2));
-}
-
-t_intersection	is_intersect(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec2 b2)
+t_intersection			is_intersect(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec2 b2)
 {
 	float			ma; // a
 	float			mb;
@@ -43,7 +27,7 @@ t_intersection	is_intersect(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec2 b2)
 	t_intersection	ret;
 
 	ret.intersect = 0;
-	if (is_commun_point(&a1, &a2, &b1, &b2))
+	if (is_common_point(&a1, &a2, &b1, &b2))
 		return (ret);
 	if (a1.x == a2.x || b1.x == b2.x)
 	{
@@ -57,8 +41,6 @@ t_intersection	is_intersect(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec2 b2)
 	ka = a1.y - a1.x * ma;
 	kb = b1.y - b1.x * mb;
 
-	// printf("ma : %f\nka : %f\nmb : %f\nkb : %f\n", ma, ka, mb, kb);
-
 	if (ma == mb)
 	{
 		if (ka == kb)
@@ -71,7 +53,6 @@ t_intersection	is_intersect(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec2 b2)
 			return (ret);
 	}
 	x = (ka - kb) / (mb - ma);
-	// printf("x = %f\n", x);
 	if (x < min(a1.x, a2.x) || x > max(a1.x, a2.x)
 		|| x < min(b1.x, b2.x) || x > max(b1.x, b2.x))
 		return (ret);

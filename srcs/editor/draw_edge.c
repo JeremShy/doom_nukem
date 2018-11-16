@@ -28,8 +28,8 @@ static t_ivec2	*add_points(t_data *data, const t_ivec2 *new_point)
 		{
 			data->points[i] = *new_point;
 			data->used_point[i] = 1;
-			printf("data->point[i] = %d, %d\n", data->points[i].x, data->points[i].y);	
-			printf("new_point = %d, %d\n", new_point->x, new_point->y);
+			// printf("data->point[i] = %d, %d\n", data->points[i].x, data->points[i].y);	
+			// printf("new_point = %d, %d\n", new_point->x, new_point->y);
 			return (&data->points[i]);
 		}
 		i++;
@@ -112,9 +112,13 @@ void		draw_edge(t_data *data, t_ivec2 clicked_point)
 		if (!new_point)
 			new_point = add_points(data, &clicked_point);
 		if (polygon->nb_points > 2 && is_equ_ivec2(polygon->points[0], new_point))
+		{
 			add_seg(data, polygon, new_point, END);
+		}
 		else if (!is_point_in_polygon(new_point, polygon))
+		{
 			add_seg(data, polygon, new_point, MIDDLE);
+		}
 	}
 	if (polygon->nb_points == last_nbr)
 		printf("No point was added.\n");

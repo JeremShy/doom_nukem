@@ -13,6 +13,8 @@
 # define MAX_ELEMENT_NBR 1024
 # define MAX_POLYGON_EDGES 64
 
+# define GRID_ROUND 50
+
 # define MAX_POINTS_NBR MAX_ELEMENT_NBR * MAX_POLYGON_EDGES
 
 struct			s_data;
@@ -76,7 +78,7 @@ typedef struct	s_edge
 
 typedef struct		s_polygon
 {
-	uint32_t		nb_points;
+	uint8_t			nb_points;
 	int8_t			finished;
 
 	t_ivec2			*points[MAX_POLYGON_EDGES];
@@ -85,15 +87,15 @@ typedef struct		s_polygon
 
 typedef struct			s_element
 {
-	uint8_t				enabled;
 	uint16_t			id;
 
 	enum e_elem_type	type;
 
 	uint8_t				printable;
-	uint16_t			id_texture;
+	uint8_t				id_texture;
 
 	uint8_t				clickable;
+	uint8_t				enabled;
 	t_on_click_func		on_click_func;
 
 	t_polygon			polygon;

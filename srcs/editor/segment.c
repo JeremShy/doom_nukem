@@ -26,15 +26,39 @@ t_intersection			is_intersect(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec2 b2)
 	float			x;
 	t_intersection	ret;
 
+	printf("a1.x = %d, a1.y = %d, a2.x = %d, a2.y = %d, b1.x = %d, b1.y = %d, b2.x = %d, b2.y = %d\n", a1.x, a1.y, a2.x, a2.y, b1.x, b1.y, b2.x, b2.y);
 	ret.intersect = 0;
 	if (is_common_point(&a1, &a2, &b1, &b2))
+	{
+		printf("ICI !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+		printf("a1.x = %d, a1.y = %d, a2.x = %d, a2.y = %d, b1.x = %d, b1.y = %d, b2.x = %d, b2.y = %d\n", a1.x, a1.y, a2.x, a2.y, b1.x, b1.y, b2.x, b2.y);
 		return (ret);
+	}
 	if (a1.x == a2.x || b1.x == b2.x)
 	{
 		swap(&a1.x, &a1.y);
 		swap(&a2.x, &a2.y);
 		swap(&b1.x, &b1.y);
 		swap(&b2.x, &b2.y);
+	}
+	if (a1.x == a2.x || b1.x == b2.x)
+	{
+		if (a1.x == a2.x)
+		{
+			if (b1.y < (int)min(a1.y, a2.y) || b1.y > (int)max(a1.y, a2.y))
+				return (ret);
+			ret.intersect = 1;
+			ret.intersection_point= (t_ivec2){a1.x, b1.y};
+			return (ret);
+		}
+		else
+		{
+			if (a1.y < (int)min(b1.y, b2.y) || a1.y > (int)max(b1.y, b2.y))
+				return (ret);
+			ret.intersect = 1;
+			ret.intersection_point= (t_ivec2){b1.x, a1.y};
+			return (ret);
+		}
 	}
 	ma = ((float)a1.y - a2.y) / (a1.x - a2.x);
 	mb = ((float)b1.y - b2.y) / (b1.x - b2.x);
@@ -55,7 +79,9 @@ t_intersection			is_intersect(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec2 b2)
 	x = (ka - kb) / (mb - ma);
 	if (x < min(a1.x, a2.x) || x > max(a1.x, a2.x)
 		|| x < min(b1.x, b2.x) || x > max(b1.x, b2.x))
+	{
 		return (ret);
+	}
 	ret.intersect = 1;
 	ret.intersection_point = (t_ivec2){x, (int)(ma * x + ka)};
 	return (ret); 

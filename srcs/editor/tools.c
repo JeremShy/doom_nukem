@@ -27,6 +27,11 @@ uint8_t			is_common_point(const t_ivec2 *a1, const t_ivec2 *a2, const t_ivec2 *b
 	return (is_equ_ivec2(a1, b1) || is_equ_ivec2(a1, b2) || is_equ_ivec2(a2, b1) || is_equ_ivec2(a2, b2));
 }
 
+void	clamp(int32_t *point, int32_t min, int32_t max)
+{
+	*point < min ? (*point = min) : 0;
+	*point > max ? (*point = max) : 0;
+}
 
 t_ivec2	*get_near_point(t_data *data, t_ivec2 *new_point)
 {
@@ -44,6 +49,10 @@ t_ivec2	*get_near_point(t_data *data, t_ivec2 *new_point)
 		}
 		i++;
 	}
+	new_point->x = new_point->x + ((new_point->x % GRID_ROUND < GRID_ROUND / 2) ? -new_point->x % GRID_ROUND : GRID_ROUND - new_point->x % GRID_ROUND);
+	new_point->y = new_point->y + ((new_point->y % GRID_ROUND < GRID_ROUND / 2) ? -new_point->y % GRID_ROUND : GRID_ROUND - new_point->y % GRID_ROUND);
+	clamp(&new_point->x, 0, WIN_SIZE_X - 1);
+	clamp(&new_point->y, 0, WIN_SIZE_Y - 1);
 	return (NULL);
 }
 

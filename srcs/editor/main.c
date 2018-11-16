@@ -51,6 +51,7 @@ int main()
 	if (!ft_init(&data))
 		return (1);
 	printf("in editor\n");
+	printf("data = %zu\nelement = %zu\npoint = %zu\nedge = %zu\npolygon = %zu\n\n", sizeof(data), sizeof(struct s_element), sizeof(struct s_ivec2), sizeof(struct s_edge), sizeof(struct s_polygon));
 	mlx_loop_hook(data.mlx.mlx_ptr, loop_hook, &data);
 	mlx_mouse_hook(data.mlx.win_ptr, mouse_hook, &data);
 	mlx_key_hook(data.mlx.win_ptr, key_hook, &data);
@@ -59,18 +60,18 @@ int main()
 
 	fill_img(&data.imgs[IMAGE_TEST], get_color_code(50, 50, 50, 0));
 
-	// {{261, 234}, {502, 233}} and {{337, 418}, {555, 73}}
+	// a1.x = 1200, a1.y = 250, a2.x = 1200, a2.y = 550, b1.x = 1200, b1.y = 600, b2.x = 1200, b2.y = 650
 
-	// t_ivec2 p1 = {261, 234}; // rouge
-	// t_ivec2 p2 = {502, 233}; // vert
-	// t_ivec2 p3 = {337, 418}; // rose
-	// t_ivec2 p4 = {555, 73}; // blanc
+	t_ivec2 p1 = {1200, 250}; // rouge
+	t_ivec2 p2 = {1200, 550}; // vert
+	t_ivec2 p3 = {1200, 600}; // rose
+	t_ivec2 p4 = {1200, 650}; // blanc
 
-	// put_pixel_to_image(&data.imgs[0], p1.x, p1.y, get_color_code(255, 0, 0, 0));
-	// put_pixel_to_image(&data.imgs[0], p2.x, p2.y, get_color_code(0, 255, 0, 0));
-	// put_pixel_to_image(&data.imgs[0], p3.x, p3.y, get_color_code(255, 0, 255, 0));
-	// put_pixel_to_image(&data.imgs[0], p4.x, p4.y, get_color_code(255, 255, 255, 0));
-	// printf("%d\n", is_intersect(p2, p1, p3, p4));
+	put_pixel_to_image(&data.imgs[0], p1.x, p1.y, get_color_code(255, 0, 0, 0));
+	put_pixel_to_image(&data.imgs[0], p2.x, p2.y, get_color_code(0, 255, 0, 0));
+	put_pixel_to_image(&data.imgs[0], p3.x, p3.y, get_color_code(255, 0, 255, 0));
+	put_pixel_to_image(&data.imgs[0], p4.x, p4.y, get_color_code(255, 255, 255, 0));
+	printf("%d\n", is_intersect(p2, p1, p3, p4).intersect);
 
 
 	mlx_put_image_to_window(data.mlx.mlx_ptr, data.mlx.win_ptr, data.imgs[IMAGE_TEST].ptr, 0, 0);

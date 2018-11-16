@@ -1,3 +1,11 @@
+drawing zone :
+	start point :
+		x = 0;
+		y = 0;
+	size of image :
+		w = 1061
+		h = 900
+
 draw wall : 
 	start point :
 		x = 1087

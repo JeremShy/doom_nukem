@@ -148,6 +148,7 @@ void			draw_line(const t_ivec2 *p1, const t_ivec2 *p2, t_img *img, uint32_t colo
 float			is_in_polygon(int x, int y, const t_polygon *poly);
 uint32_t		get_color_from_typewall(enum e_edge_type t);
 void			swap(int *a, int *b);
+uint8_t			same_edges(const t_ivec2 *a1, const t_ivec2 *a2, const t_ivec2 *b1, const t_ivec2 *b2);
 t_ivec2			*get_near_point(t_data *data, t_ivec2 *new_point);
 uint8_t			is_equ_ivec2(const t_ivec2 *p1, const t_ivec2 *p2);
 uint8_t			is_point_in_polygon(const t_ivec2 *point, const t_polygon *polygon);
@@ -165,4 +166,6 @@ void			print_click(t_data *data, uint16_t id);
 t_intersection	is_intersect(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec2 b2);
 
 void			print_points_list(const t_data *data);
+void			print_edges_list(const t_data *data);
+
 #endif

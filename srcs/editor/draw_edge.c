@@ -38,6 +38,47 @@ static t_ivec2	*add_points(t_data *data, const t_ivec2 *new_point)
 	exit(EXIT_FAILURE);
 }
 
+static t_edge	*edge_exists(t_element *elements, uint32_t nb_elements, t_ivec2 p1, t_ivec2 p2)
+{
+	uint32_t	i;
+	uint32_t	j;
+	t_polygon	*poly;
+
+	i = 0;
+	while (i < nb_elements)
+	{
+		if (!elements[i].enabled)
+		{
+			i++;
+			continue ;
+		}
+		j = 0;
+		poly = &elements[i].polygon;
+		while (j < poly->nb_points)
+		{
+			if (j < poly->nb_points - 1)
+			{
+				if (same_edges(poly->points[j], poly->points[j + 1], &p1, &p2))
+				{
+					printf("edge exists !\n");
+					return (poly->edges[j]);
+				}
+			}
+			else if (poly->finished)
+			{
+				if (same_edges(poly->points[0], poly->points[j], &p1, &p2))
+				{
+					printf("edge exists 2!\n");
+					return (poly->edges[j]);
+				}
+			}
+			j++;
+		}
+		i++;
+	}
+	return (NULL);
+}
+
 static t_edge	*add_edge(t_data *data, const t_edge new_edge)
 {
 	uint32_t i;
@@ -70,14 +111,20 @@ static void	add_seg(t_data *data, t_polygon *polygon, t_ivec2 *new_point, enum e
 	}
 	else if (p == MIDDLE)
 	{
+		if ((polygon->edges[polygon->nb_points - 1] = edge_exists(data->elements, data->nb_elements, *polygon->points[polygon->nb_points - 1], *new_point)) == NULL)
+		{
+			polygon->edges[polygon->nb_points - 1] = add_edge(data, (t_edge){1, data->input.wall_type, data->input.id_texture});
+		}
 		polygon->points[polygon->nb_points] = new_point;
-		polygon->edges[polygon->nb_points - 1] = add_edge(data, (t_edge){1, data->input.wall_type, data->input.id_texture});
 		(polygon->nb_points)++;
 	}
 	else if (p == END)
 	{
 		polygon->finished = 1;
-		polygon->edges[polygon->nb_points - 1] = add_edge(data, (t_edge){1, data->input.wall_type, data->input.id_texture});
+		if ((polygon->edges[polygon->nb_points - 1] = edge_exists(data->elements, data->nb_elements, *polygon->points[polygon->nb_points - 1], *polygon->points[0])) == NULL)
+		{
+			polygon->edges[polygon->nb_points - 1] = add_edge(data, (t_edge){1, data->input.wall_type, data->input.id_texture});
+		}
 	}
 	draw_line(polygon->points[polygon->nb_points - (p == MIDDLE ? 2 : 1)], new_point, &data->imgs[IMAGE_TEST],
 		get_color_from_typewall(data->input.wall_type));
@@ -123,5 +170,5 @@ void		draw_edge(t_data *data, t_ivec2 clicked_point)
 	}
 	if (polygon->nb_points == last_nbr)
 		printf("No point was added.\n");
-	print_points_list(data);
+	// print_edges_list(data);
 }

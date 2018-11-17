@@ -15,26 +15,26 @@ uint32_t nb_intersec_in_poly(const t_polygon *polygon, const t_ivec2 *new_point,
 	{
 		if (current_edge == polygon->nb_points - 1 && polygon->finished)
 		{
-			printf("1\n");
+			// printf("1\n");
 			p1 = polygon->points[current_edge];
 			p2 = polygon->points[0];
 		}
 		else
 		{
-			printf("2\n");
+			// printf("2\n");
 			p1 = polygon->points[current_edge];
 			p2 = polygon->points[current_edge + 1];
 		}
-		printf("current : %d nb_pomit : %d\n", current_edge, polygon->nb_points);
-		printf("p1: %d,%d 	p2: %d,%d\n", p1->x, p1->y, p2->x, p2->y);
+		// printf("current : %d nb_pomit : %d\n", current_edge, polygon->nb_points);
+		// printf("p1: %d,%d 	p2: %d,%d\n", p1->x, p1->y, p2->x, p2->y);
 		if ((intersec = is_intersect(*p1, *p2, *last_point, *new_point)).intersect)
 		{
-			printf("intersect !\n");
+			// printf("intersect !\n");
 			nb_intersec++;
 		}
 		else
 		{
-			printf("no intersect !\n");
+			// printf("no intersect !\n");
 		}
 		current_edge++;
 	}

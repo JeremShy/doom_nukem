@@ -14,3 +14,18 @@ void	print_points_list(const t_data *data)
 		i++;
 	}
 }
+
+void	print_edges_list(const t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < MAX_POINTS_NBR)
+	{
+		if (data->edges[i].used)
+		{
+			printf("edges[%d] used\n", i);
+		}
+		i++;
+	}
+}

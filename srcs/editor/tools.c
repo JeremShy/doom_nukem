@@ -28,6 +28,11 @@ void	clamp(int32_t *point, int32_t min, int32_t max)
 	*point > max ? (*point = max) : 0;
 }
 
+uint8_t	same_edges(const t_ivec2 *a1, const t_ivec2 *a2, const t_ivec2 *b1, const t_ivec2 *b2)
+{
+	return (is_equ_ivec2(a1, b1) && is_equ_ivec2(a2, b2)) || (is_equ_ivec2(a1, b2) && is_equ_ivec2(a2, b1));
+}
+
 t_ivec2	*get_near_point(t_data *data, t_ivec2 *new_point)
 {
 	uint32_t	i;

@@ -60,12 +60,12 @@ int main()
 
 	fill_img(&data.imgs[IMAGE_TEST], get_color_code(50, 50, 50, 0));
 
-	// a1.x = 600, a1.y = 400, a2.x = 600, a2.y = 500, b1.x = 600, b1.y = 500, b2.x = 600, b2.y = 350
+	// a1.x = 900, a1.y = 300, a2.x = 500, a2.y = 450, b1.x = 900, b1.y = 500, b2.x = 950, b2.y = 650
 
-	t_ivec2 p1 = {600, 400}; // rouge
-	t_ivec2 p2 = {600, 500}; // vert
-	t_ivec2 p3 = {600, 500}; // rose
-	t_ivec2 p4 = {600, 350}; // blanc
+	t_ivec2 p1 = {900, 300}; // rouge
+	t_ivec2 p2 = {500, 450}; // vert
+	t_ivec2 p3 = {900, 500}; // rose
+	t_ivec2 p4 = {950, 650}; // blanc
 
 	put_pixel_to_image(&data.imgs[0], p1.x, p1.y, get_color_code(255, 0, 0, 0));
 	put_pixel_to_image(&data.imgs[0], p2.x, p2.y, get_color_code(0, 255, 0, 0));

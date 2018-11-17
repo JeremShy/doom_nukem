@@ -113,6 +113,7 @@ void		draw_edge(t_data *data, t_ivec2 clicked_point)
 			new_point = add_points(data, &clicked_point);
 		if (polygon->nb_points > 2 && is_equ_ivec2(polygon->points[0], new_point))
 		{
+			printf("ending segment\n");
 			add_seg(data, polygon, new_point, END);
 		}
 		else if (!is_point_in_polygon(new_point, polygon))

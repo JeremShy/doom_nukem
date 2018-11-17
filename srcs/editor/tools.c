@@ -22,11 +22,6 @@ uint32_t	get_color_from_typewall(enum e_edge_type t)
 	return (color);
 }
 
-uint8_t			is_common_point(const t_ivec2 *a1, const t_ivec2 *a2, const t_ivec2 *b1, const t_ivec2 *b2)
-{
-	return (is_equ_ivec2(a1, b1) || is_equ_ivec2(a1, b2) || is_equ_ivec2(a2, b1) || is_equ_ivec2(a2, b2));
-}
-
 void	clamp(int32_t *point, int32_t min, int32_t max)
 {
 	*point < min ? (*point = min) : 0;

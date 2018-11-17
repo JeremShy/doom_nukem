@@ -60,18 +60,18 @@ int main()
 
 	fill_img(&data.imgs[IMAGE_TEST], get_color_code(50, 50, 50, 0));
 
-	// a1.x = 1200, a1.y = 250, a2.x = 1200, a2.y = 550, b1.x = 1200, b1.y = 600, b2.x = 1200, b2.y = 650
+	// a1.x = 600, a1.y = 400, a2.x = 600, a2.y = 500, b1.x = 600, b1.y = 500, b2.x = 600, b2.y = 350
 
-	t_ivec2 p1 = {1200, 250}; // rouge
-	t_ivec2 p2 = {1200, 550}; // vert
-	t_ivec2 p3 = {1200, 600}; // rose
-	t_ivec2 p4 = {1200, 650}; // blanc
+	t_ivec2 p1 = {600, 400}; // rouge
+	t_ivec2 p2 = {600, 500}; // vert
+	t_ivec2 p3 = {600, 500}; // rose
+	t_ivec2 p4 = {600, 350}; // blanc
 
 	put_pixel_to_image(&data.imgs[0], p1.x, p1.y, get_color_code(255, 0, 0, 0));
 	put_pixel_to_image(&data.imgs[0], p2.x, p2.y, get_color_code(0, 255, 0, 0));
 	put_pixel_to_image(&data.imgs[0], p3.x, p3.y, get_color_code(255, 0, 255, 0));
 	put_pixel_to_image(&data.imgs[0], p4.x, p4.y, get_color_code(255, 255, 255, 0));
-	printf("%d\n", is_intersect(p2, p1, p3, p4).intersect);
+	printf("%d\n", is_intersect(p1, p2, p3, p4).intersect);
 
 
 	mlx_put_image_to_window(data.mlx.mlx_ptr, data.mlx.win_ptr, data.imgs[IMAGE_TEST].ptr, 0, 0);

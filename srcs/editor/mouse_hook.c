@@ -20,6 +20,7 @@ static int8_t	loop_elems(int button, int x,int y, t_data *data)
 		if (data->elements[i].enabled && data->elements[i].clickable && data->elements[i].polygon.finished)
 		{
 			tmp_dist = is_in_polygon(x, y, &(data->elements[i].polygon));
+			printf("dist with polygon %d : %f\n", i, tmp_dist);
 			if (tmp_dist != -1 && (tmp_dist < dist || dist == -1))
 			{
 				dist = tmp_dist;

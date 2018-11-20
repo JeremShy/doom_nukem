@@ -2,9 +2,10 @@
 
 float		is_in_polygon(int x, int y, const t_polygon *polygon)
 {
-	if ((nb_intersec_in_poly(polygon, &(t_ivec2){x, y}, &(t_ivec2){-1, -1}) & 1) == 1)
+	if ((nb_intersec_in_poly(polygon, &(t_ivec2){0, 0}, &(t_ivec2){x, y}) & 1) == 1)
 	{
-		return (first_intersect_dist_in_poly(polygon, &(t_ivec2){x, y}, &(t_ivec2){-1, -1}));
+		printf("in polygon with %d points\n", polygon->nb_points);
+		return (first_intersect_dist_in_poly(polygon, &(t_ivec2){0, 0}, &(t_ivec2){x, y}));
 	}
 	return (-1);
 }

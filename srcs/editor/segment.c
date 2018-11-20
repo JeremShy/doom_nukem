@@ -31,6 +31,7 @@ static t_intersection	interval_intersect(uint32_t a1, uint32_t a2, uint32_t b1, 
 // 		return (ret);
 // 	}
 // }
+
 t_intersection			is_intersect(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec2 b2)
 {
 	float			ma; // a
@@ -39,13 +40,16 @@ t_intersection			is_intersect(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec2 b2)
 	float			kb;
 	float			x;
 	t_intersection	ret;
+	uint8_t			s;
 
 	ret.intersect = 0;
 	if (same_edges(&a1, &a2, &b1, &b2))
 		return (ret);
-	printf("a1.x = %d, a1.y = %d, a2.x = %d, a2.y = %d, b1.x = %d, b1.y = %d, b2.x = %d, b2.y = %d\n", a1.x, a1.y, a2.x, a2.y, b1.x, b1.y, b2.x, b2.y);
+	// printf("a1.x = %d, a1.y = %d, a2.x = %d, a2.y = %d, b1.x = %d, b1.y = %d, b2.x = %d, b2.y = %d\n", a1.x, a1.y, a2.x, a2.y, b1.x, b1.y, b2.x, b2.y);
+	s = 0;
 	if (a1.x == a2.x || b1.x == b2.x)
 	{
+		s = 1;
 		swap(&a1.x, &a1.y);
 		swap(&a2.x, &a2.y);
 		swap(&b1.x, &b1.y);
@@ -57,7 +61,7 @@ t_intersection			is_intersect(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec2 b2)
 			return (ret);
 		printf("pouet 1\n");
 		ret.intersect = 1;
-		ret.intersection_point= (t_ivec2){a1.x, b1.y};
+		ret.intersection_point = s ? (t_ivec2){b1.y, a1.x} : (t_ivec2){a1.x, b1.y};
 		return (ret);
 	}
 	else if (b1.x == b2.x)
@@ -66,7 +70,7 @@ t_intersection			is_intersect(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec2 b2)
 			return (ret);
 		printf("pouet 2\n");
 		ret.intersect = 1;
-		ret.intersection_point= (t_ivec2){b1.x, a1.y};
+		ret.intersection_point = s ? (t_ivec2){a1.y, b1.x} : (t_ivec2){b1.x, a1.y};
 		return (ret);
 	}
 	ma = ((float)a1.y - a2.y) / (a1.x - a2.x);
@@ -81,6 +85,7 @@ t_intersection			is_intersect(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec2 b2)
 			ret = interval_intersect(a1.x, a2.x, b1.x, b2.x);
 			printf("pouet 3 %d\n", ret.intersect);
 			ret.intersection_point.y = ma * ret.intersection_point.x + ka;
+			s ? swap(&ret.intersection_point.y, &ret.intersection_point.x) : 0;
 		}
 		return (ret);
 	}
@@ -89,6 +94,8 @@ t_intersection			is_intersect(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec2 b2)
 		return (ret);
 	printf("Here 123 : %f\n", x);
 	ret.intersect = 1;
-	ret.intersection_point = (t_ivec2){x, (int)(ma * x + ka)};
+	ret.intersection_point = (t_ivec2){(int)x, (int)(ma * x + ka)};
+	s ? swap(&ret.intersection_point.y, &ret.intersection_point.x) : 0;
 	return (ret); 
 }
+

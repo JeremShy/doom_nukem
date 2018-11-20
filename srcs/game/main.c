@@ -77,55 +77,67 @@ uint32_t	invert_transparency(uint32_t c)
 	return (alpha << 24 | (c & 0x00ffffff));
 }
 
-int main(int ac, char **av)
+uint32_t	*parse_tga(char *name, t_tga_header *header)
 {
-	int	fd;
-	struct stat buf;
-	t_mlx	mlx;
-	t_img	img;
-	t_img	white_img;
+	uint32_t	*img_data;
+	int			fd;
+	struct stat	buf;
 
-	if (ac != 2)
+	if ((fd = open(name, O_RDONLY)) == -1)
 	{
-		printf("Error\n");
-		return (1);
-	}
-	if ((fd = open(av[1], O_RDONLY)) == -1)
-	{
-		dprintf(2, "Error : Couldn't open file %s\n", av[1]);
-		return (2);
+		dprintf(2, "Error : Couldn't open file %s\n", name);
+		return (NULL);
 	}
 	if ((fstat(fd, &buf)) == -1)
 	{
-		dprintf(2, "Error : Couldn't open file %s\n", av[1]);
-		return (2);
+		dprintf(2, "Error : Couldn't open file %s\n", name);
+		return (NULL);
 	}
 	void *addr = mmap(NULL, buf.st_size, PROT_READ, MAP_PRIVATE | MAP_FILE, fd, 0);
 	if (addr == NULL)
 	{
 		printf("map error\n");
-		return (3);
+		return (NULL);
 	}
 	print_memory(addr, 16);
-	t_tga_header header;
 
-	header = *(t_tga_header*)addr;
-	printf("id_length : %hhu\n", header.id_length);
-	printf("color_map_type : %hhu\n", header.color_map_type);
-	printf("image_type : %hhu\n", header.image_type);
-	if (header.id_length != 0 || header.color_map_type != 0 || header.image_type != 2
-		|| ft_memcmp(header.color_map_spec, "\0\0\0\0\0", 5) != 0)
+	*header = *(t_tga_header *)addr;
+	printf("id_length : %hhu\n", header->id_length);
+	printf("color_map_type : %hhu\n", header->color_map_type);
+	printf("image_type : %hhu\n", header->image_type);
+	if (header->id_length != 0 || header->color_map_type != 0 || header->image_type != 2
+		|| ft_memcmp(header->color_map_spec, "\0\0\0\0\0", 5) != 0)
 	{
 		dprintf(2, "Error : tga file not handled.\n");
-		return (4);
+		return (NULL);
 	}
 	printf("image specs :\n");
-	printf("x_origin : %hu\n", header.image_spec.x_origin);
-	printf("y_origin : %hu\n", header.image_spec.y_origin);
-	printf("width : %hu\n", header.image_spec.width);
-	printf("height : %hu\n", header.image_spec.height);
-	printf("pixel_depth : %hhu\n", header.image_spec.pixel_depth);
-	printf("descriptor : %hhu\n", header.image_spec.descriptor);
+	printf("x_origin : %hu\n", header->image_spec.x_origin);
+	printf("y_origin : %hu\n", header->image_spec.y_origin);
+	printf("width : %hu\n", header->image_spec.width);
+	printf("height : %hu\n", header->image_spec.height);
+	printf("pixel_depth : %hhu\n", header->image_spec.pixel_depth);
+	printf("descriptor : %hhu\n", header->image_spec.descriptor);
+	img_data = addr + sizeof(t_tga_header);
+	return (img_data);
+}
+
+int main(int ac, char **av)
+{
+	t_mlx			mlx;
+	t_img			img;
+	t_img			white_img;
+	t_tga_header	header;
+	uint32_t		*img_data;
+	
+	if (ac != 2)
+	{
+		printf("Error\n");
+		return (1);
+	}
+
+	if (!(img_data = parse_tga(av[1], &header)))
+		return (1);
 	if (!ft_init(&mlx, &img, header.image_spec.width, header.image_spec.height))
 	{
 		printf("mlx error.\n");
@@ -134,8 +146,6 @@ int main(int ac, char **av)
 	create_image(&mlx, &white_img, header.image_spec.width, header.image_spec.height);
 	fill_img(&white_img, get_color_code(255, 255, 255, 0));
 
-	uint32_t	*img_data;
-	img_data = addr + sizeof(t_tga_header);
 
 	int	i = 0;
 	while (i < header.image_spec.width * header.image_spec.height)

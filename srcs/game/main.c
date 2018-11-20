@@ -150,7 +150,7 @@ int main(int ac, char **av)
 	int	i = 0;
 	while (i < header.image_spec.width * header.image_spec.height)
 	{
-		put_pixel_to_image(&img, i % header.image_spec.width, header.image_spec.height - i / header.image_spec.width, invert_transparency(img_data[i]));
+		put_pixel_to_image(&img, i % header.image_spec.width, header.image_spec.height - (i / header.image_spec.width + 1), invert_transparency(img_data[i]));
 		i++;
 	}
 

@@ -32,7 +32,9 @@ static uint8_t	ft_init(t_data *data, uint32_t w, uint32_t h)
 		ft_putendl_fd("Error: Can't init mlx.", 2);
 	else if (!(data->mlx.win_ptr = mlx_new_window(data->mlx.mlx_ptr, WIN_SIZE_X, WIN_SIZE_Y, "Doom Nukem : Map editor")))
 		ft_putendl_fd("Error: Can't init window.", 2);
-	else if (!create_image(data, IMAGE_TEST, w, h))
+	else if (!create_image(data, IMG_BACKGROUND, w, h))
+		return (0);
+	else if (!create_image(data, IMG_DRAWING, 1061, h))
 		return (0);
 	else
 	{
@@ -51,13 +53,14 @@ int main()
 	int i;
 
 	ft_bzero(&data, sizeof(t_data));
-	background = parse_tga("docs/background.tga", &header);
-	if (!ft_init(&data, header.image_spec.width, header.image_spec.width))
+	if (!(background = parse_tga("docs/background.tga", &header)))
 		return (1);
+	if (!ft_init(&data, header.image_spec.width, header.image_spec.width))
+		return (2);
 	i = 0;
 	while (i < header.image_spec.width * header.image_spec.height)
 	{
-		put_pixel_to_image(&data.imgs[IMAGE_TEST], i % header.image_spec.width, header.image_spec.height - i / header.image_spec.width, invert_transparency(background[i]));
+		put_pixel_to_image(&data.imgs[IMG_BACKGROUND], i % header.image_spec.width, header.image_spec.height - i / header.image_spec.width, invert_transparency(background[i]));
 		i++;
 	}
 	printf("in editor\n");
@@ -68,7 +71,7 @@ int main()
 
 	data.nb_elements = 1;
 
-	printf("img ptr = %p\n", data.imgs[IMAGE_TEST].addr);
+	printf("img ptr = %p\n", data.imgs[IMG_BACKGROUND].addr);
 	// a1.x = 900, a1.y = 300, a2.x = 500, a2.y = 450, b1.x = 900, b1.y = 500, b2.x = 950, b2.y = 650
 
 	// t_ivec2 p1 = {900, 300}; // rouge
@@ -82,8 +85,10 @@ int main()
 	// put_pixel_to_image(&data.imgs[0], p4.x, p4.y, get_color_code(255, 255, 255, 0));
 	// printf("%d\n", is_intersect(p1, p2, p3, p4).intersect);
 
+	fill_img(&data.imgs[IMG_DRAWING], get_color_code(0, 0, 0, 255));
 
-	mlx_put_image_to_window(data.mlx.mlx_ptr, data.mlx.win_ptr, data.imgs[IMAGE_TEST].ptr, 0, 0);
+	mlx_put_image_to_window(data.mlx.mlx_ptr, data.mlx.win_ptr, data.imgs[IMG_BACKGROUND].ptr, 0, 0);
+	mlx_put_image_to_window(data.mlx.mlx_ptr, data.mlx.win_ptr, data.imgs[IMG_DRAWING].ptr, 0, 0);
 
 
 	mlx_loop(data.mlx.mlx_ptr);

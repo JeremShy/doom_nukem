@@ -1,14 +1,18 @@
 #ifndef EDITOR_H
 # define EDITOR_H
 
+# include <background_editor.h>
 # include <doom_nukem.h>
 
 # define WIN_SIZE_X 1600
 # define WIN_SIZE_Y 900 // /!\ Can't modify
 
-# define IMAGE_TEST 0
+# define DRAWING_ZONE_WIDTH 1061
 
-# define MAX_IMAGE (IMAGE_TEST + 1)
+# define IMG_BACKGROUND 0
+# define IMG_DRAWING 1
+
+# define MAX_IMAGE (IMG_DRAWING + 1)
 
 # define MAX_ELEMENT_NBR 1024
 # define MAX_POLYGON_EDGES 64
@@ -189,4 +193,7 @@ void			print_edges_list(const t_data *data);
 
 uint32_t		*parse_tga(char *name, t_tga_header *header);
 uint32_t		invert_transparency(uint32_t c);
+
+void			switch_select(t_data *data);
+void			switch_drawing(t_data *data);
 #endif

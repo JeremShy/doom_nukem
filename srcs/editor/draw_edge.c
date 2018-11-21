@@ -104,7 +104,7 @@ static void	add_seg(t_data *data, t_polygon *polygon, t_ivec2 *new_point, enum e
 	{
 		polygon->points[0] = new_point;
 		(polygon->nb_points)++;
-		put_pixel_to_image(&data->imgs[IMAGE_TEST], new_point->x,
+		put_pixel_to_image(&data->imgs[IMG_DRAWING], new_point->x,
 			new_point->y, get_color_from_typewall(data->input.wall_type));
 		printf("poli = %d : %d, %d\n", polygon->nb_points, (*polygon->points[0]).x, (*polygon->points[0]).y);
 		return ;
@@ -126,7 +126,7 @@ static void	add_seg(t_data *data, t_polygon *polygon, t_ivec2 *new_point, enum e
 			polygon->edges[polygon->nb_points - 1] = add_edge(data, (t_edge){1, data->input.wall_type, data->input.id_texture});
 		}
 	}
-	draw_line(polygon->points[polygon->nb_points - (p == MIDDLE ? 2 : 1)], new_point, &data->imgs[IMAGE_TEST],
+	draw_line(polygon->points[polygon->nb_points - (p == MIDDLE ? 2 : 1)], new_point, &data->imgs[IMG_DRAWING],
 		get_color_from_typewall(data->input.wall_type));
 }
 

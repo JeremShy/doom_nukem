@@ -19,7 +19,7 @@ void	draw_polygon(t_polygon *polygon, t_data *data)
 			p1 = polygon->points[edge];
 			p2 = polygon->points[edge + 1];
 		}
-		draw_line(p1, p2, &data->imgs[IMAGE_TEST], get_color_from_typewall(polygon->edges[edge]->type));
+		draw_line(p1, p2, &data->imgs[IMG_DRAWING], get_color_from_typewall(polygon->edges[edge]->type));
 		edge++;
 	}
 }
@@ -34,7 +34,8 @@ int	pressed_backquote(t_data *data)
 	else
 	{
 		// polygon redraw
-		fill_img(&data->imgs[IMAGE_TEST], get_color_code(50, 50, 50, 0));
+
+		fill_img(&data->imgs[IMG_DRAWING], get_color_code(0, 0, 0, 255));
 		i = 0;
 		while (i < data->nb_elements)
 		{

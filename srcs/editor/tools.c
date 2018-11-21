@@ -51,8 +51,8 @@ t_ivec2	*get_near_point(t_data *data, t_ivec2 *new_point)
 	}
 	new_point->x = new_point->x + ((new_point->x % GRID_ROUND < GRID_ROUND / 2) ? -new_point->x % GRID_ROUND : GRID_ROUND - new_point->x % GRID_ROUND);
 	new_point->y = new_point->y + ((new_point->y % GRID_ROUND < GRID_ROUND / 2) ? -new_point->y % GRID_ROUND : GRID_ROUND - new_point->y % GRID_ROUND);
-	clamp(&new_point->x, 0, WIN_SIZE_X - 1);
-	clamp(&new_point->y, 0, WIN_SIZE_Y - 1);
+	clamp(&new_point->x, 10, DRAWING_ZONE_WIDTH);
+	clamp(&new_point->y, 10, WIN_SIZE_Y - 1 - 10);
 	return (NULL);
 }
 

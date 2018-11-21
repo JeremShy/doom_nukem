@@ -121,6 +121,18 @@ typedef struct			s_element
 	uint8_t				enabled;
 	t_on_click_func		on_click_func;
 
+	uint16_t			texture_floor;
+	t_ivec2				angle_floor;
+	t_ivec2				height_floor;
+
+	uint16_t			texture_ceiling;
+	t_ivec2				angle_ceiling;
+	t_ivec2				height_ceiling;
+
+	uint16_t			texture_up;
+	uint16_t			texture_down;
+	uint32_t			light;
+
 	t_polygon			polygon;
 }						t_element;
 

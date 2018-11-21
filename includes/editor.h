@@ -13,7 +13,7 @@
 # define MAX_ELEMENT_NBR 1024
 # define MAX_POLYGON_EDGES 64
 
-# define GRID_ROUND 50
+# define GRID_ROUND 25
 
 # define MAX_POINTS_NBR MAX_ELEMENT_NBR * MAX_POLYGON_EDGES
 
@@ -61,6 +61,25 @@ enum	e_input_mode
 	DRAWING,
 	SELECTING
 };
+
+typedef struct	s_image_spec
+{
+	uint16_t	x_origin;
+	uint16_t	y_origin;
+	uint16_t	width;
+	uint16_t	height;
+	uint8_t		pixel_depth;
+	uint8_t		descriptor;
+}				t_image_spec;
+
+typedef struct	s_tga_header
+{
+	uint8_t			id_length;
+	uint8_t			color_map_type;
+	uint8_t			image_type;
+	uint8_t			color_map_spec[5];
+	t_image_spec	image_spec;
+}				t_tga_header;
 
 typedef struct	s_intersection
 {
@@ -168,4 +187,6 @@ t_intersection	is_intersect(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec2 b2);
 void			print_points_list(const t_data *data);
 void			print_edges_list(const t_data *data);
 
+uint32_t		*parse_tga(char *name, t_tga_header *header);
+uint32_t		invert_transparency(uint32_t c);
 #endif

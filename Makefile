@@ -11,7 +11,8 @@ SRC_EDITOR_NAME =	main.c \
 					intersection.c \
 					draw_edge.c \
 					maths_tools.c \
-					debug.c
+					debug.c \
+					parser_tga.c
 
 SRC_GAME_NAME =		main.c \
 					print_memory.c

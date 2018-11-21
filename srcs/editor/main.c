@@ -26,13 +26,13 @@ static uint8_t	create_image(t_data *data, int id, int w, int h)
 	return (0);
 }
 
-static uint8_t	ft_init(t_data *data)
+static uint8_t	ft_init(t_data *data, uint32_t w, uint32_t h)
 {
 	if (!(data->mlx.mlx_ptr = mlx_init()))
 		ft_putendl_fd("Error: Can't init mlx.", 2);
 	else if (!(data->mlx.win_ptr = mlx_new_window(data->mlx.mlx_ptr, WIN_SIZE_X, WIN_SIZE_Y, "Doom Nukem : Map editor")))
 		ft_putendl_fd("Error: Can't init window.", 2);
-	else if (!create_image(data, IMAGE_TEST, 1600, 900))
+	else if (!create_image(data, IMAGE_TEST, w, h))
 		return (0);
 	else
 	{
@@ -45,11 +45,21 @@ static uint8_t	ft_init(t_data *data)
 
 int main()
 {
-	t_data	data;
+	t_data			data;
+	t_tga_header	header;
+	uint32_t		*background;
+	int i;
 
 	ft_bzero(&data, sizeof(t_data));
-	if (!ft_init(&data))
+	background = parse_tga("docs/background.tga", &header);
+	if (!ft_init(&data, header.image_spec.width, header.image_spec.width))
 		return (1);
+	i = 0;
+	while (i < header.image_spec.width * header.image_spec.height)
+	{
+		put_pixel_to_image(&data.imgs[IMAGE_TEST], i % header.image_spec.width, header.image_spec.height - i / header.image_spec.width, invert_transparency(background[i]));
+		i++;
+	}
 	printf("in editor\n");
 	printf("data = %zu\nelement = %zu\npoint = %zu\nedge = %zu\npolygon = %zu\n\n", sizeof(data), sizeof(struct s_element), sizeof(struct s_ivec2), sizeof(struct s_edge), sizeof(struct s_polygon));
 	mlx_loop_hook(data.mlx.mlx_ptr, loop_hook, &data);
@@ -58,20 +68,19 @@ int main()
 
 	data.nb_elements = 1;
 
-	fill_img(&data.imgs[IMAGE_TEST], get_color_code(50, 50, 50, 0));
-
+	printf("img ptr = %p\n", data.imgs[IMAGE_TEST].addr);
 	// a1.x = 900, a1.y = 300, a2.x = 500, a2.y = 450, b1.x = 900, b1.y = 500, b2.x = 950, b2.y = 650
 
-	t_ivec2 p1 = {900, 300}; // rouge
-	t_ivec2 p2 = {500, 450}; // vert
-	t_ivec2 p3 = {900, 500}; // rose
-	t_ivec2 p4 = {950, 650}; // blanc
+	// t_ivec2 p1 = {900, 300}; // rouge
+	// t_ivec2 p2 = {500, 450}; // vert
+	// t_ivec2 p3 = {900, 500}; // rose
+	// t_ivec2 p4 = {950, 650}; // blanc
 
-	put_pixel_to_image(&data.imgs[0], p1.x, p1.y, get_color_code(255, 0, 0, 0));
-	put_pixel_to_image(&data.imgs[0], p2.x, p2.y, get_color_code(0, 255, 0, 0));
-	put_pixel_to_image(&data.imgs[0], p3.x, p3.y, get_color_code(255, 0, 255, 0));
-	put_pixel_to_image(&data.imgs[0], p4.x, p4.y, get_color_code(255, 255, 255, 0));
-	printf("%d\n", is_intersect(p1, p2, p3, p4).intersect);
+	// put_pixel_to_image(&data.imgs[0], p1.x, p1.y, get_color_code(255, 0, 0, 0));
+	// put_pixel_to_image(&data.imgs[0], p2.x, p2.y, get_color_code(0, 255, 0, 0));
+	// put_pixel_to_image(&data.imgs[0], p3.x, p3.y, get_color_code(255, 0, 255, 0));
+	// put_pixel_to_image(&data.imgs[0], p4.x, p4.y, get_color_code(255, 255, 255, 0));
+	// printf("%d\n", is_intersect(p1, p2, p3, p4).intersect);
 
 
 	mlx_put_image_to_window(data.mlx.mlx_ptr, data.mlx.win_ptr, data.imgs[IMAGE_TEST].ptr, 0, 0);

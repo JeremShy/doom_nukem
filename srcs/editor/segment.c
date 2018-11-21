@@ -92,7 +92,7 @@ t_intersection			is_intersect(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec2 b2)
 	x = (ka - kb) / (mb - ma);
 	if (x - 0.01 < min(a1.x, a2.x) || x + 0.01 > max(a1.x, a2.x)|| x - 0.01 < min(b1.x, b2.x) || x + 0.01 > max(b1.x, b2.x))
 		return (ret);
-	printf("Here 123 : %f\n", x);
+	// printf("Here 123 : %f\n", x);
 	ret.intersect = 1;
 	ret.intersection_point = (t_ivec2){(int)x, (int)(ma * x + ka)};
 	s ? swap(&ret.intersection_point.y, &ret.intersection_point.x) : 0;

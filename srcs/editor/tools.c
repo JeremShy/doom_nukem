@@ -4,7 +4,7 @@ float		is_in_polygon(int x, int y, const t_polygon *polygon)
 {
 	if ((nb_intersec_in_poly(polygon, &(t_ivec2){0, 0}, &(t_ivec2){x, y}) & 1) == 1)
 	{
-		printf("in polygon with %d points\n", polygon->nb_points);
+		// printf("in polygon with %d points\n", polygon->nb_points);
 		return (first_intersect_dist_in_poly(polygon, &(t_ivec2){0, 0}, &(t_ivec2){x, y}));
 	}
 	return (-1);
@@ -45,6 +45,8 @@ t_ivec2	*get_near_point(t_data *data, t_ivec2 *new_point)
 		{
 			if (get_idist(new_point, &data->points[i]) < 10)
 			{
+				new_point->x = data->points[i].x;
+				new_point->y = data->points[i].y;
 				return (&data->points[i]);
 			}
 		}

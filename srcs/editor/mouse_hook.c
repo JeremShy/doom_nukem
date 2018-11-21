@@ -4,7 +4,7 @@
 ** Returns 1 if an element is touched, 0 else.
 */
 
-static int8_t	loop_elems(int button, int x,int y, t_data *data)
+int16_t	loop_elems(int button, int x,int y, t_data *data)
 {
 	uint32_t		i;
 	float			dist;
@@ -12,6 +12,7 @@ static int8_t	loop_elems(int button, int x,int y, t_data *data)
 	float			tmp_dist;
 
 	i = 0;
+	id = 0;
 	dist = -1;
 	if (button != 1)
 		return (0);
@@ -20,8 +21,8 @@ static int8_t	loop_elems(int button, int x,int y, t_data *data)
 		if (data->elements[i].enabled && data->elements[i].clickable && data->elements[i].polygon.finished)
 		{
 			tmp_dist = is_in_polygon(x, y, &(data->elements[i].polygon));
-			printf("dist with polygon %d : %f\n", i, tmp_dist);
-			if (tmp_dist != -1 && (tmp_dist < dist || dist == -1))
+			// printf("dist with polygon %d : %f\n", i, tmp_dist);
+			if (tmp_dist != -1 && ((tmp_dist < dist && data->elements[id].polygon.in_element != data->elements[i].id) || dist == -1 || data->elements[data->elements[i].id].polygon.in_element == data->elements[id].id))
 			{
 				dist = tmp_dist;
 				id = i;
@@ -30,8 +31,11 @@ static int8_t	loop_elems(int button, int x,int y, t_data *data)
 		i++;
 	}
 	if (dist != -1)
-		data->elements[id].on_click_func(data, id);
-	return (0);
+	{
+		// data->elements[id].on_click_func(data, id);
+		return (id);
+	}
+	return (-1);
 }
 
 uint16_t	find_free_element(t_data *data)
@@ -68,14 +72,17 @@ uint16_t	find_free_element(t_data *data)
 
 int	mouse_hook(int button, int x,int y, t_data *data)
 {
+	int id;
 	printf("in mouse_hook.\n");
 	printf("paramters : {button : %d, {%d, %d}}\n", button, x, y);
 	if (x < 0 || y < 0 || x >= WIN_SIZE_X || y >= WIN_SIZE_Y)
 		return (0);
 	if (data->input.input_mode == SELECTING)
 	{
-		if (loop_elems(button, x, y, data))
-			return (0);
+		id = loop_elems(button, x, y, data);
+		if (id >= 0)
+			data->elements[id].on_click_func(data, id);
+		return (0);
 	}
 	else if (data->input.input_mode == DRAWING)
 	{

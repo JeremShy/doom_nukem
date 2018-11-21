@@ -12,6 +12,7 @@
 
 # define MAX_ELEMENT_NBR 1024
 # define MAX_POLYGON_EDGES 64
+# define MAX_COLLISION 100
 
 # define GRID_ROUND 50
 
@@ -81,6 +82,12 @@ typedef struct		s_polygon
 	uint8_t			nb_points;
 	int8_t			finished;
 
+	int32_t		collision_element[MAX_COLLISION];	
+	int32_t		same_point_as_element[MAX_COLLISION];	
+	int32_t		in_element;	
+
+	//J'ai mis 10 mais parce que je voulais mettre MAX_ELEMENT_NBR mais je me suis dit Magouin va dire que c'est trop gourmAINd, du coup, j'ai mis 20. Mais ici je stock les index des elements avec lesquels jai soit un point commun soit, un point entre deux point de cet element MAIS je supprime au fur et a mesur que je me rend compte que je suis pas dedans DONC a la fin si je suis dans aucun element in_element = 0; PROUT
+
 	t_ivec2			*points[MAX_POLYGON_EDGES];
 	t_edge			*edges[MAX_POLYGON_EDGES];
 }					t_polygon;
@@ -129,6 +136,7 @@ typedef struct	s_data
 int				loop_hook(t_data *data);
 int				mouse_hook(int button, int x,int y, t_data *data);
 int				key_hook(int keycode, t_data *data);
+int16_t			loop_elems(int button, int x,int y, t_data *data);
 
 uint32_t		get_color_code(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 void			put_pixel_to_image(t_img *img, int x, int y, uint32_t color);

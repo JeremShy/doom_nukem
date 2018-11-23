@@ -86,18 +86,6 @@ int		drawing_zone(int button, int x, int y, t_data *data)
 	return (0);
 }
 
-void		ceil_angle_y(uint8_t side, t_data *data)
-{
-	char	*string;
-
-	if (side == ARROW_LEFT)
-		string = "0";
-	else if (side == ARROW_RIGHT)
-		string = "45";
-	else
-		string = "not defined";
-	mlx_string_put(data->mlx.mlx_ptr, data->mlx.win_ptr, CEIL_ORI_Y_VALUE_SX, CEIL_ORI_Y_VALUE_SY, 0x1D1D1D, string);
-}
 
 int		options_zone(int button, int x, int y, t_data *data)
 {
@@ -114,12 +102,12 @@ int		options_zone(int button, int x, int y, t_data *data)
 	else if (x > WALL_TEXT_RIGHT_SX && y > WALL_TEXT_RIGHT_SY && x < WALL_TEXT_RIGHT_EX && y < WALL_TEXT_RIGHT_EY)
 		printf("WALL_TEXT_RIGHT\n");
 	
-	else if (x > CEIL_ORI_Y_LEFT_SX && y > CEIL_ORI_Y_LEFT_SY && x < CEIL_ORI_Y_LEFT_EX && y < CEIL_ORI_Y_LEFT_EY)
+	/*else if (x > CEIL_ORI_Y_LEFT_SX && y > CEIL_ORI_Y_LEFT_SY && x < CEIL_ORI_Y_LEFT_EX && y < CEIL_ORI_Y_LEFT_EY)
 		ceil_angle_y(ARROW_LEFT, data);
 	else if (x > CEIL_ORI_Y_RIGHT_SX && y > CEIL_ORI_Y_RIGHT_SY && x < CEIL_ORI_Y_RIGHT_EX && y < CEIL_ORI_Y_RIGHT_EY)
 		ceil_angle_y(ARROW_RIGHT, data);
 	else if (x > CEIL_ORI_X_LEFT_SX && y > CEIL_ORI_X_LEFT_SY && x < CEIL_ORI_X_LEFT_EX && y < CEIL_ORI_X_LEFT_EY)
-		printf("CEIL_ORI_X_LEFT\n");
+		ceil_height();*/
 	else if (x > CEIL_ORI_X_RIGHT_SX && y > CEIL_ORI_X_RIGHT_SY && x < CEIL_ORI_X_RIGHT_EX && y < CEIL_ORI_X_RIGHT_EY)
 		printf("CEIL_ORI_X_RIGHT\n");
 	else if (x > CEIL_HEIGHT_LEFT_SX && y > CEIL_HEIGHT_LEFT_SY && x < CEIL_HEIGHT_LEFT_EX && y < CEIL_HEIGHT_LEFT_EY)

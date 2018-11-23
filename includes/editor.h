@@ -142,6 +142,8 @@ typedef struct	s_input
 	enum e_edge_type	wall_type;
 	int32_t				id_current_element;
 	enum e_input_mode	input_mode;
+
+	uint8_t				ceiling_angle_x;
 }				t_input;
 
 typedef struct	s_data

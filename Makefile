@@ -12,6 +12,7 @@ SRC_EDITOR_NAME =	main.c \
 					draw_edge.c \
 					maths_tools.c \
 					debug.c \
+					edge_tools.c \
 					parser_tga.c
 
 SRC_GAME_NAME =		main.c \

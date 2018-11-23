@@ -95,8 +95,9 @@ typedef struct	s_edge
 {
 	uint8_t				used;
 	enum e_edge_type	type;
-
 	uint16_t			id_texture;
+	t_ivec2				*p1;
+	t_ivec2				*p2;
 }				t_edge;
 
 typedef struct		s_polygon
@@ -171,9 +172,16 @@ uint32_t		get_color_code(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 void			put_pixel_to_image(t_img *img, int x, int y, uint32_t color);
 void			fill_img(t_img *img, uint32_t color);
 
+t_ivec2			vec_from_points(const t_ivec2 *p1, const t_ivec2 *p2);
+float			get_idist(const t_ivec2 *p1, const t_ivec2 *p2);
+float			inorm(const t_ivec2 *v1);
+int				idot_prod(const t_ivec2 *v1, const t_ivec2 *v2);
+float			iangle(const t_ivec2 v1, const t_ivec2 v2);
 uint32_t		min(uint32_t a, uint32_t b);
 uint32_t		max(uint32_t a, uint32_t b);
-
+void			swap(int *a, int *b);
+void			clamp(int32_t *point, int32_t min, int32_t max);
+void			fclamp(float *point, float min, float max);
 
 void			bresenham_quadrant1(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
 void			bresenham_quadrant2(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
@@ -210,4 +218,7 @@ uint32_t		invert_transparency(uint32_t c);
 
 void			switch_select(t_data *data);
 void			switch_drawing(t_data *data);
+
+t_edge			*get_nearest_edge(const t_ivec2 *point, t_edge *edges, t_ivec2 *p4);
+
 #endif

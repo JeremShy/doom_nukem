@@ -106,14 +106,14 @@ static void	add_seg(t_data *data, t_polygon *polygon, t_ivec2 *new_point, enum e
 		(polygon->nb_points)++;
 		put_pixel_to_image(&data->imgs[IMG_DRAWING], new_point->x,
 			new_point->y, get_color_from_typewall(data->input.wall_type));
-		printf("poli = %d : %d, %d\n", polygon->nb_points, (*polygon->points[0]).x, (*polygon->points[0]).y);
+		// printf("poli = %d : %d, %d\n", polygon->nb_points, (*polygon->points[0]).x, (*polygon->points[0]).y);
 		return ;
 	}
 	else if (p == MIDDLE)
 	{
 		if ((polygon->edges[polygon->nb_points - 1] = edge_exists(data->elements, data->nb_elements, *polygon->points[polygon->nb_points - 1], *new_point)) == NULL)
 		{
-			polygon->edges[polygon->nb_points - 1] = add_edge(data, (t_edge){1, data->input.wall_type, data->input.id_texture});
+			polygon->edges[polygon->nb_points - 1] = add_edge(data, (t_edge){1, data->input.wall_type, data->input.id_texture, polygon->points[polygon->nb_points - 1], new_point});
 		}
 		polygon->points[polygon->nb_points] = new_point;
 		(polygon->nb_points)++;
@@ -123,7 +123,7 @@ static void	add_seg(t_data *data, t_polygon *polygon, t_ivec2 *new_point, enum e
 		polygon->finished = 1;
 		if ((polygon->edges[polygon->nb_points - 1] = edge_exists(data->elements, data->nb_elements, *polygon->points[polygon->nb_points - 1], *polygon->points[0])) == NULL)
 		{
-			polygon->edges[polygon->nb_points - 1] = add_edge(data, (t_edge){1, data->input.wall_type, data->input.id_texture});
+			polygon->edges[polygon->nb_points - 1] = add_edge(data, (t_edge){1, data->input.wall_type, data->input.id_texture, polygon->points[polygon->nb_points - 1], polygon->points[0]});
 		}
 	}
 	draw_line(polygon->points[polygon->nb_points - (p == MIDDLE ? 2 : 1)], new_point, &data->imgs[IMG_DRAWING],

@@ -66,10 +66,16 @@ uint16_t	find_free_element(t_data *data)
 
 int		drawing_zone(int button, int x, int y, t_data *data)
 {
+	t_ivec2 p;
 	if (data->input.input_mode == SELECTING)
 	{
-		if (loop_elems(button, x, y, data))
-			return (0);
+		loop_elems(button, x, y, data);
+		t_edge *closest_edge;
+
+		if ((closest_edge = get_nearest_edge(&(t_ivec2){x, y}, data->edges, &p)) != NULL)
+		{
+			draw_line(&(t_ivec2){x,y}, &p, &data->imgs[IMG_DRAWING], get_color_code(0, 255, 255, 0));
+		}
 	}
 	else if (data->input.input_mode == DRAWING)
 	{

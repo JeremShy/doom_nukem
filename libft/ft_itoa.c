@@ -12,44 +12,38 @@
 
 #include <libft.h>
 
-long		count(long nb, long i)
+static int      compte(int nbr)
 {
-	long	count;
+	int ret;
 
-	count = nb;
-	while (count / 10)
+	ret = 0;
+	while (nbr != 0)
 	{
-		i++;
-		count /= 10;
+		nbr /= 10;
+		ret++;
 	}
-	return (i);
+	return (ret);
 }
 
-char		*ft_itoa(int nb)
+char            *ft_itoa(int nbr)
 {
-	char	*res;
-	long	i;
-	long	neg;
-	long	tmp;
+	char		*retour;
+	int		nb;
+	int		i;
+	char		tab[17];
 
-	neg = 0;
-	i = 0;
-	if (nb < 0)
+	if (nbr == 0)
+		return (ft_strdup("0"));
+	ft_strcpy(tab, "0123456789");
+	nb = compte(nbr);
+	retour = malloc(nb + 1);
+	i = 1;
+	while (nbr != 0)
 	{
-		tmp = (long)nb * -1;
-		neg = 1;
-		i += 1;
+		retour[nb - i] = tab[nbr % 10];
+		nbr /= 10;
+		i++;
 	}
-	else
-		tmp = (long)nb;
-	res = (char *)malloc(sizeof(char) * count(nb, i) + 1);
-	res[i + 1] = '\0';
-	while (i--)
-	{
-		res[i] = tmp % 10 + 48;
-		tmp /= 10;
-	}
-	if (neg == 1)
-		res[0] = '-';
-	return (res);
+	retour[nb] = '\0';
+	return (retour);
 }

@@ -116,7 +116,6 @@ int		drawing_zone(int x, int y, t_data *data)
 	return (0);
 }
 
-
 int		options_zone(int button, int x, int y, t_data *data)
 {
 	(void)button;
@@ -132,35 +131,35 @@ int		options_zone(int button, int x, int y, t_data *data)
 	else if (x > WALL_TEXT_RIGHT_SX && y > WALL_TEXT_RIGHT_SY && x < WALL_TEXT_RIGHT_EX && y < WALL_TEXT_RIGHT_EY)
 		printf("WALL_TEXT_RIGHT\n");
 	
-	/*else if (x > CEIL_ORI_Y_LEFT_SX && y > CEIL_ORI_Y_LEFT_SY && x < CEIL_ORI_Y_LEFT_EX && y < CEIL_ORI_Y_LEFT_EY)
+	else if (x > CEIL_ORI_Y_LEFT_SX && y > CEIL_ORI_Y_LEFT_SY && x < CEIL_ORI_Y_LEFT_EX && y < CEIL_ORI_Y_LEFT_EY)
 		ceil_angle_y(ARROW_LEFT, data);
 	else if (x > CEIL_ORI_Y_RIGHT_SX && y > CEIL_ORI_Y_RIGHT_SY && x < CEIL_ORI_Y_RIGHT_EX && y < CEIL_ORI_Y_RIGHT_EY)
 		ceil_angle_y(ARROW_RIGHT, data);
 	else if (x > CEIL_ORI_X_LEFT_SX && y > CEIL_ORI_X_LEFT_SY && x < CEIL_ORI_X_LEFT_EX && y < CEIL_ORI_X_LEFT_EY)
-		ceil_height();*/
+		ceil_angle_x(ARROW_LEFT, data);
 	else if (x > CEIL_ORI_X_RIGHT_SX && y > CEIL_ORI_X_RIGHT_SY && x < CEIL_ORI_X_RIGHT_EX && y < CEIL_ORI_X_RIGHT_EY)
-		printf("CEIL_ORI_X_RIGHT\n");
+		ceil_angle_x(ARROW_RIGHT, data);
 	else if (x > CEIL_HEIGHT_LEFT_SX && y > CEIL_HEIGHT_LEFT_SY && x < CEIL_HEIGHT_LEFT_EX && y < CEIL_HEIGHT_LEFT_EY)
-		printf("CEIL_HEIGHT_LEFT\n");
+		ceil_height(ARROW_LEFT, data);
 	else if (x > CEIL_HEIGHT_RIGHT_SX && y > CEIL_HEIGHT_RIGHT_SY && x < CEIL_HEIGHT_RIGHT_EX && y < CEIL_HEIGHT_RIGHT_EY)
-		printf("CEIL_HEIGHT_RIGHT\n");
+		ceil_height(ARROW_RIGHT, data);
 	else if (x > CEIL_TEXT_LEFT_SX && y > CEIL_TEXT_LEFT_SY && x < CEIL_TEXT_LEFT_EX && y < CEIL_TEXT_LEFT_EY)
 		printf("CEIL_TEXT_LEFT\n");
 	else if (x > CEIL_TEXT_RIGHT_SX && y > CEIL_TEXT_RIGHT_SY && x < CEIL_TEXT_RIGHT_EX && y < CEIL_TEXT_RIGHT_EY)
 		printf("CEIL_TEXT_RIGHT\n");
 	
 	else if (x > FLOOR_ORI_Y_LEFT_SX && y > FLOOR_ORI_Y_LEFT_SY && x < FLOOR_ORI_Y_LEFT_EX && y < FLOOR_ORI_Y_LEFT_EY)
-		printf("FLOOR_ORI_Y_LEFT\n");
+		floor_angle_y(ARROW_LEFT, data);
 	else if (x > FLOOR_ORI_Y_RIGHT_SX && y > FLOOR_ORI_Y_RIGHT_SY && x < FLOOR_ORI_Y_RIGHT_EX && y < FLOOR_ORI_Y_RIGHT_EY)
-		printf("FLOOR_ORI_Y_RIGHT\n");
+		floor_angle_y(ARROW_RIGHT, data);
 	else if (x > FLOOR_ORI_X_LEFT_SX && y > FLOOR_ORI_X_LEFT_SY && x < FLOOR_ORI_X_LEFT_EX && y < FLOOR_ORI_X_LEFT_EY)
-		printf("FLOOR_ORI_X_LEFT\n");
+		floor_angle_x(ARROW_LEFT, data);
 	else if (x > FLOOR_ORI_X_RIGHT_SX && y > FLOOR_ORI_X_RIGHT_SY && x < FLOOR_ORI_X_RIGHT_EX && y < FLOOR_ORI_X_RIGHT_EY)
-		printf("FLOOR_ORI_X_RIGHT\n");
+		floor_angle_x(ARROW_RIGHT, data);
 	else if (x > FLOOR_HEIGHT_LEFT_SX && y > FLOOR_HEIGHT_LEFT_SY && x < FLOOR_HEIGHT_LEFT_EX && y < FLOOR_HEIGHT_LEFT_EY)
-		printf("FLOOR_HEIGHT_LEFT\n");
+		floor_height(ARROW_LEFT, data);
 	else if (x > FLOOR_HEIGHT_RIGHT_SX && y > FLOOR_HEIGHT_RIGHT_SY && x < FLOOR_HEIGHT_RIGHT_EX && y < FLOOR_HEIGHT_RIGHT_EY)
-		printf("FLOOR_HEIGHT_RIGHT\n");
+		floor_height(ARROW_RIGHT, data);
 	else if (x > FLOOR_TEXT_LEFT_SX && y > FLOOR_TEXT_LEFT_SY && x < FLOOR_TEXT_LEFT_EX && y < FLOOR_TEXT_LEFT_EY)
 		printf("FLOOR_TEXT_LEFT\n");
 	else if (x > FLOOR_TEXT_RIGHT_SX && y > FLOOR_TEXT_RIGHT_SY && x < FLOOR_TEXT_RIGHT_EX && y < FLOOR_TEXT_RIGHT_EY)
@@ -175,9 +174,9 @@ int		options_zone(int button, int x, int y, t_data *data)
 	else if (x > DOWN_TEXT_RIGHT_SX && y > DOWN_TEXT_RIGHT_SY && x < DOWN_TEXT_RIGHT_EX && y < DOWN_TEXT_RIGHT_EY)
 		printf("DOWN_TEXT_RIGHT\n");
 	else if (x > LIGHT_TEXT_LEFT_SX && y > LIGHT_TEXT_LEFT_SY && x < LIGHT_TEXT_LEFT_EX && y < LIGHT_TEXT_LEFT_EY)
-		printf("LIGHT_TEXT_LEFT\n");
+		light(ARROW_LEFT, data);
 	else if (x > LIGHT_TEXT_RIGHT_SX && y > LIGHT_TEXT_RIGHT_SY && x < LIGHT_TEXT_RIGHT_EX && y < LIGHT_TEXT_RIGHT_EY)
-		printf("LIGHT_TEXT_RIGHT\n");
+		light(ARROW_RIGHT, data);
 
 	else if (x > OBJ_COLL_LEFT_SX && y > OBJ_COLL_LEFT_SY && x < OBJ_COLL_LEFT_EX && y < OBJ_COLL_LEFT_EY)
 		printf("OBJ_COLL_LEFT\n");

@@ -146,9 +146,19 @@ typedef struct	s_input
 	int32_t				id_current_point;
 	enum e_input_mode	mode;
 
+<<<<<<< HEAD
 	uint8_t				ceiling_angle_x;
 	uint8_t				button[8];
 	uint8_t				key[300];
+=======
+	int8_t				ceiling_angle_y;
+	int8_t				ceiling_angle_x;
+	int8_t				ceiling_height;
+	int8_t				floor_angle_y;
+	int8_t				floor_angle_x;
+	int8_t				floor_height;
+	int8_t				light;
+>>>>>>> editor num are set
 }				t_input;
 
 typedef struct	s_data
@@ -203,6 +213,8 @@ uint32_t		get_color_from_typewall(enum e_edge_type t);
 void			swap(int *a, int *b);
 uint8_t			same_edges(const t_ivec2 *a1, const t_ivec2 *a2, const t_ivec2 *b1, const t_ivec2 *b2);
 uint32_t		get_nearest_point(t_data *data, t_ivec2 *point, int32_t *id);
+int32_t			clamp_value(int32_t value, int32_t min, int32_t max);
+t_ivec2			*get_near_point(t_data *data, t_ivec2 *new_point);
 uint8_t			is_equ_ivec2(const t_ivec2 *p1, const t_ivec2 *p2);
 uint8_t			is_point_in_polygon(const t_ivec2 *point, const t_polygon *polygon);
 float			get_idist(const t_ivec2 *p1, const t_ivec2 *p2);
@@ -228,6 +240,7 @@ uint32_t		invert_transparency(uint32_t c);
 
 void			switch_select(t_data *data);
 void			switch_drawing(t_data *data);
+
 void			delete_element(t_element *elem, t_data *data);
 void			draw_polygon(t_polygon *polygon, t_data *data);
 uint32_t		get_idpoint_from_addr(const t_ivec2 *point, t_data *data);
@@ -237,5 +250,15 @@ void			liste_edges(t_data *data);
 
 t_edge			*get_nearest_edge(const t_ivec2 *point, t_edge *edges, float *min);
 t_edge			*get_nearest_edge_exept(const t_ivec2 *point, t_edge *edges, float *min, t_ivec2 *exept);
+=======
+
+void			ceil_angle_y(uint8_t side, t_data *data);
+void			ceil_angle_x(uint8_t side, t_data *data);
+void			ceil_height(uint8_t side, t_data *data);
+void			floor_angle_y(uint8_t side, t_data *data);
+void			floor_angle_x(uint8_t side, t_data *data);
+void			floor_height(uint8_t side, t_data *data);
+void			light(uint8_t side, t_data *data);
+>>>>>>> editor num are set
 
 #endif

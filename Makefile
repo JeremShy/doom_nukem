@@ -13,7 +13,8 @@ SRC_EDITOR_NAME =	main.c \
 					maths_tools.c \
 					debug.c \
 					edge_tools.c \
-					parser_tga.c
+					parser_tga.c \
+					editor_interactions.c
 
 SRC_GAME_NAME =		main.c \
 					print_memory.c

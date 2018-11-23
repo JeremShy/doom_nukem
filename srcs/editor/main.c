@@ -76,6 +76,7 @@ int main()
 	mlx_hook(data.mlx.win_ptr, 5, 0, mouse_release, &data);
 	mlx_hook(data.mlx.win_ptr, 6, 1l << 6, mouse_motion, &data);
 	data.nb_elements = 1;
+	data.input.light = 100;
 
 	// a1.x = 900, a1.y = 300, a2.x = 500, a2.y = 450, b1.x = 900, b1.y = 500, b2.x = 950, b2.y = 650
 

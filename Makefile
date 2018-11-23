@@ -98,3 +98,5 @@ fake_clean :
 	@rm -rf obj/
 
 re : fclean all
+
+make fake_re :  fake_clean all

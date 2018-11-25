@@ -29,7 +29,7 @@ CFLAGS = -Wall -Wextra -g -fsanitize=address
 MLX = minilibx_macos/libmlx.a 
 LIBFT = libft/libft.a
 LFLAGS = -framework OpenGL -framework AppKit $(LIBFT) $(MLX) -fsanitize=address
-INC = -I libft/ -I includes/
+INC = -I libft/ -I includes/ -I minilibx_macos/
 
 OBJ_GAME_PATH = obj/game/
 OBJ_EDITOR_PATH = obj/editor/

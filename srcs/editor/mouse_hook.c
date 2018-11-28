@@ -4,7 +4,7 @@
 ** Returns 1 if an element is touched, 0 else.
 */
 
-static int8_t	loop_elems(int button, int x,int y, t_data *data)
+t_element *get_polygon_from_point(t_data *data, t_ivec2 point)
 {
 	uint32_t		i;
 	float			dist;
@@ -13,13 +13,11 @@ static int8_t	loop_elems(int button, int x,int y, t_data *data)
 
 	i = 0;
 	dist = -1;
-	if (button != 1)
-		return (0);
 	while (i < data->nb_elements)
 	{
 		if (data->elements[i].enabled && data->elements[i].clickable && data->elements[i].polygon.finished)
 		{
-			tmp_dist = is_in_polygon(x, y, &(data->elements[i].polygon));
+			tmp_dist = is_in_polygon(point.x, point.y, &(data->elements[i].polygon));
 			if (tmp_dist != -1 && (tmp_dist < dist || dist == -1))
 			{
 				dist = tmp_dist;
@@ -29,7 +27,19 @@ static int8_t	loop_elems(int button, int x,int y, t_data *data)
 		i++;
 	}
 	if (dist != -1)
-		data->elements[id].on_click_func(data, id);
+		return (&data->elements[id]);
+	return (NULL);
+}
+
+static int8_t	loop_elems(int button, int x,int y, t_data *data)
+{
+	t_element *elem;
+
+	if (button != 1)
+		return (0);
+	elem = get_polygon_from_point(data, (t_ivec2){x, y});
+	if (elem)
+		elem->on_click_func(data, elem->id);
 	return (0);
 }
 
@@ -66,8 +76,17 @@ uint16_t	find_free_element(t_data *data)
 
 int		drawing_zone(int button, int x, int y, t_data *data)
 {
-	t_ivec2 p;
-	if (data->input.input_mode == SELECTING)
+	t_ivec2		p;
+	t_element	*elem;
+
+	if (data->input.input_mode == DELETE_SECTOR)
+	{
+		elem = get_polygon_from_point(data, (t_ivec2){x, y});
+		if (elem)
+			delete_element(elem, data);
+		data->update_drawing = 1;
+	}
+	else if (data->input.input_mode == SELECTING)
 	{
 		loop_elems(button, x, y, data);
 		t_edge *closest_edge;

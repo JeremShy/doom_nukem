@@ -34,10 +34,11 @@ t_ivec2	*get_near_point(t_data *data, t_ivec2 *new_point)
 	i = 0;
 	while (i < MAX_POINTS_NBR)
 	{
-		if (data->used_point[i] == 1)
+		if (data->used_point[i] > 0)
 		{
 			if (get_idist(new_point, &data->points[i]) < 10)
 			{
+				data->used_point[i]++;
 				return (&data->points[i]);
 			}
 		}

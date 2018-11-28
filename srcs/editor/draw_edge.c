@@ -27,7 +27,7 @@ static t_ivec2	*add_points(t_data *data, const t_ivec2 *new_point)
 		if (!data->used_point[i])
 		{
 			data->points[i] = *new_point;
-			data->used_point[i] = 1;
+			data->used_point[i]++;
 			// printf("data->point[i] = %d, %d\n", data->points[i].x, data->points[i].y);	
 			// printf("new_point = %d, %d\n", new_point->x, new_point->y);
 			return (&data->points[i]);

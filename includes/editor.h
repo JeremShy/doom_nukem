@@ -63,7 +63,8 @@ enum	e_edge_type
 enum	e_input_mode
 {
 	DRAWING,
-	SELECTING
+	SELECTING,
+	DELETE_SECTOR
 };
 
 typedef struct	s_image_spec
@@ -153,6 +154,7 @@ typedef struct	s_data
 
 	t_img		imgs[MAX_IMAGE];
 
+	uint8_t		update_drawing;
 	t_input		input;
 
 	uint32_t	nb_elements;
@@ -218,6 +220,8 @@ uint32_t		invert_transparency(uint32_t c);
 
 void			switch_select(t_data *data);
 void			switch_drawing(t_data *data);
+void			delete_element(t_element *elem, t_data *data);
+void			draw_polygon(t_polygon *polygon, t_data *data);
 
 t_edge			*get_nearest_edge(const t_ivec2 *point, t_edge *edges, t_ivec2 *p4);
 

@@ -77,26 +77,27 @@ uint16_t	find_free_element(t_data *data)
 int		drawing_zone(int button, int x, int y, t_data *data)
 {
 	t_ivec2		p;
+	t_edge 		*closest_edge;
 	t_element	*elem;
+	float		dist;
 
-	if (data->input.input_mode == DELETE_SECTOR)
+	if (data->input.mode == DELETE_SECTOR)
 	{
 		elem = get_polygon_from_point(data, (t_ivec2){x, y});
 		if (elem)
 			delete_element(elem, data);
 		data->update_drawing = 1;
 	}
-	else if (data->input.input_mode == SELECTING)
+	else if (data->input.mode == SELECTING)
 	{
 		loop_elems(button, x, y, data);
-		t_edge *closest_edge;
 
-		if ((closest_edge = get_nearest_edge(&(t_ivec2){x, y}, data->edges, &p)) != NULL)
+		if ((closest_edge = get_nearest_edge(&(t_ivec2){x, y}, data->edges, &p, &dist)) != NULL)
 		{
 			draw_line(&(t_ivec2){x,y}, &p, &data->imgs[IMG_DRAWING], get_color_code(0, 255, 255, 0));
 		}
 	}
-	else if (data->input.input_mode == DRAWING)
+	else if (data->input.mode == DRAWING)
 	{
 		if (data->input.id_current_element == -1)
 			data->input.id_current_element = find_free_element(data);
@@ -108,6 +109,12 @@ int		drawing_zone(int button, int x, int y, t_data *data)
 			data->input.id_current_element = -1;
 		}
 	}
+	else if (data->input.mode == MOVE_POINT)
+	{
+		if (get_nearest_point(data, &(t_ivec2){x, y}, &data->input.id_current_point) >= 10)
+			data->input.id_current_point = -1;
+
+	}
 	return (0);
 }
 
@@ -117,7 +124,7 @@ int		options_zone(int button, int x, int y, t_data *data)
 	(void)button;
 	(void)data;
 	if (x > DRAW_SX && y > DRAW_SY && x < DRAW_EX && y < DRAW_EY)
-		data->input.input_mode == DRAWING ? switch_select(data) : switch_drawing(data);
+		data->input.mode == DRAWING ? switch_select(data) : switch_drawing(data);
 	else if (x > WALL_SX && y > WALL_SY && x < WALL_EX && y < WALL_EY)
 		data->input.wall_type = SOLID;
 	else if (x > PORTAL_SX && y > PORTAL_SY && x < PORTAL_EX && y < PORTAL_EY)
@@ -189,15 +196,44 @@ int		options_zone(int button, int x, int y, t_data *data)
 	return (0);
 }
 
-int	mouse_hook(int button, int x,int y, t_data *data)
+int		mouse_motion(int x, int y, t_data *data)
 {
-	printf("in mouse_hook.\n");
+	// if (x < 0 || y < 0 || x >= WIN_SIZE_X || y >= WIN_SIZE_Y)
+	// 	return (0);
+	if (data->input.mode == MOVE_POINT && data->input.button[1] && data->input.id_current_point != -1)
+	{
+		clamp(&x, 10, DRAWING_ZONE_WIDTH);
+		clamp(&y, 10, WIN_SIZE_Y - 1 - 10);
+		data->update_drawing = 1;
+		data->points[data->input.id_current_point] = get_grid_point((t_ivec2){x, y});
+	}
+	return (0);
+}
+
+int	mouse_press(int button, int x,int y, t_data *data)
+{
+	printf("in mouse_press.\n");
 	printf("paramters : {button : %d, {%d, %d}}\n", button, x, y);
+	data->input.button[button] = 1;
 	if (x < 0 || y < 0 || x >= WIN_SIZE_X || y >= WIN_SIZE_Y)
 		return (0);
 	if (x < DRAWING_ZONE_WIDTH)
 		drawing_zone(button, x, y, data);
 	else
 		options_zone(button, x, y, data);
+	return (0);
+}
+
+int	mouse_release(int button, int x,int y, t_data *data)
+{
+	printf("in mouse_release.\n");
+	printf("paramters : {button : %d, {%d, %d}}\n", button, x, y);
+	data->input.button[button] = 0;
+	// if (x < 0 || y < 0 || x >= WIN_SIZE_X || y >= WIN_SIZE_Y)
+	// 	return (0);
+	// if (x < DRAWING_ZONE_WIDTH)
+	// 	drawing_zone(button, x, y, data);
+	// else
+	// 	options_zone(button, x, y, data);
 	return (0);
 }

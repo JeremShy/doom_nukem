@@ -16,6 +16,7 @@
 # define KEY_P 35
 # define KEY_X 7
 # define KEY_L 37
+# define KEY_M 46
 
 typedef struct	s_vec2 {
 	float	x;

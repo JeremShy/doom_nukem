@@ -22,7 +22,6 @@ int 		idot_prod(const t_ivec2 *v1, const t_ivec2 *v2)
 
 float		iangle(const t_ivec2 v1, const t_ivec2 v2)
 {
-	printf("acos(%f) = %f degres\n", idot_prod(&v1, &v2) / inorm(&v1) / inorm(&v2), acos(idot_prod(&v1, &v2) / inorm(&v1) / inorm(&v2)) * 180 / M_PI);
 	return (acos(idot_prod(&v1, &v2) / inorm(&v1) / inorm(&v2)));
 }
 

@@ -27,28 +27,35 @@ uint8_t	same_edges(const t_ivec2 *a1, const t_ivec2 *a2, const t_ivec2 *b1, cons
 	return (is_equ_ivec2(a1, b1) && is_equ_ivec2(a2, b2)) || (is_equ_ivec2(a1, b2) && is_equ_ivec2(a2, b1));
 }
 
-t_ivec2	*get_near_point(t_data *data, t_ivec2 *new_point)
+t_ivec2		get_grid_point(t_ivec2 point)
+{
+	point.x = point.x + ((point.x % GRID_ROUND < GRID_ROUND / 2) ? -point.x % GRID_ROUND : GRID_ROUND - point.x % GRID_ROUND);
+	point.y = point.y + ((point.y % GRID_ROUND < GRID_ROUND / 2) ? -point.y % GRID_ROUND : GRID_ROUND - point.y % GRID_ROUND);
+	clamp(&point.x, 10, DRAWING_ZONE_WIDTH);
+	clamp(&point.y, 10, WIN_SIZE_Y - 1 - 10);
+	return (point);
+}
+
+uint32_t	get_nearest_point(t_data *data, t_ivec2 *point, int32_t *id)
 {
 	uint32_t	i;
+	uint32_t	dist;
+	uint32_t	tmp;
 
 	i = 0;
+	dist = -1u;
+	*id = -1;
 	while (i < MAX_POINTS_NBR)
 	{
 		if (data->used_point[i] > 0)
-		{
-			if (get_idist(new_point, &data->points[i]) < 10)
+			if ((tmp = get_idist(point, &data->points[i])) < dist)
 			{
-				data->used_point[i]++;
-				return (&data->points[i]);
+				*id = i;
+				dist = tmp;
 			}
-		}
 		i++;
 	}
-	new_point->x = new_point->x + ((new_point->x % GRID_ROUND < GRID_ROUND / 2) ? -new_point->x % GRID_ROUND : GRID_ROUND - new_point->x % GRID_ROUND);
-	new_point->y = new_point->y + ((new_point->y % GRID_ROUND < GRID_ROUND / 2) ? -new_point->y % GRID_ROUND : GRID_ROUND - new_point->y % GRID_ROUND);
-	clamp(&new_point->x, 10, DRAWING_ZONE_WIDTH);
-	clamp(&new_point->y, 10, WIN_SIZE_Y - 1 - 10);
-	return (NULL);
+	return (dist);
 }
 
 uint8_t		is_equ_ivec2(const t_ivec2 *p1, const t_ivec2 *p2)
@@ -63,7 +70,7 @@ uint8_t		is_point_in_polygon(const t_ivec2 *point, const t_polygon *polygon)
 	i = 0;
 	while (i < polygon->nb_points)
 	{
-		if (is_equ_ivec2(point, polygon->points[i]))
+		if (is_equ_ivec2(point, polygon->edges[i]->p1))
 			return (1);
 		i++;
 	}

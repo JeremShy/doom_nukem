@@ -39,10 +39,16 @@ static uint8_t	ft_init(t_data *data, uint32_t w, uint32_t h)
 	else
 	{
 		data->input.id_current_element = -1;
-		data->input.input_mode = DRAWING;
+		data->input.mode = DRAWING;
 		return (1);
 	}
 	return (0);
+}
+
+int		close_hook(t_data *data)
+{
+	(void)data;
+	exit(EXIT_SUCCESS);
 }
 
 int main()
@@ -63,15 +69,14 @@ int main()
 		put_pixel_to_image(&data.imgs[IMG_BACKGROUND], i % header.image_spec.width, header.image_spec.height - i / header.image_spec.width, invert_transparency(background[i]));
 		i++;
 	}
-	printf("in editor\n");
-	printf("data = %zu\nelement = %zu\npoint = %zu\nedge = %zu\npolygon = %zu\n\n", sizeof(data), sizeof(struct s_element), sizeof(struct s_ivec2), sizeof(struct s_edge), sizeof(struct s_polygon));
 	mlx_loop_hook(data.mlx.mlx_ptr, loop_hook, &data);
-	mlx_mouse_hook(data.mlx.win_ptr, mouse_hook, &data);
-	mlx_key_hook(data.mlx.win_ptr, key_hook, &data);
-
+	mlx_hook(data.mlx.win_ptr, 2, 0, key_press, &data);
+	mlx_hook(data.mlx.win_ptr, 3, 0, key_release, &data);
+	mlx_hook(data.mlx.win_ptr, 4, 0, mouse_press, &data);
+	mlx_hook(data.mlx.win_ptr, 5, 0, mouse_release, &data);
+	mlx_hook(data.mlx.win_ptr, 6, 1l << 6, mouse_motion, &data);
 	data.nb_elements = 1;
 
-	printf("img ptr = %p\n", data.imgs[IMG_BACKGROUND].addr);
 	// a1.x = 900, a1.y = 300, a2.x = 500, a2.y = 450, b1.x = 900, b1.y = 500, b2.x = 950, b2.y = 650
 
 	// t_ivec2 p1 = {900, 300}; // rouge
@@ -90,7 +95,7 @@ int main()
 	mlx_put_image_to_window(data.mlx.mlx_ptr, data.mlx.win_ptr, data.imgs[IMG_BACKGROUND].ptr, 0, 0);
 	mlx_put_image_to_window(data.mlx.mlx_ptr, data.mlx.win_ptr, data.imgs[IMG_DRAWING].ptr, 0, 0);
 
-
+	mlx_hook(data.mlx.win_ptr, 17, 3, close_hook, &data);
 	mlx_loop(data.mlx.mlx_ptr);
 	return (0);
 }

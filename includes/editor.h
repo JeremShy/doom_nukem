@@ -64,7 +64,8 @@ enum	e_input_mode
 {
 	DRAWING,
 	SELECTING,
-	DELETE_SECTOR
+	DELETE_SECTOR,
+	MOVE_POINT
 };
 
 typedef struct	s_image_spec
@@ -106,7 +107,6 @@ typedef struct		s_polygon
 	uint8_t			nb_points;
 	int8_t			finished;
 
-	t_ivec2			*points[MAX_POLYGON_EDGES];
 	t_edge			*edges[MAX_POLYGON_EDGES];
 }					t_polygon;
 
@@ -143,9 +143,12 @@ typedef struct	s_input
 	uint16_t			id_texture;
 	enum e_edge_type	wall_type;
 	int32_t				id_current_element;
-	enum e_input_mode	input_mode;
+	int32_t				id_current_point;
+	enum e_input_mode	mode;
 
 	uint8_t				ceiling_angle_x;
+	uint8_t				button[8];
+	uint8_t				key[300];
 }				t_input;
 
 typedef struct	s_data
@@ -167,8 +170,11 @@ typedef struct	s_data
 }				t_data;
 
 int				loop_hook(t_data *data);
-int				mouse_hook(int button, int x,int y, t_data *data);
-int				key_hook(int keycode, t_data *data);
+int				mouse_motion(int x, int y, t_data *data);
+int				mouse_press(int button, int x, int y, t_data *data);
+int				mouse_release(int button, int x, int y, t_data *data);
+int				key_press(int keycode, t_data *data);
+int				key_release(int keycode, t_data *data);
 
 uint32_t		get_color_code(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 void			put_pixel_to_image(t_img *img, int x, int y, uint32_t color);
@@ -196,18 +202,20 @@ float			is_in_polygon(int x, int y, const t_polygon *poly);
 uint32_t		get_color_from_typewall(enum e_edge_type t);
 void			swap(int *a, int *b);
 uint8_t			same_edges(const t_ivec2 *a1, const t_ivec2 *a2, const t_ivec2 *b1, const t_ivec2 *b2);
-t_ivec2			*get_near_point(t_data *data, t_ivec2 *new_point);
+uint32_t		get_nearest_point(t_data *data, t_ivec2 *point, int32_t *id);
 uint8_t			is_equ_ivec2(const t_ivec2 *p1, const t_ivec2 *p2);
 uint8_t			is_point_in_polygon(const t_ivec2 *point, const t_polygon *polygon);
 float			get_idist(const t_ivec2 *p1, const t_ivec2 *p2);
 uint8_t			is_common_point(const t_ivec2 *a1, const t_ivec2 *a2, const t_ivec2 *b1, const t_ivec2 *b2);
+t_ivec2			get_grid_point(t_ivec2 point);
 
 void			draw_edge(t_data *data, t_ivec2 new_point);
 
 uint32_t		nb_intersec_in_poly(const t_polygon *polygon, const t_ivec2 *new_point, const t_ivec2 *last_point);
 float			first_intersect_dist_in_poly(const t_polygon *polygon, const t_ivec2 *new_point, const t_ivec2 *last_point);
 
-uint8_t			check_segment(const t_data *data, const t_ivec2 *new_point, const t_ivec2 *last_point);
+uint8_t 		check_point(t_data *data, const t_ivec2 *point);
+uint8_t			check_segment(t_data *data, const t_ivec2 *new_point, const t_ivec2 *last_point);
 void			print_click(t_data *data, uint16_t id);
 
 t_intersection	is_intersect(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec2 b2);
@@ -222,7 +230,8 @@ void			switch_select(t_data *data);
 void			switch_drawing(t_data *data);
 void			delete_element(t_element *elem, t_data *data);
 void			draw_polygon(t_polygon *polygon, t_data *data);
+uint32_t		get_idpoint_from_addr(const t_ivec2 *point, t_data *data);
 
-t_edge			*get_nearest_edge(const t_ivec2 *point, t_edge *edges, t_ivec2 *p4);
+t_edge			*get_nearest_edge(const t_ivec2 *point, t_edge *edges, t_ivec2 *p4, float *min);
 
 #endif

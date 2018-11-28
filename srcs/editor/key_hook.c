@@ -3,23 +3,11 @@
 void	draw_polygon(t_polygon *polygon, t_data *data)
 {
 	uint32_t	edge;
-	t_ivec2		*p1;
-	t_ivec2		*p2;
 
 	edge = 0;
 	while (edge < polygon->nb_points)
 	{
-		if (edge == polygon->nb_points - 1)
-		{
-			p1 = polygon->points[edge];
-			p2 = polygon->points[0];
-		}
-		else
-		{
-			p1 = polygon->points[edge];
-			p2 = polygon->points[edge + 1];
-		}
-		draw_line(p1, p2, &data->imgs[IMG_DRAWING], get_color_from_typewall(polygon->edges[edge]->type));
+		draw_line(polygon->edges[edge]->p1, polygon->edges[edge]->p2, &data->imgs[IMG_DRAWING], get_color_from_typewall(polygon->edges[edge]->type));
 		edge++;
 	}
 }
@@ -46,7 +34,7 @@ void	delete_edge(t_edge *edge, const t_data *data)
 	ft_bzero(edge, sizeof(t_edge));
 }
 
-uint32_t	get_idpoint_from_addr(t_ivec2 *point, t_data *data)
+uint32_t	get_idpoint_from_addr(const t_ivec2 *point, t_data *data)
 {
 	return ((point - data->points) / sizeof(t_ivec2));
 }
@@ -82,25 +70,33 @@ int		pressed_backquote(t_data *data)
 
 void	switch_select(t_data *data)
 {
-	if (data->input.input_mode == SELECTING)
+	if (data->input.mode == SELECTING)
 		return ;
 	pressed_backquote(data);
-	data->input.input_mode = SELECTING;
+	data->input.mode = SELECTING;
 }
 
 void	switch_drawing(t_data *data)
 {
-	if (data->input.input_mode == DRAWING)
+	if (data->input.mode == DRAWING)
 		return ;
-	data->input.input_mode = DRAWING;
+	data->input.mode = DRAWING;
 }
 
 void	switch_delete_sector(t_data *data)
 {
-	if (data->input.input_mode == DELETE_SECTOR)
+	if (data->input.mode == DELETE_SECTOR)
 		return ;
 	pressed_backquote(data);
-	data->input.input_mode = DELETE_SECTOR;
+	data->input.mode = DELETE_SECTOR;
+}
+
+void	switch_move_point(t_data *data)
+{
+	if (data->input.mode == MOVE_POINT)
+		return ;
+	pressed_backquote(data);
+	data->input.mode = MOVE_POINT;
 }
 
 void	liste_points(t_data *data)
@@ -117,10 +113,10 @@ void	liste_points(t_data *data)
 	}
 }
 
-int	key_hook(int keycode, t_data *data)
+int	key_press(int keycode, t_data *data)
 {
-	(void)data;
 	printf("keycode : %d\n", keycode);
+	data->input.key[keycode] = 1;
 	if (keycode == KEY_ESCAPE)
 		exit(EXIT_SUCCESS);
 	else if (keycode == KEY_BACKQUOTE)
@@ -131,12 +127,22 @@ int	key_hook(int keycode, t_data *data)
 		switch_drawing(data);
 	else if (keycode == KEY_P)
 	{
-		if (data->input.input_mode == DRAWING)
+		if (data->input.mode == DRAWING)
 			data->input.wall_type = PORTAL;
 	}
 	else if (keycode == KEY_X)
 		switch_delete_sector(data);
 	else if (keycode == KEY_L)
 		liste_points(data);
+	else if (keycode == KEY_M)
+		switch_move_point(data);
+	return (0);
+}
+
+int	key_release(int keycode, t_data *data)
+{
+	data->input.key[keycode] = 0;
+	(void)keycode;
+	(void)data;
 	return (0);
 }

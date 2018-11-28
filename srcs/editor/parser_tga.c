@@ -32,7 +32,6 @@ uint32_t	*parse_tga(char *name, t_tga_header *header)
 		return (NULL);
 	}
 	*header = *(t_tga_header *)addr;
-	printf("je suis ici\n");
 	if (header->id_length != 0 || header->color_map_type != 0 || header->image_type != 2
 		|| ft_memcmp(header->color_map_spec, "\0\0\0\0\0", 5) != 0)
 	{

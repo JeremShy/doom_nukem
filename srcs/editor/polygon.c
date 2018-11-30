@@ -6,16 +6,17 @@ void	print_click(t_data *data, uint16_t id)
 	printf("clicked element  : %u\n", id);
 }
 
-uint8_t check_point(t_data *data, const t_ivec2 *point)
+uint8_t check_point(t_data *data, const t_ivec2 *point, t_ivec2 *exept)
 {
 	float 			dist;
-	t_ivec2 		p;
 	
-	get_nearest_edge(point, data->edges, &p, &dist);
-	printf("dist = %f\n", dist);
+	if (exept)
+		get_nearest_edge_exept(point, data->edges, &dist, exept);
+	else
+		get_nearest_edge(point, data->edges, &dist);
 	if (dist != -1 && dist < 10)
 	{
-		printf("------- Check_point Error\n");
+		printf("------- Check_point Error = %f\n", dist);
 		return (0);
 	}
 	return (1);

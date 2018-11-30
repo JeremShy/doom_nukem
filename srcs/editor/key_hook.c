@@ -1,5 +1,33 @@
 #include <editor.h>
 
+void	liste_edges(t_data *data)
+{
+	int i;
+
+	i = 0;
+	printf("EDGE : -------------\n");
+	while (i < MAX_POINTS_NBR)
+	{
+		if (data->edges[i].used)
+			printf("edge[%u] = {%u, %u}\n", i, get_idpoint_from_addr(data->edges[i].p1, data), get_idpoint_from_addr(data->edges[i].p2, data));
+		i++;
+	}
+}
+
+void	liste_points(t_data *data)
+{
+	int i;
+
+	i = 0;
+	printf("POINT : -------------\n");
+	while (i < MAX_POINTS_NBR)
+	{
+		if (data->used_point[i])
+			printf("point[%u] * %d = {%u, %u}\n", i, data->used_point[i], data->points[i].x, data->points[i].y);
+		i++;
+	}
+}
+
 void	draw_polygon(t_polygon *polygon, t_data *data)
 {
 	uint32_t	edge;
@@ -11,6 +39,13 @@ void	draw_polygon(t_polygon *polygon, t_data *data)
 		edge++;
 	}
 }
+
+void	delete_point(t_ivec2 *point, t_data *data)
+{
+	printf("delete id %d\n", get_idpoint_from_addr(point, data)); 
+	data->used_point[get_idpoint_from_addr(point, data)]--;
+}
+
 void	delete_edge(t_edge *edge, const t_data *data)
 {
 	uint32_t i;
@@ -24,19 +59,19 @@ void	delete_edge(t_edge *edge, const t_data *data)
 			i = 0;
 			while (i < data->elements[y].polygon.nb_points)
 			{
-				if (data->elements[y].polygon.edges[i] && data->elements[y].polygon.edges[i]->used && edge == data->elements[y].polygon.edges[i])
+				if (edge == data->elements[y].polygon.edges[i])
 					return ;
 				i++;
 			}
 		}
 		y++;
 	}
-	ft_bzero(edge, sizeof(t_edge));
+	edge->used = 0;
 }
 
 uint32_t	get_idpoint_from_addr(const t_ivec2 *point, t_data *data)
 {
-	return ((point - data->points) / sizeof(t_ivec2));
+	return (point - data->points);
 }
 
 void	delete_element(t_element *elem, t_data *data)
@@ -45,15 +80,12 @@ void	delete_element(t_element *elem, t_data *data)
 
 	elem->enabled = 0;
 	i = 0;
-	while (i < elem->polygon.nb_points - 1)
+	while (i < elem->polygon.nb_points)
 	{
 		delete_edge(elem->polygon.edges[i], data);
-		data->used_point[i]--;
+		delete_point(elem->polygon.edges[i]->p1, data);
 		i++;
 	}
-	if (elem->polygon.finished)
-		delete_edge(elem->polygon.edges[i], data);
-	data->used_point[i]--;
 	ft_bzero(elem, sizeof(t_element));
 }
 
@@ -61,8 +93,7 @@ int		pressed_backquote(t_data *data)
 {
 	if (data->input.id_current_element == -1)
 		return (0);
-	else
-		data->update_drawing = 1;
+	data->update_drawing = 1;
 	delete_element(&data->elements[data->input.id_current_element], data);
 	data->input.id_current_element = -1;
 	return (1);
@@ -99,20 +130,6 @@ void	switch_move_point(t_data *data)
 	data->input.mode = MOVE_POINT;
 }
 
-void	liste_points(t_data *data)
-{
-	int i;
-
-	i = 0;
-	printf("POINT : -------------\n");
-	while (i < MAX_POINTS_NBR)
-	{
-		if (data->used_point[i])
-			printf("point[%u] = {%u, %u}\n", i, data->points[i].x, data->points[i].y);
-		i++;
-	}
-}
-
 int	key_press(int keycode, t_data *data)
 {
 	printf("keycode : %d\n", keycode);
@@ -134,6 +151,8 @@ int	key_press(int keycode, t_data *data)
 		switch_delete_sector(data);
 	else if (keycode == KEY_L)
 		liste_points(data);
+	else if (keycode == KEY_E)
+		liste_edges(data);
 	else if (keycode == KEY_M)
 		switch_move_point(data);
 	return (0);

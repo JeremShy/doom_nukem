@@ -31,17 +31,15 @@ t_element *get_polygon_from_point(t_data *data, t_ivec2 point)
 	return (NULL);
 }
 
-static int8_t	loop_elems(int button, int x,int y, t_data *data)
-{
-	t_element *elem;
-
-	if (button != 1)
-		return (0);
-	elem = get_polygon_from_point(data, (t_ivec2){x, y});
-	if (elem)
-		elem->on_click_func(data, elem->id);
-	return (0);
-}
+// static int8_t	loop_elems(int x,int y, t_data *data)
+// {
+// 	t_element *elem;
+// ;
+// 	elem = get_polygon_from_point(data, (t_ivec2){x, y});
+// 	if (elem)
+// 		elem->on_click_func(data, elem->id);
+// 	return (0);
+// }
 
 uint16_t	find_free_element(t_data *data)
 {
@@ -74,12 +72,11 @@ uint16_t	find_free_element(t_data *data)
 	return (e->id);
 }
 
-int		drawing_zone(int button, int x, int y, t_data *data)
+int		drawing_zone(int x, int y, t_data *data)
 {
-	t_ivec2		p;
-	t_edge 		*closest_edge;
+	// t_ivec2		p;
 	t_element	*elem;
-	float		dist;
+	// float		dist;
 
 	if (data->input.mode == DELETE_SECTOR)
 	{
@@ -90,17 +87,18 @@ int		drawing_zone(int button, int x, int y, t_data *data)
 	}
 	else if (data->input.mode == SELECTING)
 	{
-		loop_elems(button, x, y, data);
+		// loop_elems(x, y, data);
 
-		if ((closest_edge = get_nearest_edge(&(t_ivec2){x, y}, data->edges, &p, &dist)) != NULL)
-		{
-			draw_line(&(t_ivec2){x,y}, &p, &data->imgs[IMG_DRAWING], get_color_code(0, 255, 255, 0));
-		}
+		// if (get_nearest_edge(&(t_ivec2){x, y}, data->edges, &p, &dist) != NULL)
+		// {
+		// 	draw_line(&(t_ivec2){x,y}, &p, &data->imgs[IMG_DRAWING], get_color_code(0, 255, 255, 0));
+		// }
 	}
 	else if (data->input.mode == DRAWING)
 	{
 		if (data->input.id_current_element == -1)
 			data->input.id_current_element = find_free_element(data);
+		printf("draw\n");
 		draw_edge(data, (t_ivec2){x, y});
 		if (data->elements[data->input.id_current_element].polygon.finished)
 		{
@@ -196,29 +194,64 @@ int		options_zone(int button, int x, int y, t_data *data)
 	return (0);
 }
 
+uint8_t	check_moving_point(t_data *data, t_ivec2 point, t_ivec2 *current)
+{
+	uint32_t i;
+	uint32_t j;
+
+	i = 0;
+	while (i < MAX_POINTS_NBR)
+	{
+		if (data->edges[i].used)
+			if (data->edges[i].p1 == current || data->edges[i].p2 == current)
+			{
+				j = 0;
+				while (j < MAX_POINTS_NBR)
+				{
+					if (data->edges[j].used)
+						if (data->edges[j].p1 != current && data->edges[j].p2 != current)
+							if (is_intersect(data->edges[i].p1 == current ?
+point : *data->edges[i].p1, data->edges[i].p1 == current ? *data->edges[i].p2
+: point, *data->edges[j].p1, *data->edges[j].p2).intersect)
+								return (0);
+					j++;
+				}
+			}
+		i++;
+	}
+	return (check_point(data, &point, current));
+}
+
 int		mouse_motion(int x, int y, t_data *data)
 {
 	// if (x < 0 || y < 0 || x >= WIN_SIZE_X || y >= WIN_SIZE_Y)
 	// 	return (0);
 	if (data->input.mode == MOVE_POINT && data->input.button[1] && data->input.id_current_point != -1)
 	{
-		clamp(&x, 10, DRAWING_ZONE_WIDTH);
-		clamp(&y, 10, WIN_SIZE_Y - 1 - 10);
-		data->update_drawing = 1;
-		data->points[data->input.id_current_point] = get_grid_point((t_ivec2){x, y});
+		clamp(&x, 10, DRAWING_ZONE_WIDTH - 10);
+		clamp(&y, 10, WIN_SIZE_Y - 10);
+		printf("x = %d, y = %d\n", x, y);
+		if (check_moving_point(data, (t_ivec2){x, y}, &data->points[data->input.id_current_point]))
+		{
+			data->update_drawing = 1;
+			data->points[data->input.id_current_point] = (t_ivec2){x, y};
+		}
 	}
 	return (0);
 }
 
-int	mouse_press(int button, int x,int y, t_data *data)
+int	mouse_press(int button, int x, int y, t_data *data)
 {
-	printf("in mouse_press.\n");
-	printf("paramters : {button : %d, {%d, %d}}\n", button, x, y);
+	// printf("in mouse_press.\n");
+	// printf("paramters : {button : %d, {%d, %d}}\n", button, x, y);
 	data->input.button[button] = 1;
 	if (x < 0 || y < 0 || x >= WIN_SIZE_X || y >= WIN_SIZE_Y)
 		return (0);
-	if (x < DRAWING_ZONE_WIDTH)
-		drawing_zone(button, x, y, data);
+	if (x < DRAWING_ZONE_WIDTH && button == 1)
+	{
+		printf("I press drawing\n");
+		drawing_zone(x, y, data);
+	}
 	else
 		options_zone(button, x, y, data);
 	return (0);
@@ -226,9 +259,12 @@ int	mouse_press(int button, int x,int y, t_data *data)
 
 int	mouse_release(int button, int x,int y, t_data *data)
 {
-	printf("in mouse_release.\n");
-	printf("paramters : {button : %d, {%d, %d}}\n", button, x, y);
+	(void)x;
+	(void)y;
+	// printf("in mouse_release.\n");
+	// printf("paramters : {button : %d, {%d, %d}}\n", button, x, y);
 	data->input.button[button] = 0;
+	data->input.id_current_point = -1;
 	// if (x < 0 || y < 0 || x >= WIN_SIZE_X || y >= WIN_SIZE_Y)
 	// 	return (0);
 	// if (x < DRAWING_ZONE_WIDTH)

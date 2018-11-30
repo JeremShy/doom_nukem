@@ -214,7 +214,7 @@ void			draw_edge(t_data *data, t_ivec2 new_point);
 uint32_t		nb_intersec_in_poly(const t_polygon *polygon, const t_ivec2 *new_point, const t_ivec2 *last_point);
 float			first_intersect_dist_in_poly(const t_polygon *polygon, const t_ivec2 *new_point, const t_ivec2 *last_point);
 
-uint8_t 		check_point(t_data *data, const t_ivec2 *point);
+uint8_t 		check_point(t_data *data, const t_ivec2 *point, t_ivec2 *exept);
 uint8_t			check_segment(t_data *data, const t_ivec2 *new_point, const t_ivec2 *last_point);
 void			print_click(t_data *data, uint16_t id);
 
@@ -231,7 +231,11 @@ void			switch_drawing(t_data *data);
 void			delete_element(t_element *elem, t_data *data);
 void			draw_polygon(t_polygon *polygon, t_data *data);
 uint32_t		get_idpoint_from_addr(const t_ivec2 *point, t_data *data);
+void			delete_point(t_ivec2 *point, t_data *data);
+void			liste_points(t_data *data);
+void			liste_edges(t_data *data);
 
-t_edge			*get_nearest_edge(const t_ivec2 *point, t_edge *edges, t_ivec2 *p4, float *min);
+t_edge			*get_nearest_edge(const t_ivec2 *point, t_edge *edges, float *min);
+t_edge			*get_nearest_edge_exept(const t_ivec2 *point, t_edge *edges, float *min, t_ivec2 *exept);
 
 #endif

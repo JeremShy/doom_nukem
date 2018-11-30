@@ -22,12 +22,12 @@ static t_ivec2	*add_points(t_data *data, const t_ivec2 *new_point)
 	uint32_t i;
 
 	i = 0;
-	while (i < MAX_POLYGON_EDGES * MAX_ELEMENT_NBR)
+	while (i < MAX_POINTS_NBR)
 	{
 		if (!data->used_point[i])
 		{
 			data->points[i] = *new_point;
-			data->used_point[i]++;
+			data->used_point[i] = 1;
 			// printf("data->point[i] = %d, %d\n", data->points[i].x, data->points[i].y);	
 			// printf("new_point = %d, %d\n", new_point->x, new_point->y);
 			return (&data->points[i]);
@@ -38,12 +38,14 @@ static t_ivec2	*add_points(t_data *data, const t_ivec2 *new_point)
 	exit(EXIT_FAILURE);
 }
 
-static void	edge_exists(t_element *elements, uint32_t nb_elements, t_edge **edge)
+static void	edge_exists(t_data *data, uint32_t nb_elements, t_edge **edge)
 {
 	uint32_t	i;
 	uint32_t	j;
 	t_polygon	*poly;
-
+	t_element *elements;
+	
+	elements = data->elements;
 	i = 0;
 	while (i < nb_elements)
 	{
@@ -58,10 +60,11 @@ static void	edge_exists(t_element *elements, uint32_t nb_elements, t_edge **edge
 		{
 			if (poly->edges[j] != *edge && same_edges(poly->edges[j]->p1, poly->edges[j]->p2, (*edge)->p1, (*edge)->p2))
 			{
-				(*edge)->used = 0;
 				poly->edges[j]->p2 = (*edge)->p2;
 				poly->edges[j]->p1 = (*edge)->p1;
+				(*edge)->used = 0;
 				*edge = poly->edges[j];
+				(*edge)->type = data->input.wall_type;
 				return ;
 			}
 			j++;
@@ -99,68 +102,61 @@ static void	add_seg(t_data *data, t_polygon *polygon, t_ivec2 *new_point, enum e
 			new_point->y, get_color_from_typewall(data->input.wall_type));
 		return ;
 	}
-	else if (p == MIDDLE)
+	polygon->edges[polygon->nb_points - 1]->p2 = new_point;
+	edge_exists(data, data->nb_elements, &polygon->edges[polygon->nb_points - 1]);
+	if (p == MIDDLE)
 	{
-		polygon->edges[polygon->nb_points - 1]->p2 = new_point;
-		edge_exists(data->elements, data->nb_elements, &polygon->edges[polygon->nb_points - 1]);
 		polygon->edges[polygon->nb_points] = add_edge(data, (t_edge){1, data->input.wall_type, data->input.id_texture, polygon->edges[polygon->nb_points - 1]->p2, NULL});
 		(polygon->nb_points)++;
 	}
 	else if (p == END)
 	{
 		polygon->finished = 1;
-		polygon->edges[polygon->nb_points - 1]->p2 = new_point;
-		edge_exists(data->elements, data->nb_elements, &polygon->edges[polygon->nb_points - 1]);
+		delete_point(new_point, data);
 	}
 	draw_line(polygon->edges[polygon->nb_points - (p == MIDDLE ? 2 : 1)]->p1, new_point, &data->imgs[IMG_DRAWING],
 		get_color_from_typewall(data->input.wall_type));
 }
 
-t_ivec2 	*change_point(t_data *data, t_ivec2 *new_point)
+t_ivec2 	*change_point(t_data *data, t_ivec2 *point)
 {
 	int32_t id;
 
-	if (get_nearest_point(data, new_point, &id) < 10 && id != -1)
+	if (get_nearest_point(data, point, &id) < 10 && id != -1)
 	{
+		point = &data->points[id];
 		data->used_point[id]++;
-		new_point = &data->points[id];
-		return (new_point);
+		return (point);
 	}
 	else
-		*new_point = get_grid_point(*new_point);
+		*point = get_grid_point(*point);
 	return (NULL);
 }
 
-void		draw_edge(t_data *data, t_ivec2 clicked_point)
+void		draw_edge(t_data *data, t_ivec2 click)
 {
-	uint32_t	last_nbr;
 	t_polygon	*polygon;
-	t_ivec2		point;
-	t_ivec2		*new_point;
+	t_ivec2		*ptr;
 
 	if (draw_edge_error(data, &polygon))
 		return ;
-	last_nbr = polygon->nb_points;
-	new_point = change_point(data, &clicked_point);
-	if (!new_point)
-		if (!check_point(data, &clicked_point))
+	ptr = change_point(data, &click);
+	if (!ptr)
+		if (!check_point(data, &click, NULL))
 			return ;
-	if (polygon->nb_points == 0)
+	if (!ptr)
+		ptr = add_points(data, &click);
+	if (polygon->nb_points == 0 || check_segment(data, ptr, polygon->edges[polygon->nb_points - 1]->p1))
 	{
-		if (!new_point)
-			new_point = add_points(data, &clicked_point);
-		add_seg(data, polygon, new_point, BEGIN);
+		if (polygon->nb_points == 0)
+			add_seg(data, polygon, ptr, BEGIN);
+		else if (polygon->nb_points > 2 && is_equ_ivec2(polygon->edges[0]->p1, ptr))
+			add_seg(data, polygon, ptr, END);
+		else if (!is_point_in_polygon(ptr, polygon))
+			add_seg(data, polygon, ptr, MIDDLE);
+		else
+			delete_point(ptr, data);
 	}
-	point = *(polygon->edges[polygon->nb_points - 1]->p1);
-	if (check_segment(data, (new_point ? new_point : &clicked_point), polygon->edges[polygon->nb_points - 1]->p1))
-	{
-		if (!new_point)
-			new_point = add_points(data, &clicked_point);
-		if (polygon->nb_points > 2 && is_equ_ivec2(polygon->edges[0]->p1, new_point))
-			add_seg(data, polygon, new_point, END);
-		else if (!is_point_in_polygon(new_point, polygon))
-			add_seg(data, polygon, new_point, MIDDLE);
-	}
-	if (polygon->nb_points == last_nbr)
-		printf("No point was added.\n");
+	else if (polygon->nb_points)
+		delete_point(ptr, data);
 }

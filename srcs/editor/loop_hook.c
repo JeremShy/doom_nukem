@@ -1,6 +1,6 @@
 #include <editor.h>
 
-void	draw_strings(t_data *data)
+static void	draw_strings(t_data *data)
 {
 	mlx_string_put(data->mlx.mlx_ptr, data->mlx.win_ptr, CEIL_ORI_Y_VALUE_SX, CEIL_ORI_Y_VALUE_SY, 0x1D1D1D, ft_itoa(data->input.ceiling_angle_y));
 	mlx_string_put(data->mlx.mlx_ptr, data->mlx.win_ptr, CEIL_ORI_X_VALUE_SX, CEIL_ORI_X_VALUE_SY, 0x1D1D1D, ft_itoa(data->input.ceiling_angle_x));
@@ -11,7 +11,7 @@ void	draw_strings(t_data *data)
 	mlx_string_put(data->mlx.mlx_ptr, data->mlx.win_ptr, LIGHT_VALUE_SX, LIGHT_VALUE_SY, 0x1D1D1D, ft_itoa(data->input.light));
 }
 
-int		loop_hook(t_data *data)
+int			loop_hook(t_data *data)
 {
 	uint32_t i;
 	mlx_clear_window(data->mlx.mlx_ptr, data->mlx.win_ptr);

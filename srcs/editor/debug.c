@@ -1,31 +1,30 @@
 #include <editor.h>
 
-void	print_points_list(const t_data *data)
+void	liste_edges(t_data *data)
 {
-	int	i;
+	int i;
 
 	i = 0;
-	while (i < MAX_POINTS_NBR)
-	{
-		if (data->used_point[i] == 1)
-		{
-			printf("points[%d] : {%d, %d}\n", i, data->points[i].x, data->points[i].y);
-		}
-		i++;
-	}
-}
-
-void	print_edges_list(const t_data *data)
-{
-	int	i;
-
-	i = 0;
+	printf("EDGE : -------------\n");
 	while (i < MAX_POINTS_NBR)
 	{
 		if (data->edges[i].used)
-		{
-			printf("edges[%d] used\n", i);
-		}
+			printf("edge[%u] = {%u, %u}\n", i, get_idpoint_from_addr(data->edges[i].p1, data), get_idpoint_from_addr(data->edges[i].p2, data));
 		i++;
 	}
 }
+
+void	liste_points(t_data *data)
+{
+	int i;
+
+	i = 0;
+	printf("POINT : -------------\n");
+	while (i < MAX_POINTS_NBR)
+	{
+		if (data->used_point[i])
+			printf("point[%u] * %d = {%u, %u}\n", i, data->used_point[i], data->points[i].x, data->points[i].y);
+		i++;
+	}
+}
+

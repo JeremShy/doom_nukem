@@ -118,7 +118,7 @@ static void	add_seg(t_data *data, t_polygon *polygon, t_ivec2 *new_point, enum e
 		get_color_from_typewall(data->input.wall_type));
 }
 
-t_ivec2 	*change_point(t_data *data, t_ivec2 *point)
+static t_ivec2 	*change_point(t_data *data, t_ivec2 *point)
 {
 	int32_t id;
 

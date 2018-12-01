@@ -45,7 +45,7 @@ static uint8_t	ft_init(t_data *data, uint32_t w, uint32_t h)
 	return (0);
 }
 
-int		close_hook(t_data *data)
+static int		close_hook(t_data *data)
 {
 	(void)data;
 	exit(EXIT_SUCCESS);

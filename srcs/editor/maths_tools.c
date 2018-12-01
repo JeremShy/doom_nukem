@@ -55,3 +55,13 @@ void		fclamp(float *point, float min, float max)
 	*point < min ? (*point = min) : 0;
 	*point > max ? (*point = max) : 0;
 }
+
+int32_t		clamp_value(int32_t value, int32_t min, int32_t max)
+{
+	if (value < min)
+		value = min;
+	else if (value > max)
+		value = max;
+	return (value);
+}
+

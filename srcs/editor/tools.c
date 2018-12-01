@@ -22,15 +22,6 @@ uint32_t	get_color_from_typewall(enum e_edge_type t)
 	return (color);
 }
 
-int32_t	clamp_value(int32_t value, int32_t min, int32_t max)
-{
-	if (value < min)
-		value = min;
-	else if (value > max)
-		value = max;
-	return (value);
-}
-
 uint8_t	same_edges(const t_ivec2 *a1, const t_ivec2 *a2, const t_ivec2 *b1, const t_ivec2 *b2)
 {
 	return (is_equ_ivec2(a1, b1) && is_equ_ivec2(a2, b2)) || (is_equ_ivec2(a1, b2) && is_equ_ivec2(a2, b1));

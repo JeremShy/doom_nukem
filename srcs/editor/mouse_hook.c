@@ -1,9 +1,5 @@
 #include <editor.h>
 
-/*
-** Returns 1 if an element is touched, 0 else.
-*/
-
 t_element *get_polygon_from_point(t_data *data, t_ivec2 point)
 {
 	uint32_t		i;
@@ -41,7 +37,7 @@ t_element *get_polygon_from_point(t_data *data, t_ivec2 point)
 // 	return (0);
 // }
 
-uint16_t	find_free_element(t_data *data)
+static uint16_t	find_free_element(t_data *data)
 {
 	uint32_t	i;
 	t_element	*e;
@@ -72,7 +68,7 @@ uint16_t	find_free_element(t_data *data)
 	return (e->id);
 }
 
-int		drawing_zone(int x, int y, t_data *data)
+static int		drawing_zone(int x, int y, t_data *data)
 {
 	// t_ivec2		p;
 	t_element	*elem;
@@ -116,7 +112,7 @@ int		drawing_zone(int x, int y, t_data *data)
 	return (0);
 }
 
-int		options_zone(int button, int x, int y, t_data *data)
+static int		options_zone(int button, int x, int y, t_data *data)
 {
 	(void)button;
 	(void)data;
@@ -193,7 +189,7 @@ int		options_zone(int button, int x, int y, t_data *data)
 	return (0);
 }
 
-uint8_t	check_moving_point(t_data *data, t_ivec2 point, t_ivec2 *current)
+static uint8_t	check_moving_point(t_data *data, t_ivec2 point, t_ivec2 *current)
 {
 	uint32_t i;
 	uint32_t j;

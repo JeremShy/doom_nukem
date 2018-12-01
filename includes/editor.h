@@ -176,78 +176,39 @@ typedef struct	s_data
 	uint8_t		used_point[MAX_POINTS_NBR];
 }				t_data;
 
-int				loop_hook(t_data *data);
-int				mouse_motion(int x, int y, t_data *data);
-int				mouse_press(int button, int x, int y, t_data *data);
-int				mouse_release(int button, int x, int y, t_data *data);
-int				key_press(int keycode, t_data *data);
-int				key_release(int keycode, t_data *data);
+/*
+** bresenham.c
+*/
+void			draw_line(const t_ivec2 *p1, const t_ivec2 *p2, t_img *img, uint32_t color);
 
-uint32_t		get_color_code(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
-void			put_pixel_to_image(t_img *img, int x, int y, uint32_t color);
-void			fill_img(t_img *img, uint32_t color);
-
-t_ivec2			vec_from_points(const t_ivec2 *p1, const t_ivec2 *p2);
-float			get_idist(const t_ivec2 *p1, const t_ivec2 *p2);
-float			inorm(const t_ivec2 *v1);
-int				idot_prod(const t_ivec2 *v1, const t_ivec2 *v2);
-float			iangle(const t_ivec2 v1, const t_ivec2 v2);
-uint32_t		min(uint32_t a, uint32_t b);
-uint32_t		max(uint32_t a, uint32_t b);
-void			swap(int *a, int *b);
-void			clamp(int32_t *point, int32_t min, int32_t max);
-void			fclamp(float *point, float min, float max);
-
+/*
+** bresenham_quadrants.c
+*/
 void			bresenham_quadrant1(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
 void			bresenham_quadrant2(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
 void			bresenham_quadrant3(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
 void			bresenham_quadrant4(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
-void			draw_line(const t_ivec2 *p1, const t_ivec2 *p2, t_img *img, uint32_t color);
 
+/*
+** debug.c
+*/
+void			liste_edges(t_data *data);
+void			liste_points(t_data *data);
 
-float			is_in_polygon(int x, int y, const t_polygon *poly);
-uint32_t		get_color_from_typewall(enum e_edge_type t);
-void			swap(int *a, int *b);
-uint8_t			same_edges(const t_ivec2 *a1, const t_ivec2 *a2, const t_ivec2 *b1, const t_ivec2 *b2);
-uint32_t		get_nearest_point(t_data *data, t_ivec2 *point, int32_t *id);
-int32_t			clamp_value(int32_t value, int32_t min, int32_t max);
-t_ivec2			*get_near_point(t_data *data, t_ivec2 *new_point);
-uint8_t			is_equ_ivec2(const t_ivec2 *p1, const t_ivec2 *p2);
-uint8_t			is_point_in_polygon(const t_ivec2 *point, const t_polygon *polygon);
-float			get_idist(const t_ivec2 *p1, const t_ivec2 *p2);
-uint8_t			is_common_point(const t_ivec2 *a1, const t_ivec2 *a2, const t_ivec2 *b1, const t_ivec2 *b2);
-t_ivec2			get_grid_point(t_ivec2 point);
-
+/*
+** draw_edge.c
+*/
 void			draw_edge(t_data *data, t_ivec2 new_point);
 
-uint32_t		nb_intersec_in_poly(const t_polygon *polygon, const t_ivec2 *new_point, const t_ivec2 *last_point);
-float			first_intersect_dist_in_poly(const t_polygon *polygon, const t_ivec2 *new_point, const t_ivec2 *last_point);
-
-uint8_t 		check_point(t_data *data, const t_ivec2 *point, t_ivec2 *exept);
-uint8_t			check_segment(t_data *data, const t_ivec2 *new_point, const t_ivec2 *last_point);
-void			print_click(t_data *data, uint16_t id);
-
-t_intersection	is_intersect(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec2 b2);
-
-void			print_points_list(const t_data *data);
-void			print_edges_list(const t_data *data);
-
-uint32_t		*parse_tga(char *name, t_tga_header *header);
-uint32_t		invert_transparency(uint32_t c);
-
-void			switch_select(t_data *data);
-void			switch_drawing(t_data *data);
-
-void			delete_element(t_element *elem, t_data *data);
-void			draw_polygon(t_polygon *polygon, t_data *data);
-uint32_t		get_idpoint_from_addr(const t_ivec2 *point, t_data *data);
-void			delete_point(t_ivec2 *point, t_data *data);
-void			liste_points(t_data *data);
-void			liste_edges(t_data *data);
-
-t_edge			*get_nearest_edge(const t_ivec2 *point, t_edge *edges, float *min);
+/*
+** edge_tools.c
+*/
 t_edge			*get_nearest_edge_exept(const t_ivec2 *point, t_edge *edges, float *min, t_ivec2 *exept);
+t_edge			*get_nearest_edge(const t_ivec2 *point, t_edge *edges, float *min);
 
+/*
+** editor_interactions.c
+*/
 void			ceil_angle_y(uint8_t side, t_data *data);
 void			ceil_angle_x(uint8_t side, t_data *data);
 void			ceil_height(uint8_t side, t_data *data);
@@ -255,5 +216,88 @@ void			floor_angle_y(uint8_t side, t_data *data);
 void			floor_angle_x(uint8_t side, t_data *data);
 void			floor_height(uint8_t side, t_data *data);
 void			light(uint8_t side, t_data *data);
+
+/*
+** intersection.c
+*/
+uint32_t		nb_intersec_in_poly(const t_polygon *polygon, const t_ivec2 *new_point, const t_ivec2 *last_point);
+float			first_intersect_dist_in_poly(const t_polygon *polygon, const t_ivec2 *new_point, const t_ivec2 *last_point);
+
+/*
+** key_hook.c
+*/
+void			draw_polygon(t_polygon *polygon, t_data *data);
+void			delete_point(t_ivec2 *point, t_data *data);
+void			delete_edge(t_edge *edge, const t_data *data);
+uint32_t		get_idpoint_from_addr(const t_ivec2 *point, t_data *data);
+void			delete_element(t_element *elem, t_data *data);
+void			switch_select(t_data *data);
+void			switch_drawing(t_data *data);
+int				key_press(int keycode, t_data *data);
+int				key_release(int keycode, t_data *data);
+
+/*
+** loop_hook.c
+*/
+int				loop_hook(t_data *data);
+
+/*
+** maths_tools.c
+*/
+t_ivec2			vec_from_points(const t_ivec2 *p1, const t_ivec2 *p2);
+float			get_idist(const t_ivec2 *p1, const t_ivec2 *p2);
+float			inorm(const t_ivec2 *v1);
+int				idot_prod(const t_ivec2 *v1, const t_ivec2 *v2);
+float			iangle(const t_ivec2 v1, const t_ivec2 v2);
+void			swap(int *a, int *b);
+uint32_t		min(uint32_t a, uint32_t b);
+uint32_t		max(uint32_t a, uint32_t b);
+void			clamp(int32_t *point, int32_t min, int32_t max);
+void			fclamp(float *point, float min, float max);
+int32_t			clamp_value(int32_t value, int32_t min, int32_t max);
+
+/*
+** mlx_img_func.c
+*/
+uint32_t		get_color_code(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+void			put_pixel_to_image(t_img *img, int x, int y, uint32_t color);
+void			fill_img(t_img *img, uint32_t color);
+
+/*
+** mlx_hook.c
+*/
+t_element		*get_polygon_from_point(t_data *data, t_ivec2 point);
+int				mouse_motion(int x, int y, t_data *data);
+int				mouse_press(int button, int x, int y, t_data *data);
+int				mouse_release(int button, int x, int y, t_data *data);
+
+/*
+** parser_tga.c
+*/
+uint32_t		*parse_tga(char *name, t_tga_header *header);
+uint32_t		invert_transparency(uint32_t c);
+
+/*
+** polygon.c
+*/
+void			print_click(t_data *data, uint16_t id);
+uint8_t			check_point(t_data *data, const t_ivec2 *point, t_ivec2 *exept);
+uint8_t			check_segment(t_data *data, const t_ivec2 *new_point, const t_ivec2 *last_point);
+
+/*
+** segment.c
+*/
+t_intersection			is_intersect(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec2 b2);
+
+/*
+** tools.c
+*/
+float			is_in_polygon(int x, int y, const t_polygon *poly);
+uint32_t		get_color_from_typewall(enum e_edge_type t);
+uint8_t			same_edges(const t_ivec2 *a1, const t_ivec2 *a2, const t_ivec2 *b1, const t_ivec2 *b2);
+t_ivec2			get_grid_point(t_ivec2 point);
+uint32_t		get_nearest_point(t_data *data, t_ivec2 *point, int32_t *id);
+uint8_t			is_equ_ivec2(const t_ivec2 *p1, const t_ivec2 *p2);
+uint8_t			is_point_in_polygon(const t_ivec2 *point, const t_polygon *polygon);
 
 #endif

@@ -1,6 +1,6 @@
 #include <editor.h>
 
-static uint8_t	create_image(t_data *data, int id, int w, int h)
+uint8_t	create_image(t_data *data, int id, int w, int h)
 {
 	int	bpp;
 	int	endian;
@@ -26,15 +26,13 @@ static uint8_t	create_image(t_data *data, int id, int w, int h)
 	return (0);
 }
 
-static uint8_t	ft_init(t_data *data, uint32_t w, uint32_t h)
+static uint8_t	ft_init(t_data *data)
 {
 	if (!(data->mlx.mlx_ptr = mlx_init()))
 		ft_putendl_fd("Error: Can't init mlx.", 2);
 	else if (!(data->mlx.win_ptr = mlx_new_window(data->mlx.mlx_ptr, WIN_SIZE_X, WIN_SIZE_Y, "Doom Nukem : Map editor")))
 		ft_putendl_fd("Error: Can't init window.", 2);
-	else if (!create_image(data, IMG_BACKGROUND, w, h))
-		return (0);
-	else if (!create_image(data, IMG_DRAWING, 1061, h))
+	else if (!create_image(data, IMG_DRAWING, DRAWING_ZONE_WIDTH, WIN_SIZE_Y))
 		return (0);
 	else
 	{
@@ -54,21 +52,12 @@ static int		close_hook(t_data *data)
 int main()
 {
 	t_data			data;
-	t_tga_header	header;
-	uint32_t		*background;
-	int i;
 
 	ft_bzero(&data, sizeof(t_data));
-	if (!(background = parse_tga("docs/background.tga", &header)))
+	if (!ft_init(&data))
 		return (1);
-	if (!ft_init(&data, header.image_spec.width, header.image_spec.width))
+	if (!create_image_from_tga(&data, IMG_BACKGROUND, "docs/background.tga", NULL))
 		return (2);
-	i = 0;
-	while (i < header.image_spec.width * header.image_spec.height)
-	{
-		put_pixel_to_image(&data.imgs[IMG_BACKGROUND], i % header.image_spec.width, header.image_spec.height - i / header.image_spec.width, invert_transparency(background[i]));
-		i++;
-	}
 	mlx_loop_hook(data.mlx.mlx_ptr, loop_hook, &data);
 	mlx_hook(data.mlx.win_ptr, 2, 0, key_press, &data);
 	mlx_hook(data.mlx.win_ptr, 3, 0, key_release, &data);

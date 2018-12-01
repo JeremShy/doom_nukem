@@ -3,6 +3,8 @@
 
 # include <background_editor.h>
 # include <doom_nukem.h>
+# include <sys/stat.h>
+# include <sys/mman.h>
 
 # define WIN_SIZE_X 1600
 # define WIN_SIZE_Y 900 // /!\ Can't modify
@@ -260,6 +262,11 @@ int				key_release(int keycode, t_data *data);
 int				loop_hook(t_data *data);
 
 /*
+** main.c
+*/
+uint8_t			create_image(t_data *data, int id, int w, int h);
+
+/*
 ** maths_tools.c
 */
 void			swap(int *a, int *b);
@@ -287,8 +294,9 @@ int				mouse_release(int button, int x, int y, t_data *data);
 /*
 ** parser_tga.c
 */
-uint32_t		*parse_tga(char *name, t_tga_header *header);
+uint32_t		*parse_tga(const char *name, t_tga_header *header);
 uint32_t		invert_transparency(uint32_t c);
+uint8_t			create_image_from_tga(t_data *data, int id_img, const char *name, t_ivec2 *size);
 
 /*
 ** polygon.c

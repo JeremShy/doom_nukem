@@ -179,6 +179,12 @@ typedef struct	s_data
 }				t_data;
 
 /*
+** binary_tools.c
+*/
+uint32_t		end_conv_32(const uint32_t *nbr);
+uint64_t		end_conv_64(const uint64_t *nbr);
+
+/*
 ** bresenham.c
 */
 void			draw_line(const t_ivec2 *p1, const t_ivec2 *p2, t_img *img, uint32_t color);
@@ -290,6 +296,10 @@ t_element		*get_polygon_from_point(t_data *data, t_ivec2 point);
 int				mouse_motion(int x, int y, t_data *data);
 int				mouse_press(int button, int x, int y, t_data *data);
 int				mouse_release(int button, int x, int y, t_data *data);
+
+/*
+** parser_png.c
+*/
 
 /*
 ** parser_tga.c

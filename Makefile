@@ -6,15 +6,17 @@ SRC_EDITOR_NAME =	main.c \
 					mlx_img_func.c \
 					bresenham.c \
 					bresenham_quadrants.c \
-					segment.c \
+					intersect_two_segments.c \
 					tools.c \
 					intersection.c \
-					draw_edge.c \
+					create_edge.c \
 					maths_tools.c \
+					imaths.c \
 					debug.c \
 					edge_tools.c \
 					parser_tga.c \
-					editor_interactions.c
+					editor_interactions.c \
+					delete.c
 
 SRC_GAME_NAME =		main.c \
 					print_memory.c

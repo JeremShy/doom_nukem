@@ -27,16 +27,6 @@ t_element *get_polygon_from_point(t_data *data, t_ivec2 point)
 	return (NULL);
 }
 
-// static int8_t	loop_elems(int x,int y, t_data *data)
-// {
-// 	t_element *elem;
-// ;
-// 	elem = get_polygon_from_point(data, (t_ivec2){x, y});
-// 	if (elem)
-// 		elem->on_click_func(data, elem->id);
-// 	return (0);
-// }
-
 static uint16_t	find_free_element(t_data *data)
 {
 	uint32_t	i;
@@ -95,7 +85,7 @@ static int		drawing_zone(int x, int y, t_data *data)
 		if (data->input.id_current_element == -1)
 			data->input.id_current_element = find_free_element(data);
 		printf("draw\n");
-		draw_edge(data, (t_ivec2){x, y});
+		create_edge(data, (t_ivec2){x, y});
 		if (data->elements[data->input.id_current_element].polygon.finished)
 		{
 			data->elements[data->input.id_current_element].clickable = 1;
@@ -205,7 +195,7 @@ static uint8_t	check_moving_point(t_data *data, t_ivec2 point, t_ivec2 *current)
 				{
 					if (data->edges[j].used)
 						if (data->edges[j].p1 != current && data->edges[j].p2 != current)
-							if (is_intersect(
+							if (intersect_two_segments(
 								data->edges[i].p1 == current ? point : *data->edges[i].p1,
 								data->edges[i].p1 == current ? *data->edges[i].p2 : point,
 								*data->edges[j].p1, *data->edges[j].p2
@@ -221,8 +211,6 @@ static uint8_t	check_moving_point(t_data *data, t_ivec2 point, t_ivec2 *current)
 
 int		mouse_motion(int x, int y, t_data *data)
 {
-	// if (x < 0 || y < 0 || x >= WIN_SIZE_X || y >= WIN_SIZE_Y)
-	// 	return (0);
 	if (data->input.mode == MOVE_POINT && data->input.button[1] && data->input.id_current_point != -1)
 	{
 		clamp(&x, 10, DRAWING_ZONE_WIDTH - 10);
@@ -239,8 +227,6 @@ int		mouse_motion(int x, int y, t_data *data)
 
 int	mouse_press(int button, int x, int y, t_data *data)
 {
-	// printf("in mouse_press.\n");
-	// printf("paramters : {button : %d, {%d, %d}}\n", button, x, y);
 	data->input.button[button] = 1;
 	if (x < 0 || y < 0 || x >= WIN_SIZE_X || y >= WIN_SIZE_Y)
 		return (0);
@@ -258,15 +244,7 @@ int	mouse_release(int button, int x,int y, t_data *data)
 {
 	(void)x;
 	(void)y;
-	// printf("in mouse_release.\n");
-	// printf("paramters : {button : %d, {%d, %d}}\n", button, x, y);
 	data->input.button[button] = 0;
 	data->input.id_current_point = -1;
-	// if (x < 0 || y < 0 || x >= WIN_SIZE_X || y >= WIN_SIZE_Y)
-	// 	return (0);
-	// if (x < DRAWING_ZONE_WIDTH)
-	// 	drawing_zone(button, x, y, data);
-	// else
-	// 	options_zone(button, x, y, data);
 	return (0);
 }

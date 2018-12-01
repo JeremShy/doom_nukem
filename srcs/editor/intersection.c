@@ -1,5 +1,25 @@
 #include <editor.h>
 
+static float	first_intersect_dist_in_poly(const t_polygon *polygon, const t_ivec2 *new_point, const t_ivec2 *last_point)
+{
+	uint32_t		current_edge;
+	float			dist;
+	t_intersection	intersec;
+
+	current_edge = 0;
+	dist = -1;
+	while (current_edge < polygon->nb_points)
+	{
+		if ((intersec = intersect_two_segments(*polygon->edges[current_edge]->p1, *polygon->edges[current_edge]->p2, *last_point, *new_point)).intersect)
+		{
+			if (idist(new_point, &intersec.intersection_point) < dist || dist == -1)
+				dist = idist(new_point, &intersec.intersection_point);
+		}
+		current_edge++;
+	}
+	return (dist);
+}
+
 uint32_t nb_intersec_in_poly(const t_polygon *polygon, const t_ivec2 *new_point, const t_ivec2 *last_point)
 {
 	uint32_t		current_edge;
@@ -11,29 +31,34 @@ uint32_t nb_intersec_in_poly(const t_polygon *polygon, const t_ivec2 *new_point,
 
 	while (current_edge < polygon->nb_points - (polygon->finished ? 0: 1))
 	{
-		if ((intersec = is_intersect(*polygon->edges[current_edge]->p1, *polygon->edges[current_edge]->p2, *last_point, *new_point)).intersect)
+		if ((intersec = intersect_two_segments(*polygon->edges[current_edge]->p1, *polygon->edges[current_edge]->p2, *last_point, *new_point)).intersect)
 			nb_intersec++;
 		current_edge++;
 	}
 	return (nb_intersec);
 }
 
-float	first_intersect_dist_in_poly(const t_polygon *polygon, const t_ivec2 *new_point, const t_ivec2 *last_point)
-{
-	uint32_t		current_edge;
-	float			dist;
-	t_intersection	intersec;
 
-	current_edge = 0;
-	dist = -1;
-	while (current_edge < polygon->nb_points)
+float		is_in_polygon(int x, int y, const t_polygon *polygon)
+{
+	if ((nb_intersec_in_poly(polygon, &(t_ivec2){x, y}, &(t_ivec2){-1, -1}) & 1) == 1)
 	{
-		if ((intersec = is_intersect(*polygon->edges[current_edge]->p1, *polygon->edges[current_edge]->p2, *last_point, *new_point)).intersect)
-		{
-			if (get_idist(new_point, &intersec.intersection_point) < dist || dist == -1)
-				dist = get_idist(new_point, &intersec.intersection_point);
-		}
-		current_edge++;
+		return (first_intersect_dist_in_poly(polygon, &(t_ivec2){x, y}, &(t_ivec2){-1, -1}));
 	}
-	return (dist);
+	return (-1);
+}
+
+
+uint8_t		is_point_in_polygon(const t_ivec2 *point, const t_polygon *polygon)
+{
+	uint32_t	i;
+
+	i = 0;
+	while (i < polygon->nb_points)
+	{
+		if (is_equ_ivec2(point, polygon->edges[i]->p1))
+			return (1);
+		i++;
+	}
+	return (0);
 }

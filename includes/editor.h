@@ -190,20 +190,27 @@ void			bresenham_quadrant3(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
 void			bresenham_quadrant4(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
 
 /*
+** create_edge.c
+*/
+void			create_edge(t_data *data, t_ivec2 new_point);
+
+/*
 ** debug.c
 */
 void			liste_edges(t_data *data);
 void			liste_points(t_data *data);
 
 /*
-** draw_edge.c
+** delete.c
 */
-void			draw_edge(t_data *data, t_ivec2 new_point);
+void			delete_point(t_ivec2 *point, t_data *data);
+void			delete_edge(t_edge *edge, const t_data *data);
+void			delete_element(t_element *elem, t_data *data);
 
 /*
 ** edge_tools.c
 */
-t_edge			*get_nearest_edge_exept(const t_ivec2 *point, t_edge *edges, float *min, t_ivec2 *exept);
+t_edge			*get_nearest_edge_except(const t_ivec2 *point, t_edge *edges, float *min, t_ivec2 *exept);
 t_edge			*get_nearest_edge(const t_ivec2 *point, t_edge *edges, float *min);
 
 /*
@@ -218,19 +225,30 @@ void			floor_height(uint8_t side, t_data *data);
 void			light(uint8_t side, t_data *data);
 
 /*
+** imaths.c
+*/
+t_ivec2			vec_from_points(const t_ivec2 *p1, const t_ivec2 *p2);
+float			idist(const t_ivec2 *p1, const t_ivec2 *p2);
+float			inorm(const t_ivec2 *v1);
+int				idot_prod(const t_ivec2 *v1, const t_ivec2 *v2);
+float			iangle(const t_ivec2 v1, const t_ivec2 v2);
+
+/*
+** intersect_two_segments.c
+*/
+t_intersection	intersect_two_segments(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec2 b2);
+
+/*
 ** intersection.c
 */
 uint32_t		nb_intersec_in_poly(const t_polygon *polygon, const t_ivec2 *new_point, const t_ivec2 *last_point);
-float			first_intersect_dist_in_poly(const t_polygon *polygon, const t_ivec2 *new_point, const t_ivec2 *last_point);
+float			is_in_polygon(int x, int y, const t_polygon *poly);
+uint8_t			is_point_in_polygon(const t_ivec2 *point, const t_polygon *polygon);
 
 /*
 ** key_hook.c
 */
 void			draw_polygon(t_polygon *polygon, t_data *data);
-void			delete_point(t_ivec2 *point, t_data *data);
-void			delete_edge(t_edge *edge, const t_data *data);
-uint32_t		get_idpoint_from_addr(const t_ivec2 *point, t_data *data);
-void			delete_element(t_element *elem, t_data *data);
 void			switch_select(t_data *data);
 void			switch_drawing(t_data *data);
 int				key_press(int keycode, t_data *data);
@@ -244,11 +262,6 @@ int				loop_hook(t_data *data);
 /*
 ** maths_tools.c
 */
-t_ivec2			vec_from_points(const t_ivec2 *p1, const t_ivec2 *p2);
-float			get_idist(const t_ivec2 *p1, const t_ivec2 *p2);
-float			inorm(const t_ivec2 *v1);
-int				idot_prod(const t_ivec2 *v1, const t_ivec2 *v2);
-float			iangle(const t_ivec2 v1, const t_ivec2 v2);
 void			swap(int *a, int *b);
 uint32_t		min(uint32_t a, uint32_t b);
 uint32_t		max(uint32_t a, uint32_t b);
@@ -285,19 +298,13 @@ uint8_t			check_point(t_data *data, const t_ivec2 *point, t_ivec2 *exept);
 uint8_t			check_segment(t_data *data, const t_ivec2 *new_point, const t_ivec2 *last_point);
 
 /*
-** segment.c
-*/
-t_intersection			is_intersect(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec2 b2);
-
-/*
 ** tools.c
 */
-float			is_in_polygon(int x, int y, const t_polygon *poly);
 uint32_t		get_color_from_typewall(enum e_edge_type t);
 uint8_t			same_edges(const t_ivec2 *a1, const t_ivec2 *a2, const t_ivec2 *b1, const t_ivec2 *b2);
 t_ivec2			get_grid_point(t_ivec2 point);
 uint32_t		get_nearest_point(t_data *data, t_ivec2 *point, int32_t *id);
 uint8_t			is_equ_ivec2(const t_ivec2 *p1, const t_ivec2 *p2);
-uint8_t			is_point_in_polygon(const t_ivec2 *point, const t_polygon *polygon);
+uint32_t		get_idpoint_from_addr(const t_ivec2 *point, t_data *data);
 
 #endif

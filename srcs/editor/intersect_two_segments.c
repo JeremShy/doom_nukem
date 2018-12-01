@@ -1,4 +1,5 @@
 #include <editor.h>
+
 static t_intersection	interval_intersect(uint32_t a1, uint32_t a2, uint32_t b1, uint32_t b2)
 {
 	uint32_t		mini;
@@ -16,7 +17,7 @@ static t_intersection	interval_intersect(uint32_t a1, uint32_t a2, uint32_t b1, 
 	return (ret);
 }
 
-t_intersection			is_intersect(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec2 b2)
+t_intersection			intersect_two_segments(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec2 b2)
 {
 	float			ma;
 	float			mb;

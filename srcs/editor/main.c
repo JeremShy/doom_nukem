@@ -78,19 +78,6 @@ int main()
 	data.nb_elements = 1;
 	data.input.light = 100;
 
-	// a1.x = 900, a1.y = 300, a2.x = 500, a2.y = 450, b1.x = 900, b1.y = 500, b2.x = 950, b2.y = 650
-
-	// t_ivec2 p1 = {900, 300}; // rouge
-	// t_ivec2 p2 = {500, 450}; // vert
-	// t_ivec2 p3 = {900, 500}; // rose
-	// t_ivec2 p4 = {950, 650}; // blanc
-
-	// put_pixel_to_image(&data.imgs[0], p1.x, p1.y, get_color_code(255, 0, 0, 0));
-	// put_pixel_to_image(&data.imgs[0], p2.x, p2.y, get_color_code(0, 255, 0, 0));
-	// put_pixel_to_image(&data.imgs[0], p3.x, p3.y, get_color_code(255, 0, 255, 0));
-	// put_pixel_to_image(&data.imgs[0], p4.x, p4.y, get_color_code(255, 255, 255, 0));
-	// printf("%d\n", is_intersect(p1, p2, p3, p4).intersect);
-
 	fill_img(&data.imgs[IMG_DRAWING], get_color_code(0, 0, 0, 255));
 
 	mlx_put_image_to_window(data.mlx.mlx_ptr, data.mlx.win_ptr, data.imgs[IMG_BACKGROUND].ptr, 0, 0);

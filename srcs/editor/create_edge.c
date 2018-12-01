@@ -1,6 +1,6 @@
 #include <editor.h>
 
-static uint8_t		draw_edge_error(t_data *data, t_polygon	**polygon)
+static uint8_t		create_edge_error(t_data *data, t_polygon	**polygon)
 {
 	if (data->input.id_current_element == -1)
 	{
@@ -28,8 +28,6 @@ static t_ivec2	*add_points(t_data *data, const t_ivec2 *new_point)
 		{
 			data->points[i] = *new_point;
 			data->used_point[i] = 1;
-			// printf("data->point[i] = %d, %d\n", data->points[i].x, data->points[i].y);	
-			// printf("new_point = %d, %d\n", new_point->x, new_point->y);
 			return (&data->points[i]);
 		}
 		i++;
@@ -133,12 +131,12 @@ static t_ivec2 	*change_point(t_data *data, t_ivec2 *point)
 	return (NULL);
 }
 
-void		draw_edge(t_data *data, t_ivec2 click)
+void		create_edge(t_data *data, t_ivec2 click)
 {
 	t_polygon	*polygon;
 	t_ivec2		*ptr;
 
-	if (draw_edge_error(data, &polygon))
+	if (create_edge_error(data, &polygon))
 		return ;
 	ptr = change_point(data, &click);
 	if (!ptr)

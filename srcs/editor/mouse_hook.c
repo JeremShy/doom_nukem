@@ -210,9 +210,11 @@ uint8_t	check_moving_point(t_data *data, t_ivec2 point, t_ivec2 *current)
 				{
 					if (data->edges[j].used)
 						if (data->edges[j].p1 != current && data->edges[j].p2 != current)
-							if (is_intersect(data->edges[i].p1 == current ?
-point : *data->edges[i].p1, data->edges[i].p1 == current ? *data->edges[i].p2
-: point, *data->edges[j].p1, *data->edges[j].p2).intersect)
+							if (is_intersect(
+								data->edges[i].p1 == current ? point : *data->edges[i].p1,
+								data->edges[i].p1 == current ? *data->edges[i].p2 : point,
+								*data->edges[j].p1, *data->edges[j].p2
+							).intersect)
 								return (0);
 					j++;
 				}

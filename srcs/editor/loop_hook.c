@@ -19,8 +19,8 @@ int		loop_hook(t_data *data)
 				draw_polygon(&data->elements[i].polygon, data);
 			i++;
 		}
+		data->update_drawing = 0;
 	}
-	data->update_drawing = 0;
 	mlx_put_image_to_window(data->mlx.mlx_ptr, data->mlx.win_ptr, data->imgs[IMG_BACKGROUND].ptr, 0, 0);
 	mlx_put_image_to_window(data->mlx.mlx_ptr, data->mlx.win_ptr, data->imgs[IMG_DRAWING].ptr, 0, 0);
 	/*draw_strings(data);*/

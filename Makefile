@@ -16,7 +16,9 @@ SRC_EDITOR_NAME =	main.c \
 					edge_tools.c \
 					parser_tga.c \
 					editor_interactions.c \
-					delete.c
+					delete.c \
+					binary_tools.c \
+					parser_png.c
 
 SRC_GAME_NAME =		main.c \
 					print_memory.c

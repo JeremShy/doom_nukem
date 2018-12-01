@@ -130,6 +130,8 @@ int main(int ac, char **av)
 	t_tga_header	header;
 	uint32_t		*img_data;
 	
+	int i = 0xff;
+	printf("%d\n", *(char*)&i);
 	if (ac != 2)
 	{
 		printf("Error\n");
@@ -147,7 +149,7 @@ int main(int ac, char **av)
 	fill_img(&white_img, get_color_code(255, 255, 255, 0));
 
 
-	int	i = 0;
+	i = 0;
 	while (i < header.image_spec.width * header.image_spec.height)
 	{
 		put_pixel_to_image(&img, i % header.image_spec.width, header.image_spec.height - i / header.image_spec.width, invert_transparency(img_data[i]));

@@ -146,11 +146,9 @@ typedef struct	s_input
 	int32_t				id_current_point;
 	enum e_input_mode	mode;
 
-<<<<<<< HEAD
-	uint8_t				ceiling_angle_x;
 	uint8_t				button[8];
 	uint8_t				key[300];
-=======
+
 	int8_t				ceiling_angle_y;
 	int8_t				ceiling_angle_x;
 	int8_t				ceiling_height;
@@ -158,7 +156,6 @@ typedef struct	s_input
 	int8_t				floor_angle_x;
 	int8_t				floor_height;
 	int8_t				light;
->>>>>>> editor num are set
 }				t_input;
 
 typedef struct	s_data
@@ -250,7 +247,6 @@ void			liste_edges(t_data *data);
 
 t_edge			*get_nearest_edge(const t_ivec2 *point, t_edge *edges, float *min);
 t_edge			*get_nearest_edge_exept(const t_ivec2 *point, t_edge *edges, float *min, t_ivec2 *exept);
-=======
 
 void			ceil_angle_y(uint8_t side, t_data *data);
 void			ceil_angle_x(uint8_t side, t_data *data);
@@ -259,6 +255,5 @@ void			floor_angle_y(uint8_t side, t_data *data);
 void			floor_angle_x(uint8_t side, t_data *data);
 void			floor_height(uint8_t side, t_data *data);
 void			light(uint8_t side, t_data *data);
->>>>>>> editor num are set
 
 #endif

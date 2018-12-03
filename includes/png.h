@@ -13,4 +13,11 @@ struct	s_png_ihdr {
 	uint8_t		interlace;
 };
 
+struct	s_chunk_hdr {
+	uint32_t	length;
+	uint32_t	type;
+};
+
+void	*png_inflate(uint8_t *data, size_t datasize);
+
 #endif

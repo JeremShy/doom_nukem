@@ -18,7 +18,9 @@ SRC_EDITOR_NAME =	main.c \
 					editor_interactions.c \
 					delete.c \
 					binary_tools.c \
-					parser_png.c
+					parser_png.c \
+					print_memory.c \
+					png_inflate.c
 
 SRC_GAME_NAME =		main.c \
 					print_memory.c

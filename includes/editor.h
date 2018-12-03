@@ -300,6 +300,7 @@ int				mouse_release(int button, int x, int y, t_data *data);
 /*
 ** parser_png.c
 */
+uint8_t			create_image_from_png(t_data *data, int id_img, const char *name, t_ivec2 *size);
 
 /*
 ** parser_tga.c

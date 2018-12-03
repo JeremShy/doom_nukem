@@ -56,8 +56,10 @@ int main()
 	ft_bzero(&data, sizeof(t_data));
 	if (!ft_init(&data))
 		return (1);
-	if (!create_image_from_tga(&data, IMG_BACKGROUND, "docs/background.tga", NULL))
+	if (!create_image_from_png(&data, IMG_BACKGROUND, "docs/draw-portal.png", NULL))
 		return (2);
+	// if (!create_image_from_tga(&data, IMG_BACKGROUND, "docs/background.tga", NULL))
+	// 	return (2);
 	mlx_loop_hook(data.mlx.mlx_ptr, loop_hook, &data);
 	mlx_hook(data.mlx.win_ptr, 2, 0, key_press, &data);
 	mlx_hook(data.mlx.win_ptr, 3, 0, key_release, &data);

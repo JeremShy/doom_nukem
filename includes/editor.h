@@ -183,7 +183,7 @@ typedef struct	s_data
 */
 uint32_t		get_conv_32(const uint32_t *nbr);
 uint64_t		get_conv_64(const uint64_t *nbr);
-
+uint8_t			reverse_byte(const uint8_t	*input);
 /*
 ** bresenham.c
 */

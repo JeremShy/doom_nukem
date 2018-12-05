@@ -29,6 +29,37 @@
 **								^
 **								|
 **								+ ------- Inversé car huffman code (dans l'exemple)
+
+
+
+00 01 02 03 04 05 06 07
+
+07 06 05 04 03 02 01 xx		0f 0e 0d 0c 0b 0a 09 08		xx xx xx xx xx xx xx 10
+
+
+100f0e0d0c0b0a09 0807060504030201
+
+EF CD AB 89
+[0] EF
+[1] CD
+
+AB 89
+[0] AB
+
+7  6  5  4  3  2  1  0
+xx xx 01 00 xx xx xx xx
+00 00 00 00 xx xx 01 00
+
+
+
+xx xx 07 06 05 04 03 02		01 00 xx xx xx ...
+
+
+
+xx xx 00 01 02 03 xx xx		xx xx xx xx xx ...
+ 1  1  1  0  1  1  0  0
+ 0  0  1  1  0  1  1 
+
 */
 
 struct	s_png_ihdr {
@@ -50,6 +81,13 @@ struct	s_length_code {
 	uint8_t	length;
 	uint8_t	code;
 	char	symbol; // For testing purpose
+};
+
+enum	e_compression_method {
+	no_compression = 0,
+	fixed_huffman = 1,
+	dynamic_huffman = 2,
+	invalid = 3
 };
 
 void	*png_inflate(uint8_t *data, size_t datasize);

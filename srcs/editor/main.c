@@ -1,4 +1,5 @@
 #include <editor.h>
+#include <zlib.h>
 
 uint8_t	create_image(t_data *data, int id, int w, int h)
 {
@@ -49,14 +50,16 @@ static int		close_hook(t_data *data)
 	exit(EXIT_SUCCESS);
 }
 
-int main()
+int main(int ac, char **av)
 {
 	t_data			data;
 
+	if (ac != 2)
+		return (printf ("Error\n"));
 	ft_bzero(&data, sizeof(t_data));
 	if (!ft_init(&data))
 		return (1);
-	if (!create_image_from_png(&data, IMG_BACKGROUND, "docs/draw-portal.png", NULL))
+	if (!create_image_from_png(&data, IMG_BACKGROUND, av[1], NULL))
 		return (2);
 	// if (!create_image_from_tga(&data, IMG_BACKGROUND, "docs/background.tga", NULL))
 	// 	return (2);

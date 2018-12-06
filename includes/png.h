@@ -32,6 +32,14 @@
 
 
 
+16	
+
+111	001
+
+
+
+
+
 00 01 02 03 04 05 06 07
 
 07 06 05 04 03 02 01 xx		0f 0e 0d 0c 0b 0a 09 08		xx xx xx xx xx xx xx 10
@@ -78,9 +86,9 @@ struct	s_chunk_hdr {
 };
 
 struct	s_length_code {
-	uint8_t	length;
-	uint8_t	code;
-	char	symbol; // For testing purpose
+	uint8_t		length;
+	uint8_t		code;
+	uint16_t	symbol; // For testing purpose
 };
 
 enum	e_compression_method {
@@ -93,3 +101,5 @@ enum	e_compression_method {
 void	*png_inflate(uint8_t *data, size_t datasize);
 
 #endif
+
+// {16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15};

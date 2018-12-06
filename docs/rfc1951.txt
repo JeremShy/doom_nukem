@@ -663,7 +663,7 @@ RFC 1951      DEFLATE Compressed Data Format Specification      May 1996
                      0 - 143     8          00110000 through
                                             10111111
                    144 - 255     9          110010000 through
-                                            111111111
+                                              111111111
                    256 - 279     7          0000000 through
                                             0010111
                    280 - 287     8          11000000 through

@@ -5,6 +5,7 @@
 # include <doom_nukem.h>
 # include <sys/stat.h>
 # include <sys/mman.h>
+# include <ft_printf.h>
 
 # define WIN_SIZE_X 1600
 # define WIN_SIZE_Y 900 // /!\ Can't modify

@@ -9,7 +9,8 @@ void		fill_bl_count(uint16_t *bl_count, struct s_length_code *length_code, size_
 	i = 0;
 	while (i < s) // add one per elem to the corresponding length;
 	{
-		bl_count[length_code[i].length]++;
+		if (length_code[i].length != 0)
+			bl_count[length_code[i].length]++;
 		i++;
 	}
 }
@@ -87,11 +88,19 @@ void		print_compression_method(enum e_compression_method m)
 		printf("invalid\n");
 }
 
+// Tree A : Le code qui permet de decoder les deux autres codes
+// Tree B : Literal/Length
+// Tree C : Distances
+
 uint8_t		process_block(uint8_t *data, size_t datasize, uint8_t *current_bit, uint32_t *current_byte, uint32_t winsize)
 {
-	uint8_t						temp;
 	enum e_compression_method	compression_method;
 	uint8_t						final;
+	uint16_t					hlit;
+	uint8_t						hdist;
+	uint8_t						hclen;
+	struct s_length_code		a[19];
+	size_t						i;
 
 
 	final = read_n_bits(data, current_bit, current_byte, 1);
@@ -101,6 +110,28 @@ uint8_t		process_block(uint8_t *data, size_t datasize, uint8_t *current_bit, uin
 	{
 		printf("not handled or invalid.\n");
 		return (0);
+	}
+	hlit = read_n_bits(data, current_bit, current_byte, 5) + 257;
+	hdist = read_n_bits(data, current_bit, current_byte, 5) + 1;
+	hclen = read_n_bits(data, current_bit, current_byte, 4) + 4;
+
+	printf("hlit : %d\n", hlit);
+	printf("hdist : %d\n", hdist);
+	printf("hclen : %d\n", hclen);
+
+	ft_memcpy(a, (struct s_length_code[]){{0, 0, 16}, {0, 0, 17}, {0, 0, 18}, {0, 0, 0}, {0, 0, 8}, {0, 0, 7}, {0, 0, 9}, {0, 0, 6}, {0, 0, 10}, {0, 0, 5}, {0, 0, 11}, {0, 0, 4}, {0, 0, 12}, {0, 0, 3}, {0, 0, 13}, {0, 0, 2}, {0, 0, 14}, {0, 0, 1}, {0, 0, 15}}, 76);
+	i = 0;
+	while (i < hclen)
+	{
+		a[i].length = read_n_bits(data, current_bit, current_byte, 3);
+		i++;
+	}
+	get_code_from_lengths(a, 19);
+	i = 0;
+	while (i < 18)
+	{
+		ft_printf("%2d -> %2d -> %.8b | %d\n", a[i].symbol, a[i].length, a[i].code, a[i].code);
+		i++;
 	}
 	return (1);
 }

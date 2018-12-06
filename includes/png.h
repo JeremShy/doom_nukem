@@ -98,7 +98,16 @@ enum	e_compression_method {
 	invalid = 3
 };
 
-void	*png_inflate(uint8_t *data, size_t datasize);
+struct	s_tree {
+	struct s_tree	*l;
+	struct s_tree	*r;
+	uint16_t		symbol;
+};
+
+void			get_code_from_lengths(struct s_length_code *length_codes, size_t s);
+void			*png_inflate(uint8_t *data, size_t datasize);
+struct s_tree	*create_tree(struct s_length_code *codes, size_t s);
+
 
 #endif
 

@@ -20,6 +20,8 @@ SRC_EDITOR_NAME =	main.c \
 					binary_tools.c \
 					parser_png.c \
 					print_memory.c \
+					huffman_get_code_from_length.c \
+					create_arbre.c \
 					png_inflate.c
 
 SRC_GAME_NAME =		main.c \

@@ -1,61 +1,6 @@
 #include <editor.h>
 #include <png.h>
 
-void		fill_bl_count(uint16_t *bl_count, struct s_length_code *length_code, size_t s)
-{
-	uint16_t		i;
-
-	ft_bzero(bl_count, (MAX_BITS + 1) * sizeof(uint16_t));
-	i = 0;
-	while (i < s) // add one per elem to the corresponding length;
-	{
-		if (length_code[i].length != 0)
-			bl_count[length_code[i].length]++;
-		i++;
-	}
-}
-
-void		fill_next_code(uint16_t *next_code, uint16_t *bl_count)
-{
-	uint16_t	bits;
-	uint16_t	code;
-
-	code = 0;
-	bits = 1;
-	while (bits <= MAX_BITS)
-	{
-		code = (code + bl_count[bits - 1]) << 1;
-		next_code[bits] = code;
-		bits++;
-	}
-}
-
-void		fill_codes(uint16_t *next_code, struct s_length_code *length_codes, size_t s)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < s)
-	{
-		if (length_codes[i].length != 0)
-		{
-			length_codes[i].code = next_code[length_codes[i].length];
-			next_code[length_codes[i].length]++;
-		}
-		i++;
-	}
-}
-
-void		get_code_from_lengths(struct s_length_code *length_codes, size_t s)
-{
-	uint16_t				bl_count[MAX_BITS + 1]; //Let bl_count[N] be the number of codes of length N, N >= 1.
-	uint16_t				next_code[MAX_BITS + 1];
-
-	fill_bl_count(bl_count, length_codes, s);
-	fill_next_code(next_code, bl_count);
-	fill_codes(next_code, length_codes, s);
-}
-
 uint64_t	read_n_bits(uint8_t *data, uint8_t *current_bit, uint32_t *current_byte, size_t len)
 {
 	uint64_t	ret;
@@ -99,7 +44,7 @@ uint8_t		process_block(uint8_t *data, size_t datasize, uint8_t *current_bit, uin
 	uint16_t					hlit;
 	uint8_t						hdist;
 	uint8_t						hclen;
-	struct s_length_code		a[19];
+	struct s_length_code		a_lens[19];
 	size_t						i;
 
 
@@ -119,20 +64,22 @@ uint8_t		process_block(uint8_t *data, size_t datasize, uint8_t *current_bit, uin
 	printf("hdist : %d\n", hdist);
 	printf("hclen : %d\n", hclen);
 
-	ft_memcpy(a, (struct s_length_code[]){{0, 0, 16}, {0, 0, 17}, {0, 0, 18}, {0, 0, 0}, {0, 0, 8}, {0, 0, 7}, {0, 0, 9}, {0, 0, 6}, {0, 0, 10}, {0, 0, 5}, {0, 0, 11}, {0, 0, 4}, {0, 0, 12}, {0, 0, 3}, {0, 0, 13}, {0, 0, 2}, {0, 0, 14}, {0, 0, 1}, {0, 0, 15}}, 76);
+	ft_memcpy(a_lens, (struct s_length_code[]){{0, 0, 16}, {0, 0, 17}, {0, 0, 18}, {0, 0, 0}, {0, 0, 8}, {0, 0, 7}, {0, 0, 9}, {0, 0, 6}, {0, 0, 10}, {0, 0, 5}, {0, 0, 11}, {0, 0, 4}, {0, 0, 12}, {0, 0, 3}, {0, 0, 13}, {0, 0, 2}, {0, 0, 14}, {0, 0, 1}, {0, 0, 15}}, 76);
 	i = 0;
 	while (i < hclen)
 	{
-		a[i].length = read_n_bits(data, current_bit, current_byte, 3);
+		a_lens[i].length = read_n_bits(data, current_bit, current_byte, 3);
 		i++;
 	}
-	get_code_from_lengths(a, 19);
+	get_code_from_lengths(a_lens, 19);
 	i = 0;
 	while (i < 18)
 	{
-		ft_printf("%2d -> %2d -> %.8b | %d\n", a[i].symbol, a[i].length, a[i].code, a[i].code);
+		if (a_lens[i].length != 0)
+			ft_printf("%2d -> %2d -> %.8b | %d\n", a_lens[i].symbol, a_lens[i].length, a_lens[i].code, a_lens[i].code);
 		i++;
 	}
+	struct s_tree *a = create_tree(a_lens, hclen);
 	return (1);
 }
 

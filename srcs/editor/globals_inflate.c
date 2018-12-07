@@ -1,5 +1,3 @@
-
-
 #include <png.h>
 
 const struct s_length_code	g_a_init[] = {{0, 0, 16}, {0, 0, 17},

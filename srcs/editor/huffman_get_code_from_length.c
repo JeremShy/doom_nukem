@@ -13,13 +13,6 @@ void		fill_bl_count(uint16_t *bl_count, struct s_length_code *length_code, size_
 			bl_count[length_code[i].length]++;
 		i++;
 	}
-	i = 0;
-	while (i < MAX_BITS)
-	{
-		if (bl_count[i])
-			printf("bl_count[%d] = %d\n", i, bl_count[i]);
-		i++;
-	}
 }
 
 static void		fill_next_code(uint16_t *next_code, uint16_t *bl_count)

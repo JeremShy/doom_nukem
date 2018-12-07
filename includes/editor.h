@@ -14,8 +14,9 @@
 
 # define IMG_BACKGROUND 0
 # define IMG_DRAWING 1
+# define IMG_WHITE_BG 2
 
-# define MAX_IMAGE (IMG_DRAWING + 1)
+# define MAX_IMAGE (IMG_WHITE_BG + 1)
 
 # define MAX_ELEMENT_NBR 1024
 # define MAX_POLYGON_EDGES 64

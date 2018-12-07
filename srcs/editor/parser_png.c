@@ -83,14 +83,15 @@ uint8_t		create_image_from_png(t_data *data, int id_img, const char *name, t_ive
 	void				*addr;
 	off_t				file_size;
 	struct s_chunk_hdr	*current_chunk;
+	uint8_t				*img_data;
+	size_t				image_size;
+	uint8_t				current_filter;
 
 	(void)data;
 	(void)id_img;
 	(void)size;
 	if (!(addr = init_png_parser(name, &file_size)))
 		return (0);
-	png_inflate(addr);
-	return (0);
 	if (file_size < 8 || get_conv_64(addr) != 0x89504E470D0A1A0Al)
 	{
 		munmap(addr, file_size);
@@ -103,6 +104,14 @@ uint8_t		create_image_from_png(t_data *data, int id_img, const char *name, t_ive
 		return (0);
 	}
 	current_chunk = get_next_chunk(addr + 8);
+
+	printf ("width : %d\n", png_ihdr.width);
+	printf ("height : %d\n", png_ihdr.height);
+	printf ("bdp : %d\n", png_ihdr.bdp);
+	printf ("color_type : %d\n", png_ihdr.color_type);
+	printf ("compression : %d\n", png_ihdr.compression);
+	printf ("filter : %d\n", png_ihdr.filter);
+	printf ("interlace : %d\n", png_ihdr.interlace);
 	printf("current_chunk : %.4s\n", (char*)&current_chunk->type);
 	if (get_conv_32(&current_chunk->type) != 0x49444154) // IDAT
 	{
@@ -110,6 +119,47 @@ uint8_t		create_image_from_png(t_data *data, int id_img, const char *name, t_ive
 		munmap(addr, file_size);
 		return (0);
 	}
-	png_inflate((void*)current_chunk + 8);
-	return (0);
+	image_size = png_ihdr.width * png_ihdr.height * ((png_ihdr.bdp / 8) * (png_ihdr.color_type == 6 ? 4 : 3)) + png_ihdr.height;
+	printf("image_size : %zu\n", image_size);
+	img_data = malloc(image_size);
+	png_inflate((void*)current_chunk + 8, img_data);
+
+	create_image(data, id_img, png_ihdr.width, png_ihdr.height);
+
+	size_t	i = 0;
+	size_t	j = 0;
+	printf("png_ihdr.width * png_ihdr.height * 4 : %d\n", png_ihdr.width * png_ihdr.height * 4);
+	printf("image_size : %zu\n", image_size);
+	printf("img_data[0] : %d\n", img_data[0]);
+	while (i < image_size)
+	{
+		if (j % (data->imgs[id_img].w * 4) == 0)
+		{
+			current_filter = img_data[i];
+			i++;
+			printf("current_filter : %d\n", current_filter);
+		}
+
+		((uint8_t*)data->imgs[id_img].addr)[j] = img_data[i];
+		((uint8_t*)data->imgs[id_img].addr)[j] = apply_filter(current_filter, (uint8_t*)data->imgs[id_img].addr, &png_ihdr, j);
+		i++;
+		j++;
+	}
+	i = 0;
+	uint32_t	tmp;
+	while (i < png_ihdr.width * png_ihdr.height)
+	{
+		tmp = data->imgs[id_img].addr[i];
+		tmp = (tmp << 24) | (tmp >> 8);
+		data->imgs[id_img].addr[i] = invert_transparency(tmp);
+		i++;
+	}
+
+
+	return (1);
 }
+
+
+/*	On a : RGBA
+	On veut : ARGB
+*/

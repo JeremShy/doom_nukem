@@ -61,6 +61,10 @@ int main(int ac, char **av)
 		return (1);
 	if (!create_image_from_png(&data, IMG_BACKGROUND, av[1], NULL))
 		return (2);
+	if (!create_image(&data, IMG_WHITE_BG, WIN_SIZE_X, WIN_SIZE_Y))
+		return (3);
+	fill_img(&data.imgs[IMG_WHITE_BG], get_color_code(0xff, 0xff, 0xff, 0x0));
+
 	// if (!create_image_from_tga(&data, IMG_BACKGROUND, "docs/background.tga", NULL))
 	// 	return (2);
 	mlx_loop_hook(data.mlx.mlx_ptr, loop_hook, &data);
@@ -74,8 +78,9 @@ int main(int ac, char **av)
 
 	fill_img(&data.imgs[IMG_DRAWING], get_color_code(0, 0, 0, 255));
 
+	mlx_put_image_to_window(data.mlx.mlx_ptr, data.mlx.win_ptr, data.imgs[IMG_WHITE_BG].ptr, 0, 0);
 	mlx_put_image_to_window(data.mlx.mlx_ptr, data.mlx.win_ptr, data.imgs[IMG_BACKGROUND].ptr, 0, 0);
-	mlx_put_image_to_window(data.mlx.mlx_ptr, data.mlx.win_ptr, data.imgs[IMG_DRAWING].ptr, 0, 0);
+	// mlx_put_image_to_window(data.mlx.mlx_ptr, data.mlx.win_ptr, data.imgs[IMG_DRAWING].ptr, 0, 0);
 
 	mlx_hook(data.mlx.win_ptr, 17, 3, close_hook, &data);
 	mlx_loop(data.mlx.mlx_ptr);

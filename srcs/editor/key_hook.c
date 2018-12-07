@@ -2,7 +2,7 @@
 
 static int		pressed_backquote(t_data *data)
 {
-	if (data->input.id_current_element == -1)
+	if (data->input.id_current_element == -1 || (data->elements[data->input.id_current_element]).polygon.finished)
 		return (0);
 	data->update_drawing = 1;
 	delete_element(&data->elements[data->input.id_current_element], data);

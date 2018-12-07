@@ -27,23 +27,33 @@ static int      compte(int nbr)
 
 char            *ft_itoa(int nbr)
 {
-	char		*retour;
+	char	*retour;
 	int		nb;
 	int		i;
-	char		tab[17];
+	uint8_t	signe;
 
+	signe = 0;
 	if (nbr == 0)
 		return (ft_strdup("0"));
-	ft_strcpy(tab, "0123456789");
+	if (nbr < 0)
+	{
+		if (nbr == (int)0x80000000)
+			return (ft_strdup("-2147483648"));
+		retour = malloc(16);
+		nbr *= -1;
+		signe = 1;
+		retour[0] = '-';
+	}
+	else
+		retour = malloc(16);
 	nb = compte(nbr);
-	retour = malloc(nb + 1);
 	i = 1;
 	while (nbr != 0)
 	{
-		retour[nb - i] = tab[nbr % 10];
+		retour[nb - i + signe] = '0' + (nbr % 10);
 		nbr /= 10;
 		i++;
 	}
-	retour[nb] = '\0';
+	retour[nb + signe] = '\0';
 	return (retour);
 }

@@ -132,11 +132,11 @@ typedef struct			s_element
 
 	uint16_t			texture_floor;
 	t_ivec2				angle_floor;
-	uint8_t				height_floor;
+	int16_t				height_floor;
 
-	uint16_t			texture_ceiling;
+	int16_t				texture_ceiling;
 	t_ivec2				angle_ceiling;
-	uint8_t				height_ceiling;
+	int16_t				height_ceiling;
 
 	uint16_t			texture_up;
 	uint16_t			texture_down;
@@ -158,11 +158,11 @@ typedef struct	s_input
 
 	uint16_t			texture_floor;
 	t_ivec2				angle_floor;
-	uint8_t				height_floor;
+	int16_t				height_floor;
 
-	uint16_t			texture_ceiling;
+	int16_t				texture_ceiling;
 	t_ivec2				angle_ceiling;
-	uint8_t				height_ceiling;
+	int16_t				height_ceiling;
 
 	uint16_t			texture_up;
 	uint16_t			texture_down;
@@ -287,6 +287,7 @@ uint32_t		max(uint32_t a, uint32_t b);
 void			clamp(int32_t *point, int32_t min, int32_t max);
 void			fclamp(float *point, float min, float max);
 int32_t			clamp_value(int32_t value, int32_t min, int32_t max);
+void			sclamp(int16_t *point, int16_t min, int16_t max);
 
 /*
 ** mlx_img_func.c

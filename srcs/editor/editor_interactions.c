@@ -2,92 +2,96 @@
 
 void		ceil_angle_y(uint8_t side, t_data *data)
 {
-	int32_t *ceil_angle_y;
+	int32_t *angle_ceiling_y;
 
 	if (data->input.id_current_element == -1)
-		ceil_angle_y = &data->input.angle_ceiling.y;
+		angle_ceiling_y = &data->input.angle_ceiling.y;
 	else
-		ceil_angle_y = &data->elements[data->input.id_current_element].angle_ceiling.y;
+		angle_ceiling_y = &data->elements[data->input.id_current_element].angle_ceiling.y;
 	if (side == ARROW_LEFT)
-		*ceil_angle_y -= *ceil_angle_y ? 5 : 0;
+		*angle_ceiling_y -= 5;
 	else
-		*ceil_angle_y += 5;
-	*ceil_angle_y = (int8_t)clamp_value(*ceil_angle_y, 0, 45);
+		*angle_ceiling_y += 5;
+	clamp(angle_ceiling_y, -25, 25);
 }
 
 void		ceil_angle_x(uint8_t side, t_data *data)
 {
-	int32_t *ceil_angle_x;
+	int32_t *angle_ceiling_x;
 
 	if (data->input.id_current_element == -1)
-		ceil_angle_x = &data->input.angle_ceiling.x;
+		angle_ceiling_x = &data->input.angle_ceiling.x;
 	else
-		ceil_angle_x = &data->elements[data->input.id_current_element].angle_ceiling.x;
+		angle_ceiling_x = &data->elements[data->input.id_current_element].angle_ceiling.x;
 	if (side == ARROW_LEFT)
-		*ceil_angle_x -= *ceil_angle_x ? 5 : 0;
+		*angle_ceiling_x -= 5;
 	else
-		*ceil_angle_x += 5;
-	*ceil_angle_x = (int8_t)clamp_value(*ceil_angle_x, 0, 45);
+		*angle_ceiling_x += 5;
+	clamp(angle_ceiling_x, -25, 25);
 }
 
 void		ceil_height(uint8_t side, t_data *data)
 {
-	uint8_t *ceil_height;
+	int16_t *height_ceiling;
 
+	printf("data->input.id_current_element = %d\n", data->input.id_current_element);
+	printf("before height_ceiling = %d\n", data->elements[data->input.id_current_element].height_ceiling);
 	if (data->input.id_current_element == -1)
-		ceil_height = &data->input.height_ceiling;
+		height_ceiling = &data->input.height_ceiling;
 	else
-		ceil_height = &data->elements[data->input.id_current_element].height_ceiling;
+		height_ceiling = &(data->elements[data->input.id_current_element].height_ceiling);
 	if (side == ARROW_LEFT)
-		*ceil_height -= *ceil_height ? 10 : 0;
+		*height_ceiling -= 10;
 	else
-		*ceil_height += 10;
-	*ceil_height = (int8_t)clamp_value(*ceil_height, 0, 100);
+		*height_ceiling += 10;
+	sclamp(height_ceiling, -300, 300);
+	printf("side = %d et ARROW_LEFT = %d\n", side, ARROW_LEFT);
+	printf("after height_ceiling = %d\n", data->elements[data->input.id_current_element].height_ceiling);
 }
 
 void		floor_angle_y(uint8_t side, t_data *data)
 {
-	int32_t *floor_angle_y;
+	int32_t *angle_floor_y;
 
 	if (data->input.id_current_element == -1)
-		floor_angle_y = &data->input.angle_floor.y;
+		angle_floor_y = &data->input.angle_floor.y;
 	else
-		floor_angle_y = &data->elements[data->input.id_current_element].angle_floor.y;
+		angle_floor_y = &data->elements[data->input.id_current_element].angle_floor.y;
 	if (side == ARROW_LEFT)
-		*floor_angle_y -= *floor_angle_y ? 5 : 0;
+		*angle_floor_y -= 5;
 	else
-		*floor_angle_y += 5;
-	*floor_angle_y = (int8_t)clamp_value(*floor_angle_y, 0, 45);
+		*angle_floor_y += 5;
+	clamp(angle_floor_y, -25, 25);
 }
 
 void		floor_angle_x(uint8_t side, t_data *data)
 {
-	int32_t *floor_angle_x;
+	int32_t *angle_floor_x;
 
 	if (data->input.id_current_element == -1)
-		floor_angle_x = &data->input.angle_floor.x;
+		angle_floor_x = &data->input.angle_floor.x;
 	else
-		floor_angle_x = &data->elements[data->input.id_current_element].angle_floor.x;
+		angle_floor_x = &data->elements[data->input.id_current_element].angle_floor.x;
 	if (side == ARROW_LEFT)
-		*floor_angle_x -= *floor_angle_x ? 5 : 0;
+		*angle_floor_x -= 5;
 	else
-		*floor_angle_x += 5;
-	*floor_angle_x = (int8_t)clamp_value(*floor_angle_x, 0, 45);
+		*angle_floor_x += 5;
+	clamp(angle_floor_x, -25, 25);
 }
 
 void		floor_height(uint8_t side, t_data *data)
 {
-	uint8_t *floor_height;
+	int16_t *height_floor;
 
 	if (data->input.id_current_element == -1)
-		floor_height = &data->input.height_floor;
+		height_floor = &data->input.height_floor;
 	else
-		floor_height = &data->elements[data->input.id_current_element].height_floor;
+		height_floor = &data->elements[data->input.id_current_element].height_floor;
 	if (side == ARROW_LEFT)
-		*floor_height -= *floor_height ? 10 : 0;
+		*height_floor -= 10;
 	else
-		*floor_height += 10;
-	*floor_height = (int8_t)clamp_value(*floor_height, 0, 100);
+		*height_floor += 10;
+	sclamp(height_floor, -300, 300);
 }
 
 void		light(uint8_t side, t_data *data)
@@ -102,5 +106,5 @@ void		light(uint8_t side, t_data *data)
 		*light -= *light ? 10 : 0;
 	else
 		*light += 10;
-	*light = (int8_t)clamp_value(*light, 0, 100);
+	*light = *light > 100 ? 100 : *light;
 }

@@ -94,7 +94,7 @@ static void	add_seg(t_data *data, t_polygon *polygon, t_ivec2 *new_point, enum e
 {
 	if (p == BEGIN)
 	{
-		polygon->edges[0] = add_edge(data, (t_edge){1, data->input.wall_type, data->input.id_texture, new_point, NULL});
+		polygon->edges[0] = add_edge(data, (t_edge){1, data->input.wall_type, data->input.texture_wall, new_point, NULL});
 		(polygon->nb_points)++;
 		put_pixel_to_image(&data->imgs[IMG_DRAWING], new_point->x,
 			new_point->y, get_color_from_typewall(data->input.wall_type));
@@ -104,7 +104,7 @@ static void	add_seg(t_data *data, t_polygon *polygon, t_ivec2 *new_point, enum e
 	edge_exists(data, data->nb_elements, &polygon->edges[polygon->nb_points - 1]);
 	if (p == MIDDLE)
 	{
-		polygon->edges[polygon->nb_points] = add_edge(data, (t_edge){1, data->input.wall_type, data->input.id_texture, polygon->edges[polygon->nb_points - 1]->p2, NULL});
+		polygon->edges[polygon->nb_points] = add_edge(data, (t_edge){1, data->input.wall_type, data->input.texture_wall, polygon->edges[polygon->nb_points - 1]->p2, NULL});
 		(polygon->nb_points)++;
 	}
 	else if (p == END)

@@ -17,6 +17,8 @@
 # define TEXTURE_2 2
 # define TEXTURE_3 3
 # define TEXTURE_4 4
+# define FIRST_TEXTURE TEXTURE_1
+# define LAST_TEXTURE TEXTURE_4
 # define IMG_DRAWING 5
 
 # define MAX_IMAGE (IMG_DRAWING + 1)
@@ -124,7 +126,7 @@ typedef struct			s_element
 	enum e_elem_type	type;
 
 	uint8_t				printable;
-	uint8_t				id_texture;
+	uint16_t			texture_wall;
 
 	uint8_t				clickable;
 	uint8_t				enabled;
@@ -134,7 +136,7 @@ typedef struct			s_element
 	t_ivec2				angle_floor;
 	int16_t				height_floor;
 
-	int16_t				texture_ceiling;
+	uint16_t				texture_ceiling;
 	t_ivec2				angle_ceiling;
 	int16_t				height_ceiling;
 
@@ -147,7 +149,7 @@ typedef struct			s_element
 
 typedef struct	s_input
 {
-	uint16_t			id_texture;
+	uint16_t			texture_wall;
 	enum e_edge_type	wall_type;
 	int32_t				id_current_element;
 	int32_t				id_current_point;
@@ -160,7 +162,7 @@ typedef struct	s_input
 	t_ivec2				angle_floor;
 	int16_t				height_floor;
 
-	int16_t				texture_ceiling;
+	uint16_t				texture_ceiling;
 	t_ivec2				angle_ceiling;
 	int16_t				height_ceiling;
 
@@ -227,6 +229,11 @@ t_edge			*get_nearest_edge(const t_ivec2 *point, t_edge *edges, float *min);
 /*
 ** editor_interactions.c
 */
+void			wall_texture(uint8_t side, t_data *data);
+void			up_texture(uint8_t side, t_data *data);
+void			down_texture(uint8_t side, t_data *data);
+void			floor_texture(uint8_t side, t_data *data);
+void			ceiling_texture(uint8_t side, t_data *data);
 void			ceil_angle_y(uint8_t side, t_data *data);
 void			ceil_angle_x(uint8_t side, t_data *data);
 void			ceil_height(uint8_t side, t_data *data);
@@ -266,7 +273,7 @@ int				key_press(int keycode, t_data *data);
 int				key_release(int keycode, t_data *data);
 void			switch_delete_sector(t_data *data);
 void			switch_move_point(t_data *data);
-
+void			switch_wall_type(t_data *data);
 
 /*
 ** loop_hook.c

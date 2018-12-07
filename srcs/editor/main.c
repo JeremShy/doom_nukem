@@ -40,7 +40,7 @@ static uint8_t	ft_init(t_data *data)
 		data->input.mode = DRAWING;
 		data->nb_elements = 1;
 		data->input.light = 100;
-		data->input.id_texture = 1;
+		data->input.texture_wall = 1;
 		data->update_drawing = 1;
 		fill_img(&data->imgs[IMG_DRAWING], get_color_code(0, 0, 0, 255));
 		return (1);

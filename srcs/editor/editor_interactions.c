@@ -1,5 +1,130 @@
 #include <editor.h>
 
+void		wall_texture(uint8_t side, t_data *data)
+{
+	uint16_t *id;
+
+	if (data->input.id_current_element == -1)
+		id = &data->input.texture_wall;
+	else
+		id = &data->elements[data->input.id_current_element].texture_wall;
+	printf("id : %hu\n", *id);
+	if (side == ARROW_RIGHT)
+	{
+		if (*id == LAST_TEXTURE)
+			*id = FIRST_TEXTURE;
+		else
+			*id += 1;
+	}
+	else
+	{
+		if (*id == FIRST_TEXTURE)
+			*id = LAST_TEXTURE;
+		else
+			*id -= 1;
+	}
+}
+
+void		up_texture(uint8_t side, t_data *data)
+{
+	uint16_t *id;
+
+	if (data->input.id_current_element == -1)
+		id = &data->input.texture_up;
+	else
+		id = &data->elements[data->input.id_current_element].texture_up;
+	printf("id : %hu\n", *id);
+	if (side == ARROW_RIGHT)
+	{
+		if (*id == LAST_TEXTURE)
+			*id = FIRST_TEXTURE;
+		else
+			*id += 1;
+	}
+	else
+	{
+		if (*id == FIRST_TEXTURE)
+			*id = LAST_TEXTURE;
+		else
+			*id -= 1;
+	}
+}
+
+void		down_texture(uint8_t side, t_data *data)
+{
+	uint16_t *id;
+
+	if (data->input.id_current_element == -1)
+		id = &data->input.texture_down;
+	else
+		id = &data->elements[data->input.id_current_element].texture_down;
+	printf("id : %hu\n", *id);
+	if (side == ARROW_RIGHT)
+	{
+		if (*id == LAST_TEXTURE)
+			*id = FIRST_TEXTURE;
+		else
+			*id += 1;
+	}
+	else
+	{
+		if (*id == FIRST_TEXTURE)
+			*id = LAST_TEXTURE;
+		else
+			*id -= 1;
+	}
+}
+
+void		floor_texture(uint8_t side, t_data *data)
+{
+	uint16_t *id;
+
+	if (data->input.id_current_element == -1)
+		id = &data->input.texture_floor;
+	else
+		id = &data->elements[data->input.id_current_element].texture_floor;
+	printf("id : %hu\n", *id);
+	if (side == ARROW_RIGHT)
+	{
+		if (*id == LAST_TEXTURE)
+			*id = FIRST_TEXTURE;
+		else
+			*id += 1;
+	}
+	else
+	{
+		if (*id == FIRST_TEXTURE)
+			*id = LAST_TEXTURE;
+		else
+			*id -= 1;
+	}
+}
+
+void		ceiling_texture(uint8_t side, t_data *data)
+{
+	uint16_t *id;
+
+	if (data->input.id_current_element == -1)
+		id = &data->input.texture_ceiling;
+	else
+		id = &data->elements[data->input.id_current_element].texture_ceiling;
+	printf("id : %hu\n", *id);
+	if (side == ARROW_RIGHT)
+	{
+		if (*id == LAST_TEXTURE)
+			*id = FIRST_TEXTURE;
+		else
+			*id += 1;
+	}
+	else
+	{
+		if (*id == FIRST_TEXTURE)
+			*id = LAST_TEXTURE;
+		else
+			*id -= 1;
+	}
+}
+
 void		ceil_angle_y(uint8_t side, t_data *data)
 {
 	int32_t *angle_ceiling_y;
@@ -42,7 +167,7 @@ void		ceil_height(uint8_t side, t_data *data)
 		*height_ceiling -= 10;
 	else
 		*height_ceiling += 10;
-	sclamp(height_ceiling, -300, 300);
+	sclamp(height_ceiling, 0, 300);
 }
 
 void		floor_angle_y(uint8_t side, t_data *data)
@@ -87,7 +212,7 @@ void		floor_height(uint8_t side, t_data *data)
 		*height_floor -= 10;
 	else
 		*height_floor += 10;
-	sclamp(height_floor, -300, 300);
+	sclamp(height_floor, 0, 300);
 }
 
 void		light(uint8_t side, t_data *data)

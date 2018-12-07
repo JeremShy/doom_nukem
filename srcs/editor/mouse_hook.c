@@ -58,7 +58,7 @@ static uint16_t	find_free_element(t_data *data)
 	e->texture_ceiling = 2; 
 	e->texture_up = 3;
 	e->texture_down = 1;
-	e->id_texture = 2;
+	e->texture_wall = 2;
 	e->id = i;
 	e->enabled = 1;
 	return (e->id);
@@ -132,6 +132,10 @@ static int		options_zone(int button, int x, int y, t_data *data)
 		exit(EXIT_SUCCESS);
 	else if (x >= SQUARE_DRAW_SX && y >= SQUARE_DRAW_SY && x <= SQUARE_DRAW_EX && y <= SQUARE_DRAW_EY)
 		switch_drawing(data);
+	else if (x > WALL_TYPE_RED_SX && y > WALL_TYPE_RED_SY && x < WALL_TYPE_RED_EX && y < WALL_TYPE_RED_EY)
+		switch_wall_type(data);
+	else if (x > WALL_TYPE_WHITE_SX && y > WALL_TYPE_WHITE_SY && x < WALL_TYPE_WHITE_EX && y < WALL_TYPE_WHITE_EY)
+		switch_wall_type(data);
 
 	if (data->input.mode == SELECTING && data->input.id_current_element != -1)
 	{
@@ -139,7 +143,21 @@ static int		options_zone(int button, int x, int y, t_data *data)
 			light(ARROW_LEFT, data);
 		else if (x > LIGHT_RIGHT_ARROW_SX && y > LIGHT_RIGHT_ARROW_SY && x < LIGHT_RIGHT_ARROW_EX && y < LIGHT_RIGHT_ARROW_EY)
 			light(ARROW_RIGHT, data);
-	
+
+		else if (x > WALL_LEFT_ARROW_SX && y > WALL_LEFT_ARROW_SY && x < WALL_LEFT_ARROW_EX && y < WALL_LEFT_ARROW_EY)
+			wall_texture(ARROW_LEFT, data);
+		else if (x > WALL_RIGHT_ARROW_SX && y > WALL_RIGHT_ARROW_SY && x < WALL_RIGHT_ARROW_EX && y < WALL_RIGHT_ARROW_EY)
+			wall_texture(ARROW_RIGHT, data);
+
+		else if (x > UP_LEFT_ARROW_SX && y > UP_LEFT_ARROW_SY && x < UP_LEFT_ARROW_EX && y < UP_LEFT_ARROW_EY)
+			up_texture(ARROW_LEFT, data);
+		else if (x > UP_RIGHT_ARROW_SX && y > UP_RIGHT_ARROW_SY && x < UP_RIGHT_ARROW_EX && y < UP_RIGHT_ARROW_EY)
+			up_texture(ARROW_RIGHT, data);
+		else if (x > DOWN_LEFT_ARROW_SX && y > DOWN_LEFT_ARROW_SY && x < DOWN_LEFT_ARROW_EX && y < DOWN_LEFT_ARROW_EY)
+			down_texture(ARROW_LEFT, data);
+		else if (x > DOWN_RIGHT_ARROW_SX && y > DOWN_RIGHT_ARROW_SY && x < DOWN_RIGHT_ARROW_EX && y < DOWN_RIGHT_ARROW_EY)
+			down_texture(ARROW_RIGHT, data);
+
 		else if (x > CEIL_HEIGHT_LEFT_ARROW_SX && y > CEIL_HEIGHT_LEFT_ARROW_SY && x < CEIL_HEIGHT_LEFT_ARROW_EX && y < CEIL_HEIGHT_LEFT_ARROW_EY)
 			ceil_height(ARROW_LEFT, data);
 		else if (x > CEIL_HEIGHT_RIGHT_ARROW_SX && y > CEIL_HEIGHT_RIGHT_ARROW_SY && x < CEIL_HEIGHT_RIGHT_ARROW_EX && y < CEIL_HEIGHT_RIGHT_ARROW_EY)
@@ -152,6 +170,10 @@ static int		options_zone(int button, int x, int y, t_data *data)
 			ceil_angle_y(ARROW_LEFT, data);
 		else if (x > SMALL_Y_CEIL_RIGHT_ARROW_SX && y > SMALL_Y_CEIL_RIGHT_ARROW_SY && x < SMALL_Y_CEIL_RIGHT_ARROW_EX && y < SMALL_Y_CEIL_RIGHT_ARROW_EY)
 			ceil_angle_y(ARROW_RIGHT, data);
+		else if (x > CEIL_TEXT_LEFT_ARROW_SX && y > CEIL_TEXT_LEFT_ARROW_SY && x < CEIL_TEXT_LEFT_ARROW_EX && y < CEIL_TEXT_LEFT_ARROW_EY)
+			ceiling_texture(ARROW_LEFT, data);
+		else if (x > CEIL_TEXT_RIGHT_ARROW_SX && y > CEIL_TEXT_RIGHT_ARROW_SY && x < CEIL_TEXT_RIGHT_ARROW_EX && y < CEIL_TEXT_RIGHT_ARROW_EY)
+			ceiling_texture(ARROW_RIGHT, data);
 	
 		else if (x > FLOOR_HEIGHT_LEFT_ARROW_SX && y > FLOOR_HEIGHT_LEFT_ARROW_SY && x < FLOOR_HEIGHT_LEFT_ARROW_EX && y < FLOOR_HEIGHT_LEFT_ARROW_EY)
 			floor_height(ARROW_LEFT, data);
@@ -165,6 +187,10 @@ static int		options_zone(int button, int x, int y, t_data *data)
 			floor_angle_y(ARROW_LEFT, data);
 		else if (x > SMALL_Y_FLOOR_RIGHT_ARROW_SX && y > SMALL_Y_FLOOR_RIGHT_ARROW_SY && x < SMALL_Y_FLOOR_RIGHT_ARROW_EX && y < SMALL_Y_FLOOR_RIGHT_ARROW_EY)
 			floor_angle_y(ARROW_RIGHT, data);
+		else if (x > FLOOR_TEXT_LEFT_ARROW_SX && y > FLOOR_TEXT_LEFT_ARROW_SY && x < FLOOR_TEXT_LEFT_ARROW_EX && y < FLOOR_TEXT_LEFT_ARROW_EY)
+			floor_texture(ARROW_LEFT, data);
+		else if (x > FLOOR_TEXT_RIGHT_ARROW_SX && y > FLOOR_TEXT_RIGHT_ARROW_SY && x < FLOOR_TEXT_RIGHT_ARROW_EX && y < FLOOR_TEXT_RIGHT_ARROW_EY)
+			floor_texture(ARROW_RIGHT, data);
 	}
 
 

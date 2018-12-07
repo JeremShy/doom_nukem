@@ -41,7 +41,7 @@ static void	draw_texture(t_data *data)
 		// printf("%d\n", data->elements[data->input.id_current_element].texture_up);
 		mlx_put_image_to_window(data->mlx.mlx_ptr, data->mlx.win_ptr, data->imgs[data->elements[data->input.id_current_element].texture_up].ptr, UP_TEXTURE_X, UP_TEXTURE_Y);
 		mlx_put_image_to_window(data->mlx.mlx_ptr, data->mlx.win_ptr, data->imgs[data->elements[data->input.id_current_element].texture_down].ptr, DOWN_TEXTURE_X, DOWN_TEXTURE_Y);
-		mlx_put_image_to_window(data->mlx.mlx_ptr, data->mlx.win_ptr, data->imgs[data->elements[data->input.id_current_element].id_texture].ptr, WALL_TEXTURE_X, WALL_TEXTURE_Y);
+		mlx_put_image_to_window(data->mlx.mlx_ptr, data->mlx.win_ptr, data->imgs[data->elements[data->input.id_current_element].texture_wall].ptr, WALL_TEXTURE_X, WALL_TEXTURE_Y);
 		mlx_put_image_to_window(data->mlx.mlx_ptr, data->mlx.win_ptr, data->imgs[data->elements[data->input.id_current_element].texture_ceiling].ptr, CEIL_TEXT_TEXTURE_X, CEIL_TEXT_TEXTURE_Y);
 		mlx_put_image_to_window(data->mlx.mlx_ptr, data->mlx.win_ptr, data->imgs[data->elements[data->input.id_current_element].texture_floor].ptr, FLOOR_TEXT_TEXTURE_X, FLOOR_TEXT_TEXTURE_Y);
 	}

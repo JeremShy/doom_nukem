@@ -53,6 +53,14 @@ void	switch_drawing(t_data *data)
 	data->input.mode = DRAWING;
 }
 
+void	switch_wall_type(t_data *data)
+{
+	if (data->input.wall_type != PORTAL)
+		data->input.wall_type = PORTAL;
+	else
+		data->input.wall_type = SOLID;
+}
+
 int	key_press(int keycode, t_data *data)
 {
 	printf("keycode : %d\n", keycode);
@@ -68,7 +76,7 @@ int	key_press(int keycode, t_data *data)
 	else if (keycode == KEY_P)
 	{
 		if (data->input.mode == DRAWING)
-			data->input.wall_type = PORTAL;
+			switch_wall_type(data);
 	}
 	else if (keycode == KEY_X)
 		switch_delete_sector(data);

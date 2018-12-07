@@ -119,9 +119,10 @@ struct	s_bit_and_byte
 };
 
 void			get_code_from_lengths(struct s_length_code *length_codes, size_t s);
-void			*png_inflate(uint8_t *data);
+void			*png_inflate(uint8_t *data, uint8_t *dst);
 struct s_tree	*create_tree(struct s_length_code *codes, size_t s);
 void			fill_bl_count(uint16_t *bl_count, struct s_length_code *length_code, size_t s);
+uint8_t			apply_filter(uint8_t filter, uint8_t *data, struct s_png_ihdr *png_ihdr, size_t i);
 
 extern const struct s_length_code	g_a_init[19];
 extern const int					g_length_codes_base_len[][2];

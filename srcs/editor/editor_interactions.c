@@ -34,8 +34,6 @@ void		ceil_height(uint8_t side, t_data *data)
 {
 	int16_t *height_ceiling;
 
-	printf("data->input.id_current_element = %d\n", data->input.id_current_element);
-	printf("before height_ceiling = %d\n", data->elements[data->input.id_current_element].height_ceiling);
 	if (data->input.id_current_element == -1)
 		height_ceiling = &data->input.height_ceiling;
 	else
@@ -45,8 +43,6 @@ void		ceil_height(uint8_t side, t_data *data)
 	else
 		*height_ceiling += 10;
 	sclamp(height_ceiling, -300, 300);
-	printf("side = %d et ARROW_LEFT = %d\n", side, ARROW_LEFT);
-	printf("after height_ceiling = %d\n", data->elements[data->input.id_current_element].height_ceiling);
 }
 
 void		floor_angle_y(uint8_t side, t_data *data)

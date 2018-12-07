@@ -38,6 +38,11 @@ static uint8_t	ft_init(t_data *data)
 	{
 		data->input.id_current_element = -1;
 		data->input.mode = DRAWING;
+		data->nb_elements = 1;
+		data->input.light = 100;
+		data->input.id_texture = 1;
+		data->update_drawing = 1;
+		fill_img(&data->imgs[IMG_DRAWING], get_color_code(0, 0, 0, 255));
 		return (1);
 	}
 	return (0);
@@ -79,15 +84,6 @@ int main()
 	mlx_hook(data.mlx.win_ptr, 4, 0, mouse_press, &data);
 	mlx_hook(data.mlx.win_ptr, 5, 0, mouse_release, &data);
 	mlx_hook(data.mlx.win_ptr, 6, 1l << 6, mouse_motion, &data);
-	data.nb_elements = 1;
-	data.input.light = 100;
-	data.input.id_texture = 1;
-
-	fill_img(&data.imgs[IMG_DRAWING], get_color_code(0, 0, 0, 255));
-
-	mlx_put_image_to_window(data.mlx.mlx_ptr, data.mlx.win_ptr, data.imgs[IMG_BACKGROUND].ptr, 0, 0);
-	mlx_put_image_to_window(data.mlx.mlx_ptr, data.mlx.win_ptr, data.imgs[IMG_DRAWING].ptr, 0, 0);
-
 	mlx_hook(data.mlx.win_ptr, 17, 3, close_hook, &data);
 	mlx_loop(data.mlx.mlx_ptr);
 	return (0);

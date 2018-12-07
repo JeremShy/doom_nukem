@@ -89,7 +89,7 @@ uint8_t		create_image_from_png(t_data *data, int id_img, const char *name, t_ive
 	(void)size;
 	if (!(addr = init_png_parser(name, &file_size)))
 		return (0);
-	png_inflate(addr, file_size);
+	png_inflate(addr);
 	return (0);
 	if (file_size < 8 || get_conv_64(addr) != 0x89504E470D0A1A0Al)
 	{
@@ -110,6 +110,6 @@ uint8_t		create_image_from_png(t_data *data, int id_img, const char *name, t_ive
 		munmap(addr, file_size);
 		return (0);
 	}
-	png_inflate((void*)current_chunk + 8, get_conv_32(&current_chunk->length));
+	png_inflate((void*)current_chunk + 8);
 	return (0);
 }

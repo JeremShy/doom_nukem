@@ -98,14 +98,28 @@ enum	e_compression_method {
 	invalid = 3
 };
 
-struct	s_tree {
+struct	s_tree
+{
 	struct s_tree	*l;
 	struct s_tree	*r;
 	uint16_t		symbol;
 };
 
+struct	s_huff_decode
+{
+	struct	s_tree*			tree;
+	struct	s_length_code*	len;
+	uint16_t				size;
+};
+
+struct	s_bit_and_byte
+{
+	uint8_t		bit;
+	uint32_t	byte;
+};
+
 void			get_code_from_lengths(struct s_length_code *length_codes, size_t s);
-void			*png_inflate(uint8_t *data, size_t datasize);
+void			*png_inflate(uint8_t *data);
 struct s_tree	*create_tree(struct s_length_code *codes, size_t s);
 void			fill_bl_count(uint16_t *bl_count, struct s_length_code *length_code, size_t s);
 

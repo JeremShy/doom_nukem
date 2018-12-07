@@ -1,8 +1,6 @@
 #include <editor.h>
 #include <png.h>
 
-#define COUNT 10 
-
 void	create_leaf(struct s_tree *node, struct s_length_code code)
 {
 	struct	s_tree			*new;

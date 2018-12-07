@@ -87,7 +87,7 @@ struct	s_chunk_hdr {
 
 struct	s_length_code {
 	uint8_t		length;
-	uint8_t		code;
+	uint16_t	code;
 	uint16_t	symbol; // For testing purpose
 };
 
@@ -107,8 +107,11 @@ struct	s_tree {
 void			get_code_from_lengths(struct s_length_code *length_codes, size_t s);
 void			*png_inflate(uint8_t *data, size_t datasize);
 struct s_tree	*create_tree(struct s_length_code *codes, size_t s);
+void			fill_bl_count(uint16_t *bl_count, struct s_length_code *length_code, size_t s);
 
-
+extern const struct s_length_code	g_a_init[19];
+extern const int					g_length_codes_base_len[][2];
+extern const int					g_dist_base_len[][2];
 #endif
 
 // {16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15};

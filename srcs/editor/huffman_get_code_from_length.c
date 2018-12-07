@@ -1,7 +1,7 @@
 #include <editor.h>
 #include <png.h>
 
-static void		fill_bl_count(uint16_t *bl_count, struct s_length_code *length_code, size_t s)
+void		fill_bl_count(uint16_t *bl_count, struct s_length_code *length_code, size_t s)
 {
 	uint16_t		i;
 
@@ -13,6 +13,13 @@ static void		fill_bl_count(uint16_t *bl_count, struct s_length_code *length_code
 			bl_count[length_code[i].length]++;
 		i++;
 	}
+	i = 0;
+	while (i < MAX_BITS)
+	{
+		if (bl_count[i])
+			printf("bl_count[%d] = %d\n", i, bl_count[i]);
+		i++;
+	}
 }
 
 static void		fill_next_code(uint16_t *next_code, uint16_t *bl_count)
@@ -22,6 +29,7 @@ static void		fill_next_code(uint16_t *next_code, uint16_t *bl_count)
 
 	code = 0;
 	bits = 1;
+	bl_count[0] = 0;
 	while (bits <= MAX_BITS)
 	{
 		code = (code + bl_count[bits - 1]) << 1;
@@ -30,7 +38,7 @@ static void		fill_next_code(uint16_t *next_code, uint16_t *bl_count)
 	}
 }
 
-static void		fill_codes(uint16_t *next_code, struct s_length_code *length_codes, size_t s)
+void		fill_codes(uint16_t *next_code, struct s_length_code *length_codes, size_t s)
 {
 	size_t	i;
 
@@ -50,6 +58,9 @@ void		get_code_from_lengths(struct s_length_code *length_codes, size_t s)
 {
 	uint16_t				bl_count[MAX_BITS + 1]; //Let bl_count[N] be the number of codes of length N, N >= 1.
 	uint16_t				next_code[MAX_BITS + 1];
+
+	ft_bzero(bl_count, sizeof(bl_count));
+	ft_bzero(next_code, sizeof(next_code));
 
 	fill_bl_count(bl_count, length_codes, s);
 	fill_next_code(next_code, bl_count);

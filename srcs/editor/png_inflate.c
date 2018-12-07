@@ -75,74 +75,61 @@ void	get_error(struct s_length_code *len, uint16_t nbr)
 	}
 }
 
-static void		get_len_list(uint8_t *data, size_t datasize, uint8_t *current_bit, uint32_t *current_byte, struct s_length_code *len, uint16_t nbr, struct s_tree *a)
+void			write_lenght_code(struct s_length_code *len, uint16_t
+	occurency, size_t *index_in_len, uint16_t sym)
+{
+	size_t		i;
+
+	i = 0;
+	while (i < occurency)
+	{
+		if (sym == 16)
+			len[*index_in_len] = (struct s_length_code){
+				len[*index_in_len - 1].length, 0, *index_in_len};
+		else
+			len[*index_in_len] = (struct s_length_code){0, 0, *index_in_len};
+		(*index_in_len)++;
+		i++;
+	}
+}
+
+static void		get_len_list(uint8_t *data, size_t datasize,
+	uint8_t *current_bit, uint32_t *current_byte, 
+	struct s_length_code *len, uint16_t nbr, struct s_tree *a)
 {
 	size_t		index_in_len;
-	uint16_t	occurency;
-	size_t		i;
 	uint16_t	sym;
-
 
 	index_in_len = 0;
 	while (index_in_len < nbr)
 	{
 		sym = get_next_symbol(data, datasize, current_bit, current_byte, a);
-		// printf("currrent_byte = %x et current_bit = %x\n", *current_byte, *current_bit);
-		// printf("sym : %d\n", sym);
 		if (sym <= 15)
 		{
 			len[index_in_len] = (struct s_length_code){sym, 0, index_in_len};
-			printf("[%zu] : Code is %d : putting 1 code of %d\n", index_in_len, sym, sym);
 			index_in_len++;
 		}
 		else if (sym == 16)
-		{
-			occurency = 3 + read_n_bits(data, current_bit, current_byte, 2);
-			i = 0;
-			printf("[%zu] : Code is 16 : putting %d codes of %d\n", index_in_len, occurency, len[index_in_len - 1].length);
-			while (i < occurency)
-			{
-				len[index_in_len] = (struct s_length_code){len[index_in_len - 1].length, 0, index_in_len};
-				index_in_len++;
-				i++;
-			}
-		}
+			write_lenght_code(len, 3 + read_n_bits(data,
+				current_bit, current_byte, 2), &index_in_len, sym);
 		else if (sym == 17)
-		{
-			occurency = 3 + read_n_bits(data, current_bit, current_byte, 3);
-			printf("[%zu] : Code is 17 : puttings %d codes of 0\n", index_in_len, occurency);
-			i = 0;
-			while (i < occurency)
-			{
-				len[index_in_len] = (struct s_length_code){0, 0, index_in_len};
-				index_in_len++;
-				i++;
-			}
-		}
+			write_lenght_code(len, 3 + read_n_bits(data,
+				current_bit, current_byte, 3), &index_in_len, sym);
 		else if (sym == 18)
-		{
-			occurency = 11 + read_n_bits(data, current_bit, current_byte, 7);
-			printf("[%zu] : Code is 18 : puttings %d codes of 0\n", index_in_len, occurency);
-			i = 0;
-			while (i < occurency)
-			{
-				len[index_in_len] = (struct s_length_code){0, 0, index_in_len};
-				index_in_len++;
-				i++;
-			}
-		}
+			write_lenght_code(len, 11 + read_n_bits(data,
+				current_bit, current_byte, 7), &index_in_len, sym);
 		else
-		{
 			exit(printf("Error 132\n"));
-		}
 	}
 	if (index_in_len > nbr)
 		printf("wtf\n");
 }
 
-uint8_t		process_block(uint8_t *data, size_t datasize, uint8_t *current_bit, uint32_t *current_byte, uint32_t winsize)
+uint8_t		process_block(uint8_t *data, size_t datasize)
 {
 	enum e_compression_method	compression_method;
+	uint8_t						current_bit;
+	uint32_t					current_byte;
 	uint8_t						final;
 	uint16_t					hlit;
 	uint8_t						hdist;
@@ -165,9 +152,12 @@ uint8_t		process_block(uint8_t *data, size_t datasize, uint8_t *current_bit, uin
 	ft_bzero(b_lens, sizeof(b_lens));
 	ft_bzero(c_lens, sizeof(c_lens));
 
+	current_bit = 0;
+	current_byte = 0;
+
 	image = malloc(1024 * 1024);
-	final = read_n_bits(data, current_bit, current_byte, 1);
-	compression_method = read_n_bits(data, current_bit, current_byte, 2);
+	final = read_n_bits(data, &current_bit, &current_byte, 1);
+	compression_method = read_n_bits(data, &current_bit, &current_byte, 2);
 	print_compression_method(compression_method);
 
 	if (compression_method == no_compression || compression_method == invalid)
@@ -178,9 +168,9 @@ uint8_t		process_block(uint8_t *data, size_t datasize, uint8_t *current_bit, uin
 
 	if (compression_method == dynamic_huffman)
 	{
-		hlit = read_n_bits(data, current_bit, current_byte, 5) + 257;
-		hdist = read_n_bits(data, current_bit, current_byte, 5) + 1;
-		hclen = read_n_bits(data, current_bit, current_byte, 4) + 4;
+		hlit = read_n_bits(data, &current_bit, &current_byte, 5) + 257;
+		hdist = read_n_bits(data, &current_bit, &current_byte, 5) + 1;
+		hclen = read_n_bits(data, &current_bit, &current_byte, 4) + 4;
 
 		printf("hlit : %d\n", hlit);
 		printf("hdist : %d\n", hdist);
@@ -191,7 +181,7 @@ uint8_t		process_block(uint8_t *data, size_t datasize, uint8_t *current_bit, uin
 		{
 			a_lens[g_a_init[i].symbol].symbol = g_a_init[i].symbol;
 			if (i < hclen)
-				a_lens[g_a_init[i].symbol].length = read_n_bits(data, current_bit, current_byte, 3);
+				a_lens[g_a_init[i].symbol].length = read_n_bits(data, &current_bit, &current_byte, 3);
 			i++;
 		}
 		get_code_from_lengths(a_lens, 19);
@@ -204,7 +194,7 @@ uint8_t		process_block(uint8_t *data, size_t datasize, uint8_t *current_bit, uin
 		}
 		a = create_tree(a_lens, 19);
 
-		get_len_list(data, datasize, current_bit, current_byte, b_lens, hlit, a);
+		get_len_list(data, datasize, &current_bit, &current_byte, b_lens, hlit, a);
 		get_error(b_lens, hlit);
 		get_code_from_lengths(b_lens, hlit);
 		b = create_tree(b_lens, hlit);
@@ -216,7 +206,7 @@ uint8_t		process_block(uint8_t *data, size_t datasize, uint8_t *current_bit, uin
 			i++;
 		}
 
-		get_len_list(data, datasize, current_bit, current_byte, c_lens, hdist, a);
+		get_len_list(data, datasize, &current_bit, &current_byte, c_lens, hdist, a);
 		get_code_from_lengths(c_lens, hdist);
 		c = create_tree(c_lens, hdist);
 	}
@@ -258,7 +248,7 @@ uint8_t		process_block(uint8_t *data, size_t datasize, uint8_t *current_bit, uin
 	sym = 0;
 	while (sym != 256)
 	{
-		sym = get_next_symbol(data, datasize, current_bit, current_byte, b);
+		sym = get_next_symbol(data, datasize, &current_bit, &current_byte, b);
 		printf("sym : %d\n", sym);
 		if (sym < 256)
 		{
@@ -267,10 +257,10 @@ uint8_t		process_block(uint8_t *data, size_t datasize, uint8_t *current_bit, uin
 		}
 		else if (sym > 256)
 		{
-			len = g_length_codes_base_len[sym - 257][1] + (int)read_n_bits(data, current_bit, current_byte, g_length_codes_base_len[sym - 257][0]);
+			len = g_length_codes_base_len[sym - 257][1] + (int)read_n_bits(data, &current_bit, &current_byte, g_length_codes_base_len[sym - 257][0]);
 			printf("must read : %d codes (%d extra bits and %d base len)\n", len, g_length_codes_base_len[sym - 257][0], g_length_codes_base_len[sym - 257][1]);
-			distance = get_next_symbol(data, datasize, current_bit, current_byte, c);
-			distance = g_dist_base_len[distance][1] + (int)read_n_bits(data, current_bit, current_byte, g_dist_base_len[distance][0]);
+			distance = get_next_symbol(data, datasize, &current_bit, &current_byte, c);
+			distance = g_dist_base_len[distance][1] + (int)read_n_bits(data, &current_bit, &current_byte, g_dist_base_len[distance][0]);
 			printf("distance : %d\n", distance);
 			i = 0;
 			while (i < len)
@@ -290,40 +280,35 @@ uint8_t		process_block(uint8_t *data, size_t datasize, uint8_t *current_bit, uin
 
 void		*png_inflate(uint8_t *data, size_t datasize)
 {
-	(void)datasize;
-	uint8_t					cmf;
-	uint8_t					*compressed_data;
-	struct s_length_code	length_code[] = {{3, 0, 'A'}, {3, 0, 'B'}, {3, 0, 'C'}, {3, 0, 'D'}, {3, 0, 'E'}, {2, 0, 'F'}, {4, 0, 'G'}, {4, 0, 'H'}};
-	size_t					s;
-	uint32_t				winsize;
-	uint8_t					current_bit;
-	uint32_t				current_byte;
+	// uint8_t					cmf;
+	// uint8_t					*compressed_data;
+	// struct s_length_code	length_code[] = {{3, 0, 'A'}, {3, 0, 'B'}, {3, 0, 'C'}, {3, 0, 'D'}, {3, 0, 'E'}, {2, 0, 'F'}, {4, 0, 'G'}, {4, 0, 'H'}};
+	// size_t					s;
+
 
 	// printf("%.*s\n", (int)datasize, data);
 	// fwrite(data, 1, datasize, stdout);
 
-	s = sizeof(length_code) / sizeof(struct s_length_code);
-	cmf = data[0];
-	winsize = 2 << ((cmf >> 4) + 7);
+	// s = sizeof(length_code) / sizeof(struct s_length_code);
+	// cmf = data[0];
 
-	printf("cm : %u\n", cmf & 0xf);
-	printf("cinfo : %u\n", cmf >> 4);
-	printf("winsize : %u\n", winsize);
-	printf("flags  : %x\n", data[1]);
-	compressed_data = data + 2;
+	// printf("cm : %u\n", cmf & 0xf);
+	// printf("cinfo : %u\n", cmf >> 4);
+	// printf("winsize : %u\n", winsize);
+	// printf("flags  : %x\n", data[1]);
+	// compressed_data = data + 2;
 
-	get_code_from_lengths(length_code, s);
+	// get_code_from_lengths(length_code, s);
 
-	printf("compressed_data[0] : %x\n", compressed_data[0]);
-	printf("compressed_data[1] : %x\n", compressed_data[1]);
-	printf("compressed_data[2] : %x\n", compressed_data[2]);
-	printf("compressed_data[3] : %x\n", compressed_data[3]);
-	printf("compressed_data[4] : %x\n", compressed_data[4]);
+	printf("compressed_data[0] : %x\n", data[0 + 2]);
+	printf("compressed_data[1] : %x\n", data[1 + 2]);
+	printf("compressed_data[2] : %x\n", data[2 + 2]);
+	printf("compressed_data[3] : %x\n", data[3 + 2]);
+	printf("compressed_data[4] : %x\n", data[4 + 2]);
 
-	current_bit = 0;
-	current_byte = 0;
 
-	if (!process_block(compressed_data, datasize - 2, &current_bit, &current_byte, winsize))
+
+	if (!process_block(data + 2, datasize - 2))
 		return (NULL);
 
 	return (NULL);

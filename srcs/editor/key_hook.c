@@ -10,7 +10,7 @@ static int		pressed_backquote(t_data *data)
 	return (1);
 }
 
-static void	switch_delete_sector(t_data *data)
+void	switch_delete_sector(t_data *data)
 {
 	if (data->input.mode == DELETE_SECTOR)
 		return ;
@@ -18,7 +18,7 @@ static void	switch_delete_sector(t_data *data)
 	data->input.mode = DELETE_SECTOR;
 }
 
-static void	switch_move_point(t_data *data)
+void	switch_move_point(t_data *data)
 {
 	if (data->input.mode == MOVE_POINT)
 		return ;

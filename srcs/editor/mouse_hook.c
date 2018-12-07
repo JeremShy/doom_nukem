@@ -53,10 +53,27 @@ static uint16_t	find_free_element(t_data *data)
 		e = &(data->elements[i]);
 		(data->nb_elements)++;
 	}
+	e->light = 100;
+	e->texture_floor = 1;
+	e->texture_ceiling = 2; 
+	e->texture_up = 3;
+	e->texture_down = 1;
+	e->id_texture = 2;
 	e->id = i;
 	e->enabled = 1;
 	return (e->id);
 }
+
+// static void		update_input(t_data *data)
+// {
+// 	data->input.ceiling_angle_y;
+// 	data->input.ceiling_angle_x;
+// 	data->input.ceiling_height;
+// 	data->input.floor_angle_y;
+// 	data->input.floor_angle_x;
+// 	data->input.floor_height;
+// 	data->input.light;
+// }
 
 static int		drawing_zone(int x, int y, t_data *data)
 {
@@ -73,12 +90,11 @@ static int		drawing_zone(int x, int y, t_data *data)
 	}
 	else if (data->input.mode == SELECTING)
 	{
-		// loop_elems(x, y, data);
+		data->input.id_current_element = -1;
+		elem = get_polygon_from_point(data, (t_ivec2){x, y});
+		if (elem)
+			data->input.id_current_element = elem->id;
 
-		// if (get_nearest_edge(&(t_ivec2){x, y}, data->edges, &p, &dist) != NULL)
-		// {
-		// 	draw_line(&(t_ivec2){x,y}, &p, &data->imgs[IMG_DRAWING], get_color_code(0, 255, 255, 0));
-		// }
 	}
 	else if (data->input.mode == DRAWING)
 	{
@@ -106,76 +122,122 @@ static int		options_zone(int button, int x, int y, t_data *data)
 {
 	(void)button;
 	(void)data;
-	if (x > DRAW_SX && y > DRAW_SY && x < DRAW_EX && y < DRAW_EY)
-		data->input.mode == DRAWING ? switch_select(data) : switch_drawing(data);
-	else if (x > WALL_SX && y > WALL_SY && x < WALL_EX && y < WALL_EY)
-		data->input.wall_type = SOLID;
-	else if (x > PORTAL_SX && y > PORTAL_SY && x < PORTAL_EX && y < PORTAL_EY)
-		data->input.wall_type = PORTAL;
-	else if (x > WALL_TEXT_LEFT_SX && y > WALL_TEXT_LEFT_SY && x < WALL_TEXT_LEFT_EX && y < WALL_TEXT_LEFT_EY)
-		printf("WALL_TEXT_LEFT\n");
-	else if (x > WALL_TEXT_RIGHT_SX && y > WALL_TEXT_RIGHT_SY && x < WALL_TEXT_RIGHT_EX && y < WALL_TEXT_RIGHT_EY)
-		printf("WALL_TEXT_RIGHT\n");
-	
-	else if (x > CEIL_ORI_Y_LEFT_SX && y > CEIL_ORI_Y_LEFT_SY && x < CEIL_ORI_Y_LEFT_EX && y < CEIL_ORI_Y_LEFT_EY)
-		ceil_angle_y(ARROW_LEFT, data);
-	else if (x > CEIL_ORI_Y_RIGHT_SX && y > CEIL_ORI_Y_RIGHT_SY && x < CEIL_ORI_Y_RIGHT_EX && y < CEIL_ORI_Y_RIGHT_EY)
-		ceil_angle_y(ARROW_RIGHT, data);
-	else if (x > CEIL_ORI_X_LEFT_SX && y > CEIL_ORI_X_LEFT_SY && x < CEIL_ORI_X_LEFT_EX && y < CEIL_ORI_X_LEFT_EY)
-		ceil_angle_x(ARROW_LEFT, data);
-	else if (x > CEIL_ORI_X_RIGHT_SX && y > CEIL_ORI_X_RIGHT_SY && x < CEIL_ORI_X_RIGHT_EX && y < CEIL_ORI_X_RIGHT_EY)
-		ceil_angle_x(ARROW_RIGHT, data);
-	else if (x > CEIL_HEIGHT_LEFT_SX && y > CEIL_HEIGHT_LEFT_SY && x < CEIL_HEIGHT_LEFT_EX && y < CEIL_HEIGHT_LEFT_EY)
-		ceil_height(ARROW_LEFT, data);
-	else if (x > CEIL_HEIGHT_RIGHT_SX && y > CEIL_HEIGHT_RIGHT_SY && x < CEIL_HEIGHT_RIGHT_EX && y < CEIL_HEIGHT_RIGHT_EY)
-		ceil_height(ARROW_RIGHT, data);
-	else if (x > CEIL_TEXT_LEFT_SX && y > CEIL_TEXT_LEFT_SY && x < CEIL_TEXT_LEFT_EX && y < CEIL_TEXT_LEFT_EY)
-		printf("CEIL_TEXT_LEFT\n");
-	else if (x > CEIL_TEXT_RIGHT_SX && y > CEIL_TEXT_RIGHT_SY && x < CEIL_TEXT_RIGHT_EX && y < CEIL_TEXT_RIGHT_EY)
-		printf("CEIL_TEXT_RIGHT\n");
-	
-	else if (x > FLOOR_ORI_Y_LEFT_SX && y > FLOOR_ORI_Y_LEFT_SY && x < FLOOR_ORI_Y_LEFT_EX && y < FLOOR_ORI_Y_LEFT_EY)
-		floor_angle_y(ARROW_LEFT, data);
-	else if (x > FLOOR_ORI_Y_RIGHT_SX && y > FLOOR_ORI_Y_RIGHT_SY && x < FLOOR_ORI_Y_RIGHT_EX && y < FLOOR_ORI_Y_RIGHT_EY)
-		floor_angle_y(ARROW_RIGHT, data);
-	else if (x > FLOOR_ORI_X_LEFT_SX && y > FLOOR_ORI_X_LEFT_SY && x < FLOOR_ORI_X_LEFT_EX && y < FLOOR_ORI_X_LEFT_EY)
-		floor_angle_x(ARROW_LEFT, data);
-	else if (x > FLOOR_ORI_X_RIGHT_SX && y > FLOOR_ORI_X_RIGHT_SY && x < FLOOR_ORI_X_RIGHT_EX && y < FLOOR_ORI_X_RIGHT_EY)
-		floor_angle_x(ARROW_RIGHT, data);
-	else if (x > FLOOR_HEIGHT_LEFT_SX && y > FLOOR_HEIGHT_LEFT_SY && x < FLOOR_HEIGHT_LEFT_EX && y < FLOOR_HEIGHT_LEFT_EY)
-		floor_height(ARROW_LEFT, data);
-	else if (x > FLOOR_HEIGHT_RIGHT_SX && y > FLOOR_HEIGHT_RIGHT_SY && x < FLOOR_HEIGHT_RIGHT_EX && y < FLOOR_HEIGHT_RIGHT_EY)
-		floor_height(ARROW_RIGHT, data);
-	else if (x > FLOOR_TEXT_LEFT_SX && y > FLOOR_TEXT_LEFT_SY && x < FLOOR_TEXT_LEFT_EX && y < FLOOR_TEXT_LEFT_EY)
-		printf("FLOOR_TEXT_LEFT\n");
-	else if (x > FLOOR_TEXT_RIGHT_SX && y > FLOOR_TEXT_RIGHT_SY && x < FLOOR_TEXT_RIGHT_EX && y < FLOOR_TEXT_RIGHT_EY)
-		printf("FLOOR_TEXT_RIGHT\n");
+	if (x >= SQUARE_SELECT_SX && y >= SQUARE_SELECT_SY && x <= SQUARE_SELECT_EX && y <= SQUARE_SELECT_EY)
+		switch_select(data);
+	else if (x >= SQUARE_MOVE_SX && y >= SQUARE_MOVE_SY && x <= SQUARE_MOVE_EX && y <= SQUARE_MOVE_EY)
+		switch_move_point(data);
+	else if (x >= SQUARE_DELETE_SX && y >= SQUARE_DELETE_SY && x <= SQUARE_DELETE_EX && y <= SQUARE_DELETE_EY)
+		switch_delete_sector(data);
+	else if (x >= SQUARE_SAVE_SX && y >= SQUARE_SAVE_SY && x <= SQUARE_SAVE_EX && y <= SQUARE_SAVE_EY)
+		exit(EXIT_SUCCESS);
+	else if (x >= SQUARE_DRAW_SX && y >= SQUARE_DRAW_SY && x <= SQUARE_DRAW_EX && y <= SQUARE_DRAW_EY)
+		switch_drawing(data);
 
-	else if (x > UP_TEXT_LEFT_SX && y > UP_TEXT_LEFT_SY && x < UP_TEXT_LEFT_EX && y < UP_TEXT_LEFT_EY)
-		printf("UP_TEXT_LEFT\n");
-	else if (x > UP_TEXT_RIGHT_SX && y > UP_TEXT_RIGHT_SY && x < UP_TEXT_RIGHT_EX && y < UP_TEXT_RIGHT_EY)
-		printf("UP_TEXT_RIGHT\n");
-	else if (x > DOWN_TEXT_LEFT_SX && y > DOWN_TEXT_LEFT_SY && x < DOWN_TEXT_LEFT_EX && y < DOWN_TEXT_LEFT_EY)
-		printf("DOWN_TEXT_LEFT\n");
-	else if (x > DOWN_TEXT_RIGHT_SX && y > DOWN_TEXT_RIGHT_SY && x < DOWN_TEXT_RIGHT_EX && y < DOWN_TEXT_RIGHT_EY)
-		printf("DOWN_TEXT_RIGHT\n");
-	else if (x > LIGHT_TEXT_LEFT_SX && y > LIGHT_TEXT_LEFT_SY && x < LIGHT_TEXT_LEFT_EX && y < LIGHT_TEXT_LEFT_EY)
-		light(ARROW_LEFT, data);
-	else if (x > LIGHT_TEXT_RIGHT_SX && y > LIGHT_TEXT_RIGHT_SY && x < LIGHT_TEXT_RIGHT_EX && y < LIGHT_TEXT_RIGHT_EY)
-		light(ARROW_RIGHT, data);
+	if (data->input.mode == SELECTING && data->input.id_current_element != -1)
+	{
+		if (x > LIGHT_LEFT_ARROW_SX && y > LIGHT_LEFT_ARROW_SY && x < LIGHT_LEFT_ARROW_EX && y < LIGHT_LEFT_ARROW_EY)
+			light(ARROW_LEFT, data);
+		else if (x > LIGHT_RIGHT_ARROW_SX && y > LIGHT_RIGHT_ARROW_SY && x < LIGHT_RIGHT_ARROW_EX && y < LIGHT_RIGHT_ARROW_EY)
+			light(ARROW_RIGHT, data);
+	
+		else if (x > CEIL_HEIGHT_LEFT_ARROW_SX && y > CEIL_HEIGHT_LEFT_ARROW_SY && x < CEIL_HEIGHT_LEFT_ARROW_EX && y < CEIL_HEIGHT_LEFT_ARROW_EY)
+			ceil_height(ARROW_LEFT, data);
+		else if (x > CEIL_HEIGHT_RIGHT_ARROW_SX && y > CEIL_HEIGHT_RIGHT_ARROW_SY && x < CEIL_HEIGHT_RIGHT_ARROW_EX && y < CEIL_HEIGHT_RIGHT_ARROW_EY)
+			ceil_height(ARROW_RIGHT, data);
+		else if (x > SMALL_X_CEIL_LEFT_ARROW_SX && y > SMALL_X_CEIL_LEFT_ARROW_SY && x < SMALL_X_CEIL_LEFT_ARROW_EX && y < SMALL_X_CEIL_LEFT_ARROW_EY)
+			ceil_angle_x(ARROW_LEFT, data);
+		else if (x > SMALL_X_CEIL_RIGHT_ARROW_SX && y > SMALL_X_CEIL_RIGHT_ARROW_SY && x < SMALL_X_CEIL_RIGHT_ARROW_EX && y < SMALL_X_CEIL_RIGHT_ARROW_EY)
+			ceil_angle_x(ARROW_RIGHT, data);
+		else if (x > SMALL_Y_CEIL_LEFT_ARROW_SX && y > SMALL_Y_CEIL_LEFT_ARROW_SY && x < SMALL_Y_CEIL_LEFT_ARROW_EX && y < SMALL_Y_CEIL_LEFT_ARROW_EY)
+			ceil_angle_y(ARROW_LEFT, data);
+		else if (x > SMALL_Y_CEIL_RIGHT_ARROW_SX && y > SMALL_Y_CEIL_RIGHT_ARROW_SY && x < SMALL_Y_CEIL_RIGHT_ARROW_EX && y < SMALL_Y_CEIL_RIGHT_ARROW_EY)
+			ceil_angle_y(ARROW_RIGHT, data);
+	
+		else if (x > FLOOR_HEIGHT_LEFT_ARROW_SX && y > FLOOR_HEIGHT_LEFT_ARROW_SY && x < FLOOR_HEIGHT_LEFT_ARROW_EX && y < FLOOR_HEIGHT_LEFT_ARROW_EY)
+			floor_height(ARROW_LEFT, data);
+		else if (x > FLOOR_HEIGHT_RIGHT_ARROW_SX && y > FLOOR_HEIGHT_RIGHT_ARROW_SY && x < FLOOR_HEIGHT_RIGHT_ARROW_EX && y < FLOOR_HEIGHT_RIGHT_ARROW_EY)
+			floor_height(ARROW_RIGHT, data);
+		else if (x > SMALL_X_FLOOR_LEFT_ARROW_SX && y > SMALL_X_FLOOR_LEFT_ARROW_SY && x < SMALL_X_FLOOR_LEFT_ARROW_EX && y < SMALL_X_FLOOR_LEFT_ARROW_EY)
+			floor_angle_x(ARROW_LEFT, data);
+		else if (x > SMALL_X_FLOOR_RIGHT_ARROW_SX && y > SMALL_X_FLOOR_RIGHT_ARROW_SY && x < SMALL_X_FLOOR_RIGHT_ARROW_EX && y < SMALL_X_FLOOR_RIGHT_ARROW_EY)
+			floor_angle_x(ARROW_RIGHT, data);
+		else if (x > SMALL_Y_FLOOR_LEFT_ARROW_SX && y > SMALL_Y_FLOOR_LEFT_ARROW_SY && x < SMALL_Y_FLOOR_LEFT_ARROW_EX && y < SMALL_Y_FLOOR_LEFT_ARROW_EY)
+			floor_angle_y(ARROW_LEFT, data);
+		else if (x > SMALL_Y_FLOOR_RIGHT_ARROW_SX && y > SMALL_Y_FLOOR_RIGHT_ARROW_SY && x < SMALL_Y_FLOOR_RIGHT_ARROW_EX && y < SMALL_Y_FLOOR_RIGHT_ARROW_EY)
+			floor_angle_y(ARROW_RIGHT, data);
+	}
 
-	else if (x > OBJ_COLL_LEFT_SX && y > OBJ_COLL_LEFT_SY && x < OBJ_COLL_LEFT_EX && y < OBJ_COLL_LEFT_EY)
-		printf("OBJ_COLL_LEFT\n");
-	else if (x > OBJ_COLL_RIGHT_SX && y > OBJ_COLL_RIGHT_SY && x < OBJ_COLL_RIGHT_EX && y < OBJ_COLL_RIGHT_EY)
-		printf("OBJ_COLL_RIGHT\n");
-	else if (x > OBJ_SCEN_LEFT_SX && y > OBJ_SCEN_LEFT_SY && x < OBJ_SCEN_LEFT_EX && y < OBJ_SCEN_LEFT_EY)
-		printf("OBJ_SCEN_LEFT\n");
-	else if (x > OBJ_SCEN_RIGHT_SX && y > OBJ_SCEN_RIGHT_SY && x < OBJ_SCEN_RIGHT_EX && y < OBJ_SCEN_RIGHT_EY)
-		printf("OBJ_SCEN_RIGHT\n");
-	else if (x > OBJ_PNJ_LEFT_SX && y > OBJ_PNJ_LEFT_SY && x < OBJ_PNJ_LEFT_EX && y < OBJ_PNJ_LEFT_EY)
-		printf("OBJ_PNJ_LEFT\n");
-	else if (x > OBJ_PNJ_RIGHT_SX && y > OBJ_PNJ_RIGHT_SY && x < OBJ_PNJ_RIGHT_EX && y < OBJ_PNJ_RIGHT_EY)
-		printf("OBJ_PNJ_RIGHT\n");
+
+	// if (x > DRAW_SX && y > DRAW_SY && x < DRAW_EX && y < DRAW_EY)
+	// 	data->input.mode == DRAWING ? switch_select(data) : switch_drawing(data);
+	// else if (x > WALL_SX && y > WALL_SY && x < WALL_EX && y < WALL_EY)
+	// 	data->input.wall_type = SOLID;
+	// else if (x > PORTAL_SX && y > PORTAL_SY && x < PORTAL_EX && y < PORTAL_EY)
+	// 	data->input.wall_type = PORTAL;
+	// else if (x > WALL_TEXT_LEFT_SX && y > WALL_TEXT_LEFT_SY && x < WALL_TEXT_LEFT_EX && y < WALL_TEXT_LEFT_EY)
+	// 	printf("WALL_TEXT_LEFT\n");
+	// else if (x > WALL_TEXT_RIGHT_SX && y > WALL_TEXT_RIGHT_SY && x < WALL_TEXT_RIGHT_EX && y < WALL_TEXT_RIGHT_EY)
+	// 	printf("WALL_TEXT_RIGHT\n");
+	
+	// else if (x > CEIL_ORI_Y_LEFT_SX && y > CEIL_ORI_Y_LEFT_SY && x < CEIL_ORI_Y_LEFT_EX && y < CEIL_ORI_Y_LEFT_EY)
+	// 	ceil_angle_y(ARROW_LEFT, data);
+	// else if (x > CEIL_ORI_Y_RIGHT_SX && y > CEIL_ORI_Y_RIGHT_SY && x < CEIL_ORI_Y_RIGHT_EX && y < CEIL_ORI_Y_RIGHT_EY)
+	// 	ceil_angle_y(ARROW_RIGHT, data);
+	// else if (x > CEIL_ORI_X_LEFT_SX && y > CEIL_ORI_X_LEFT_SY && x < CEIL_ORI_X_LEFT_EX && y < CEIL_ORI_X_LEFT_EY)
+	// 	ceil_angle_x(ARROW_LEFT, data);
+	// else if (x > CEIL_ORI_X_RIGHT_SX && y > CEIL_ORI_X_RIGHT_SY && x < CEIL_ORI_X_RIGHT_EX && y < CEIL_ORI_X_RIGHT_EY)
+	// 	ceil_angle_x(ARROW_RIGHT, data);
+	// else if (x > CEIL_HEIGHT_LEFT_SX && y > CEIL_HEIGHT_LEFT_SY && x < CEIL_HEIGHT_LEFT_EX && y < CEIL_HEIGHT_LEFT_EY)
+	// 	ceil_height(ARROW_LEFT, data);
+	// else if (x > CEIL_HEIGHT_RIGHT_SX && y > CEIL_HEIGHT_RIGHT_SY && x < CEIL_HEIGHT_RIGHT_EX && y < CEIL_HEIGHT_RIGHT_EY)
+	// 	ceil_height(ARROW_RIGHT, data);
+	// else if (x > CEIL_TEXT_LEFT_SX && y > CEIL_TEXT_LEFT_SY && x < CEIL_TEXT_LEFT_EX && y < CEIL_TEXT_LEFT_EY)
+	// 	printf("CEIL_TEXT_LEFT\n");
+	// else if (x > CEIL_TEXT_RIGHT_SX && y > CEIL_TEXT_RIGHT_SY && x < CEIL_TEXT_RIGHT_EX && y < CEIL_TEXT_RIGHT_EY)
+	// 	printf("CEIL_TEXT_RIGHT\n");
+	
+	// else if (x > FLOOR_ORI_Y_LEFT_SX && y > FLOOR_ORI_Y_LEFT_SY && x < FLOOR_ORI_Y_LEFT_EX && y < FLOOR_ORI_Y_LEFT_EY)
+	// 	floor_angle_y(ARROW_LEFT, data);
+	// else if (x > FLOOR_ORI_Y_RIGHT_SX && y > FLOOR_ORI_Y_RIGHT_SY && x < FLOOR_ORI_Y_RIGHT_EX && y < FLOOR_ORI_Y_RIGHT_EY)
+	// 	floor_angle_y(ARROW_RIGHT, data);
+	// else if (x > FLOOR_ORI_X_LEFT_SX && y > FLOOR_ORI_X_LEFT_SY && x < FLOOR_ORI_X_LEFT_EX && y < FLOOR_ORI_X_LEFT_EY)
+	// 	floor_angle_x(ARROW_LEFT, data);
+	// else if (x > FLOOR_ORI_X_RIGHT_SX && y > FLOOR_ORI_X_RIGHT_SY && x < FLOOR_ORI_X_RIGHT_EX && y < FLOOR_ORI_X_RIGHT_EY)
+	// 	floor_angle_x(ARROW_RIGHT, data);
+	// else if (x > FLOOR_HEIGHT_LEFT_SX && y > FLOOR_HEIGHT_LEFT_SY && x < FLOOR_HEIGHT_LEFT_EX && y < FLOOR_HEIGHT_LEFT_EY)
+	// 	floor_height(ARROW_LEFT, data);
+	// else if (x > FLOOR_HEIGHT_RIGHT_SX && y > FLOOR_HEIGHT_RIGHT_SY && x < FLOOR_HEIGHT_RIGHT_EX && y < FLOOR_HEIGHT_RIGHT_EY)
+	// 	floor_height(ARROW_RIGHT, data);
+	// else if (x > FLOOR_TEXT_LEFT_SX && y > FLOOR_TEXT_LEFT_SY && x < FLOOR_TEXT_LEFT_EX && y < FLOOR_TEXT_LEFT_EY)
+	// 	printf("FLOOR_TEXT_LEFT\n");
+	// else if (x > FLOOR_TEXT_RIGHT_SX && y > FLOOR_TEXT_RIGHT_SY && x < FLOOR_TEXT_RIGHT_EX && y < FLOOR_TEXT_RIGHT_EY)
+	// 	printf("FLOOR_TEXT_RIGHT\n");
+
+	// else if (x > UP_TEXT_LEFT_SX && y > UP_TEXT_LEFT_SY && x < UP_TEXT_LEFT_EX && y < UP_TEXT_LEFT_EY)
+	// 	printf("UP_TEXT_LEFT\n");
+	// else if (x > UP_TEXT_RIGHT_SX && y > UP_TEXT_RIGHT_SY && x < UP_TEXT_RIGHT_EX && y < UP_TEXT_RIGHT_EY)
+	// 	printf("UP_TEXT_RIGHT\n");
+	// else if (x > DOWN_TEXT_LEFT_SX && y > DOWN_TEXT_LEFT_SY && x < DOWN_TEXT_LEFT_EX && y < DOWN_TEXT_LEFT_EY)
+	// 	printf("DOWN_TEXT_LEFT\n");
+	// else if (x > DOWN_TEXT_RIGHT_SX && y > DOWN_TEXT_RIGHT_SY && x < DOWN_TEXT_RIGHT_EX && y < DOWN_TEXT_RIGHT_EY)
+	// 	printf("DOWN_TEXT_RIGHT\n");
+	// else if (x > LIGHT_TEXT_LEFT_SX && y > LIGHT_TEXT_LEFT_SY && x < LIGHT_TEXT_LEFT_EX && y < LIGHT_TEXT_LEFT_EY)
+	// 	light(ARROW_LEFT, data);
+	// else if (x > LIGHT_TEXT_RIGHT_SX && y > LIGHT_TEXT_RIGHT_SY && x < LIGHT_TEXT_RIGHT_EX && y < LIGHT_TEXT_RIGHT_EY)
+	// 	light(ARROW_RIGHT, data);
+
+	// else if (x > OBJ_COLL_LEFT_SX && y > OBJ_COLL_LEFT_SY && x < OBJ_COLL_LEFT_EX && y < OBJ_COLL_LEFT_EY)
+	// 	printf("OBJ_COLL_LEFT\n");
+	// else if (x > OBJ_COLL_RIGHT_SX && y > OBJ_COLL_RIGHT_SY && x < OBJ_COLL_RIGHT_EX && y < OBJ_COLL_RIGHT_EY)
+	// 	printf("OBJ_COLL_RIGHT\n");
+	// else if (x > OBJ_SCEN_LEFT_SX && y > OBJ_SCEN_LEFT_SY && x < OBJ_SCEN_LEFT_EX && y < OBJ_SCEN_LEFT_EY)
+	// 	printf("OBJ_SCEN_LEFT\n");
+	// else if (x > OBJ_SCEN_RIGHT_SX && y > OBJ_SCEN_RIGHT_SY && x < OBJ_SCEN_RIGHT_EX && y < OBJ_SCEN_RIGHT_EY)
+	// 	printf("OBJ_SCEN_RIGHT\n");
+	// else if (x > OBJ_PNJ_LEFT_SX && y > OBJ_PNJ_LEFT_SY && x < OBJ_PNJ_LEFT_EX && y < OBJ_PNJ_LEFT_EY)
+	// 	printf("OBJ_PNJ_LEFT\n");
+	// else if (x > OBJ_PNJ_RIGHT_SX && y > OBJ_PNJ_RIGHT_SY && x < OBJ_PNJ_RIGHT_EX && y < OBJ_PNJ_RIGHT_EY)
+	// 	printf("OBJ_PNJ_RIGHT\n");
 	return (0);
 }
 
@@ -214,7 +276,7 @@ int		mouse_motion(int x, int y, t_data *data)
 	if (data->input.mode == MOVE_POINT && data->input.button[1] && data->input.id_current_point != -1)
 	{
 		clamp(&x, 10, DRAWING_ZONE_WIDTH - 10);
-		clamp(&y, 10, WIN_SIZE_Y - 10);
+		clamp(&y, 10, DRAWING_ZONE_HEIGHT - 10);
 		printf("x = %d, y = %d\n", x, y);
 		if (check_moving_point(data, (t_ivec2){x, y}, &data->points[data->input.id_current_point]))
 		{
@@ -227,10 +289,11 @@ int		mouse_motion(int x, int y, t_data *data)
 
 int	mouse_press(int button, int x, int y, t_data *data)
 {
+		printf("On clique en : x = %d, y = %d\n", x, y);
 	data->input.button[button] = 1;
 	if (x < 0 || y < 0 || x >= WIN_SIZE_X || y >= WIN_SIZE_Y)
 		return (0);
-	if (x < DRAWING_ZONE_WIDTH && button == 1)
+	if (y < DRAWING_ZONE_HEIGHT && x < DRAWING_ZONE_WIDTH && button == 1)
 	{
 		printf("I press drawing\n");
 		drawing_zone(x, y, data);

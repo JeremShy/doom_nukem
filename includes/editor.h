@@ -7,12 +7,17 @@
 # include <sys/mman.h>
 
 # define WIN_SIZE_X 1600
-# define WIN_SIZE_Y 900 // /!\ Can't modify
+# define WIN_SIZE_Y 1050 // /!\ Can't modify
 
 # define DRAWING_ZONE_WIDTH 1061
+# define DRAWING_ZONE_HEIGHT 900
 
 # define IMG_BACKGROUND 0
-# define IMG_DRAWING 1
+# define TEXTURE_1 1
+# define TEXTURE_2 2
+# define TEXTURE_3 3
+# define TEXTURE_4 4
+# define IMG_DRAWING 5
 
 # define MAX_IMAGE (IMG_DRAWING + 1)
 
@@ -127,11 +132,11 @@ typedef struct			s_element
 
 	uint16_t			texture_floor;
 	t_ivec2				angle_floor;
-	t_ivec2				height_floor;
+	uint8_t				height_floor;
 
 	uint16_t			texture_ceiling;
 	t_ivec2				angle_ceiling;
-	t_ivec2				height_ceiling;
+	uint8_t				height_ceiling;
 
 	uint16_t			texture_up;
 	uint16_t			texture_down;
@@ -151,13 +156,17 @@ typedef struct	s_input
 	uint8_t				button[8];
 	uint8_t				key[300];
 
-	int8_t				ceiling_angle_y;
-	int8_t				ceiling_angle_x;
-	int8_t				ceiling_height;
-	int8_t				floor_angle_y;
-	int8_t				floor_angle_x;
-	int8_t				floor_height;
-	int8_t				light;
+	uint16_t			texture_floor;
+	t_ivec2				angle_floor;
+	uint8_t				height_floor;
+
+	uint16_t			texture_ceiling;
+	t_ivec2				angle_ceiling;
+	uint8_t				height_ceiling;
+
+	uint16_t			texture_up;
+	uint16_t			texture_down;
+	uint32_t			light;
 }				t_input;
 
 typedef struct	s_data
@@ -255,6 +264,9 @@ void			switch_select(t_data *data);
 void			switch_drawing(t_data *data);
 int				key_press(int keycode, t_data *data);
 int				key_release(int keycode, t_data *data);
+void			switch_delete_sector(t_data *data);
+void			switch_move_point(t_data *data);
+
 
 /*
 ** loop_hook.c

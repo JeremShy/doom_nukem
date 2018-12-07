@@ -129,7 +129,7 @@ int main(int ac, char **av)
 	t_img			white_img;
 	t_tga_header	header;
 	uint32_t		*img_data;
-	
+
 	if (ac != 2)
 	{
 		printf("Error\n");

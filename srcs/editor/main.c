@@ -48,6 +48,18 @@ static int		close_hook(t_data *data)
 	(void)data;
 	exit(EXIT_SUCCESS);
 }
+static uint8_t	ft_init_texture(t_data *data)
+{
+	if (!create_image_from_tga(data, TEXTURE_1, "docs/texture-bleu.tga", NULL))
+		return (1);
+	if (!create_image_from_tga(data, TEXTURE_2, "docs/texture-rouge.tga", NULL))
+		return (1);
+	if (!create_image_from_tga(data, TEXTURE_3, "docs/texture-jaune.tga", NULL))
+		return (1);
+	if (!create_image_from_tga(data, TEXTURE_4, "docs/moche.tga", NULL))
+		return (1);
+	return (0);
+}
 
 int main()
 {
@@ -56,8 +68,11 @@ int main()
 	ft_bzero(&data, sizeof(t_data));
 	if (!ft_init(&data))
 		return (1);
-	if (!create_image_from_tga(&data, IMG_BACKGROUND, "docs/background.tga", NULL))
+	if (!create_image_from_tga(&data, IMG_BACKGROUND, "docs/new-background-2.tga", NULL))
 		return (2);
+	if (ft_init_texture(&data))
+		return (3);
+	ft_init_texture(&data);
 	mlx_loop_hook(data.mlx.mlx_ptr, loop_hook, &data);
 	mlx_hook(data.mlx.win_ptr, 2, 0, key_press, &data);
 	mlx_hook(data.mlx.win_ptr, 3, 0, key_release, &data);
@@ -66,6 +81,7 @@ int main()
 	mlx_hook(data.mlx.win_ptr, 6, 1l << 6, mouse_motion, &data);
 	data.nb_elements = 1;
 	data.input.light = 100;
+	data.input.id_texture = 1;
 
 	fill_img(&data.imgs[IMG_DRAWING], get_color_code(0, 0, 0, 255));
 

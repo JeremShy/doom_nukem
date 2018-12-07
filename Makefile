@@ -22,6 +22,7 @@ SRC_EDITOR_NAME =	main.c \
 					print_memory.c \
 					huffman_get_code_from_length.c \
 					create_arbre.c \
+					globals_inflate.c \
 					png_inflate.c
 
 SRC_GAME_NAME =		main.c \

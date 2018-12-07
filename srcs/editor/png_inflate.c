@@ -1,4 +1,4 @@
-	#include <editor.h>
+#include <editor.h>
 #include <png.h>
 
 uint64_t	read_n_bits(uint8_t *data, uint8_t *current_bit, uint32_t *current_byte, size_t len)

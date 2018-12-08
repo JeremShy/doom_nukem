@@ -3,11 +3,13 @@
 
 # include <stdint.h>
 # include <stddef.h>
+# include <sys/stat.h>
 
 # define MAX_BITS 15
 
-# define IEND 0x49454E44
+# define IHDR 0x49484452
 # define IDAT 0x49444154
+# define IEND 0x49454E44
 
 /*
 **
@@ -81,7 +83,7 @@ struct	s_png_ihdr {
 	uint8_t		compression;
 	uint8_t		filter;
 	uint8_t		interlace;
-	uint8_t		bytes_per_pixel;
+	uint8_t		bpp;
 };
 
 struct	s_chunk_hdr {
@@ -125,9 +127,21 @@ struct	s_bit_and_byte
 void			get_code_from_lengths(struct s_length_code *length_codes, size_t s);
 void			*png_inflate(uint8_t *data, uint8_t *dst);
 struct s_tree	*create_tree(struct s_length_code *codes, size_t s);
-void			fill_bl_count(uint16_t *bl_count, struct s_length_code *length_code, size_t s);
-uint8_t			apply_filter(uint8_t filter, uint8_t *data, struct s_png_ihdr *png_ihdr, size_t i, uint8_t color);
 void			delete_tree(struct s_tree	*tree);
+
+
+void				*init_png_parser(const char *name, off_t *size);
+struct s_chunk_hdr	*get_next_chunk(void *current_chunk);
+int64_t				print_and_ret(const char *str, void *addr, off_t file_size, uint8_t *compressed_data);
+uint8_t				check_and_read_ihdr(void *addr, struct s_png_ihdr *png_ihdr);
+
+uint8_t				apply_filter(uint8_t filter, uint8_t *data, struct s_png_ihdr *png_ihdr, size_t i);
+
+
+uint8_t	left(uint8_t *data, size_t i, struct s_png_ihdr *png_ihdr);
+uint8_t	prior(uint8_t *data, size_t i, struct s_png_ihdr *png_ihdr);
+uint8_t	prior_left(uint8_t *data, size_t i, struct s_png_ihdr *png_ihdr);
+uint8_t	paeth_predictor(int a, int b, int c);
 
 extern const struct s_length_code	g_a_init[19];
 extern const int					g_length_codes_base_len[][2];

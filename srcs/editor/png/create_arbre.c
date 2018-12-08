@@ -1,10 +1,10 @@
 #include <editor.h>
 #include <png.h>
 
-void	create_leaf(struct s_tree *node, struct s_length_code code)
+void			create_leaf(struct s_tree *node, struct s_length_code code)
 {
-	struct	s_tree			*new;
-	struct	s_tree			**to_modify;
+	struct s_tree			*new;
+	struct s_tree			**to_modify;
 
 	if (code.length == 0)
 	{
@@ -19,14 +19,14 @@ void	create_leaf(struct s_tree *node, struct s_length_code code)
 		to_modify = &node->l;
 	code.length--;
 	if (*to_modify)
-			new = *to_modify;
+		new = *to_modify;
 	else
 	{
 		new = malloc(sizeof(struct s_tree));
 		*new = (struct s_tree){NULL, NULL, 0};
 		*to_modify = new;
 	}
-	create_leaf(new, code); 
+	create_leaf(new, code);
 }
 
 void			delete_tree(struct s_tree	*tree)
@@ -46,7 +46,7 @@ void			delete_tree(struct s_tree	*tree)
 struct s_tree	*create_tree(struct s_length_code *codes, size_t s)
 {
 	size_t					i;
-	struct	s_tree			*tree;
+	struct s_tree			*tree;
 
 	i = 0;
 	tree = malloc(sizeof(struct s_tree));

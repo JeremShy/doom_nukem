@@ -18,13 +18,15 @@ SRC_EDITOR_NAME =	main.c \
 					editor_interactions.c \
 					delete.c \
 					binary_tools.c \
-					parser_png.c \
 					print_memory.c \
-					huffman_get_code_from_length.c \
-					create_arbre.c \
-					globals_inflate.c \
-					png_filter.c \
-					png_inflate.c
+					png/parser_png.c \
+					png/huffman_get_code_from_length.c \
+					png/create_arbre.c \
+					png/globals_inflate.c \
+					png/png_filter.c \
+					png/png_filter_tools.c \
+					png/png_inflate.c \
+					png/parser_png_tools.c
 
 SRC_GAME_NAME =		main.c \
 					print_memory.c
@@ -75,6 +77,7 @@ $(OBJ_GAME_PATH):
 
 $(OBJ_EDITOR_PATH):
 	@mkdir -p $@
+	@mkdir -p $@/png
 
 
 $(OBJ_GAME_PATH)%.o: $(SRC_GAME_PATH)%.c

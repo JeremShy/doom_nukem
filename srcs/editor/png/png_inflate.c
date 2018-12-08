@@ -1,7 +1,8 @@
 #include <editor.h>
 #include <png.h>
 
-uint64_t	read_n_bits(uint8_t *data, struct s_bit_and_byte *current, size_t len)
+uint64_t	read_n_bits(uint8_t *data, struct s_bit_and_byte *current,
+	size_t len)
 {
 	uint64_t	ret;
 	size_t		n;
@@ -12,7 +13,8 @@ uint64_t	read_n_bits(uint8_t *data, struct s_bit_and_byte *current, size_t len)
 	start_bit = current->bit;
 	while (n)
 	{
-		ret |= ((data[current->byte] >> current->bit) & ((1 << n) - 1)) << (len - n);
+		ret |= ((data[current->byte] >> current->bit) & ((1 << n) - 1))
+		<< (len - n);
 		n = (n < 8 - current->bit ? 0 : (n - (8 - current->bit)));
 		current->bit = (start_bit + len - n) % 8;
 		if (current->bit == 0)
@@ -21,11 +23,8 @@ uint64_t	read_n_bits(uint8_t *data, struct s_bit_and_byte *current, size_t len)
 	return (ret);
 }
 
-// Tree A : Le code qui permet de decoder les deux autres codes
-// Tree B : Literal/Length
-// Tree C : Distances
-
-uint16_t		get_next_symbol(uint8_t *data, struct s_bit_and_byte *current, struct s_tree *tree)
+uint16_t		get_next_symbol(uint8_t *data, struct s_bit_and_byte *current,
+	struct s_tree *tree)
 {
 	uint8_t	bit;
 
@@ -40,8 +39,8 @@ uint16_t		get_next_symbol(uint8_t *data, struct s_bit_and_byte *current, struct 
 	return (tree->symbol);
 }
 
-void			write_length_code(struct s_length_code *len, uint16_t
-	occurency, size_t *index_in_len, uint16_t sym)
+void			write_length_code(struct s_length_code *len,
+	uint16_t occurency, size_t *index_in_len, uint16_t sym)
 {
 	size_t		i;
 
@@ -88,7 +87,8 @@ static void		get_len_list(uint8_t *data,
 	}
 }
 
-static void		create_fixed_huffman(struct s_huff_decode *b, struct s_huff_decode *c)
+static void		create_fixed_huffman(struct s_huff_decode *b,
+	struct s_huff_decode *c)
 {
 	int16_t i;
 
@@ -113,7 +113,8 @@ static void		create_fixed_huffman(struct s_huff_decode *b, struct s_huff_decode 
 	c->tree = create_tree(c->len, 32);
 }
 
-static void		create_dynamic_huffman(struct s_huff_decode *b, struct s_huff_decode *c, uint8_t *data, struct s_bit_and_byte *current)
+static void		create_dynamic_huffman(struct s_huff_decode *b,
+	struct s_huff_decode *c, uint8_t *data, struct s_bit_and_byte *current)
 {
 	struct s_huff_decode		a;
 	struct s_length_code		a_lens[19];
@@ -124,13 +125,12 @@ static void		create_dynamic_huffman(struct s_huff_decode *b, struct s_huff_decod
 	b->size = read_n_bits(data, current, 5) + 257;
 	c->size = read_n_bits(data, current, 5) + 1;
 	a.size = read_n_bits(data, current, 4) + 4;
-	i = 0;
-	while (i < 19)
+	i = -1;
+	while (++i < 19)
 	{
 		a.len[g_a_init[i].symbol].symbol = g_a_init[i].symbol;
 		if (i < a.size)
 			a.len[g_a_init[i].symbol].length = read_n_bits(data, current, 3);
-		i++;
 	}
 	get_code_from_lengths(a.len, 19);
 	a.tree = create_tree(a.len, 19);
@@ -143,15 +143,19 @@ static void		create_dynamic_huffman(struct s_huff_decode *b, struct s_huff_decod
 	delete_tree(a.tree);
 }
 
-void write_from_len_and_dist(uint8_t *data, uint16_t sym, struct s_bit_and_byte *current, size_t *index_in_img, uint8_t *image, struct s_huff_decode c)
+void	write_from_len_and_dist(uint8_t *data, uint16_t sym,
+	struct s_bit_and_byte *current, size_t *index_in_img, uint8_t *image,
+	struct s_huff_decode c)
 {
 	uint16_t					len;
 	uint16_t					distance;
 	size_t						i;
 
-	len = g_length_codes_base_len[sym - 257][1] + (int)read_n_bits(data, current, g_length_codes_base_len[sym - 257][0]);
+	len = g_length_codes_base_len[sym - 257][1] + (int)read_n_bits(data,
+		current, g_length_codes_base_len[sym - 257][0]);
 	distance = get_next_symbol(data, current, c.tree);
-	distance = g_dist_base_len[distance][1] + (int)read_n_bits(data, current, g_dist_base_len[distance][0]);
+	distance = g_dist_base_len[distance][1] + (int)read_n_bits(data,
+		current, g_dist_base_len[distance][0]);
 	i = 0;
 	while (i < len)
 	{
@@ -164,7 +168,8 @@ void write_from_len_and_dist(uint8_t *data, uint16_t sym, struct s_bit_and_byte 
 	*index_in_img += len;
 }
 
-uint8_t		init_png_value(uint8_t *data, struct s_bit_and_byte	*current, struct s_huff_decode *b, struct s_huff_decode *c, uint8_t *final)
+uint8_t		init_png_value(uint8_t *data, struct s_bit_and_byte	*current,
+	struct s_huff_decode *b, struct s_huff_decode *c, uint8_t *final)
 {
 	enum e_compression_method	compression_method;
 
@@ -176,10 +181,9 @@ uint8_t		init_png_value(uint8_t *data, struct s_bit_and_byte	*current, struct s_
 	compression_method = read_n_bits(data, current, 2);
 	if (compression_method == no_compression || compression_method == invalid)
 	{
-		printf("not handled or invalid. %d\n", compression_method);
+		ft_putendl_fd("not handled or invalid.", 2);
 		return (0);
 	}
-
 	if (compression_method == dynamic_huffman)
 		create_dynamic_huffman(b, c, data, current);
 	else if (compression_method == fixed_huffman)
@@ -187,7 +191,8 @@ uint8_t		init_png_value(uint8_t *data, struct s_bit_and_byte	*current, struct s_
 	return (1);
 }
 
-uint8_t		process_block(uint8_t *data, uint8_t *image, size_t *index_in_img, struct s_bit_and_byte *current)
+uint8_t		process_block(uint8_t *data, uint8_t *image, size_t *index_in_img,
+	struct s_bit_and_byte *current)
 {
 	uint16_t					sym;
 	struct s_huff_decode		b;
@@ -224,6 +229,5 @@ void		*png_inflate(uint8_t *data, uint8_t *dst)
 	current.byte = 0;
 	while (!process_block(data + 2, dst, &index_in_img, &current))
 		;
-	printf("last index : %zu\n", index_in_img);
 	return (NULL);
 }

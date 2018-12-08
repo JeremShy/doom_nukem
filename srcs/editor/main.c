@@ -76,6 +76,7 @@ int main(int ac, char **av)
 	data.nb_elements = 1;
 	data.input.light = 100;
 
+
 	fill_img(&data.imgs[IMG_DRAWING], get_color_code(0, 0, 0, 255));
 
 	mlx_put_image_to_window(data.mlx.mlx_ptr, data.mlx.win_ptr, data.imgs[IMG_WHITE_BG].ptr, 0, 0);

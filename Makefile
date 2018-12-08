@@ -35,12 +35,12 @@ NAME_EDITOR = editor
 CC = gcc
 
 # CFLAGS = -Wall -Wextra -Werror
-CFLAGS = -Wall -Wextra -g -fsanitize=address
+CFLAGS = -Wall -Wextra -g
 
 MLX = minilibx_macos/libmlx.a 
 LIBFT = libft/libft.a
 FT_PRINTF = ft_printf/libftprintf.a
-LFLAGS = -framework OpenGL -framework AppKit $(LIBFT) $(FT_PRINTF) $(MLX) -fsanitize=address -lz
+LFLAGS = -framework OpenGL -framework AppKit $(LIBFT) $(FT_PRINTF) $(MLX)
 INC = -I libft/ -I includes/ -I minilibx_macos/ -I ft_printf/includes
 
 OBJ_GAME_PATH = obj/game/

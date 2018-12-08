@@ -4,6 +4,7 @@
 void	create_leaf(struct s_tree *node, struct s_length_code code)
 {
 	struct	s_tree			*new;
+	struct	s_tree			**to_modify;
 
 	if (code.length == 0)
 	{
@@ -13,32 +14,32 @@ void	create_leaf(struct s_tree *node, struct s_length_code code)
 		return ;
 	}
 	if (code.code & (1 << (code.length - 1)))
-	{
-		code.length--;
-		if (node->r)
-				new = node->r;
-		else
-		{
-			new = malloc(sizeof(struct s_tree));
-			new->l = NULL;
-			new->r = NULL;
-			node->r = new;
-		}
-		create_leaf(new, code); 
-	}
+		to_modify = &node->r;
+	else
+		to_modify = &node->l;
+	code.length--;
+	if (*to_modify)
+			new = *to_modify;
 	else
 	{
-		code.length--;
-		if (node->l)
-				new = node->l;
-		else
-		{
-			new = malloc(sizeof(struct s_tree));
-			new->l = NULL;
-			new->r = NULL;
-			node->l = new;
-		}
-		create_leaf(new, code); 
+		new = malloc(sizeof(struct s_tree));
+		*new = (struct s_tree){NULL, NULL, 0};
+		*to_modify = new;
+	}
+	create_leaf(new, code); 
+}
+
+void			delete_tree(struct s_tree	*tree)
+{
+	if (!tree->r && !tree->l)
+		free(tree);
+	else
+	{
+		if (tree->r)
+			delete_tree(tree->r);
+		if (tree->l)
+			delete_tree(tree->l);
+		free(tree);
 	}
 }
 

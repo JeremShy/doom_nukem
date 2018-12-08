@@ -69,128 +69,128 @@ struct s_chunk_hdr		*get_next_chunk(void *current_chunk)
 
 	ret = current_chunk;
 	ret = (void*)ret + get_conv_32(&ret->length) + 12;
-	while (get_conv_32(&ret->type) != 0x49454E44 && (ret->type & 0x20))
-	{
-		printf("Passing chunk : %.4s\n", (char*)&ret->type);
+	while (get_conv_32(&ret->type) != IEND && (ret->type & 0x20))
 		ret = (void*)ret + get_conv_32(&ret->length) + 12;
-	}
-	printf("last chunk : %.4s\n", (char*)&ret->type);
 	return (ret);
 }
 
-uint8_t		create_image_from_png(t_data *data, int id_img, const char *name, t_ivec2 *size)
+uint8_t print_and_ret(const char *str, void *addr, off_t file_size, uint8_t *compressed_data)
 {
-	// uint32_t	*img_data;
-	struct s_png_ihdr	png_ihdr;
-	void				*addr;
-	off_t				file_size;
-	struct s_chunk_hdr	*current_chunk;
-	uint8_t				*img_data;
-	size_t				source_size;
-	size_t				i;
-	uint8_t				current_filter;
-	uint8_t				*compressed_data;
+	ft_putendl_fd(str, 2);
+	munmap(addr, file_size);
+	free(compressed_data);
+	return (0);
+}
 
-	(void)data;
-	(void)id_img;
-	(void)size;
-	if (!(addr = init_png_parser(name, &file_size)))
-		return (0);
-	if (file_size < 8 || get_conv_64(addr) != 0x89504E470D0A1A0Al)
-	{
-		munmap(addr, file_size);
-		dprintf(2, "invalid signature.\n");
-		return (0);
-	}
-	if (!check_and_read_ihdr(addr, &png_ihdr))
-	{
-		munmap(addr, file_size);
-		return (0);
-	}
-	size_t	all_idats_size;
-	all_idats_size = 0;
-	current_chunk = addr + 8;
-	while (get_conv_32(&(current_chunk = get_next_chunk(current_chunk))->type) != 0x49454E44)
-	{
-		all_idats_size += get_conv_32(&current_chunk->length);
-	}
-	printf("all_idats : %zu\n", all_idats_size);
-	if (!(compressed_data = malloc(all_idats_size)))
-	{
-		ft_putendl_fd("Memory error 119", 2);
-		return (0);
-	}
-	current_chunk = addr + 8;
-	i = 0;
-	while (get_conv_32(&(current_chunk = get_next_chunk(current_chunk))->type) != 0x49454E44)
-	{
-		ft_memcpy(compressed_data + i, (void*)current_chunk + 8, get_conv_32(&current_chunk->length));
-		i += get_conv_32(&current_chunk->length);
-	}
+void		copy_source_in_img(t_data *data, struct s_png_ihdr *png_ihdr, int id_img, uint8_t *img_data)
+{
+	size_t	index_source;
+	size_t	index_dest;
+	uint32_t	transp;
 
-
-	printf ("width : %d\n", png_ihdr.width);
-	printf ("height : %d\n", png_ihdr.height);
-	printf ("bdp : %d\n", png_ihdr.bdp);
-	printf ("color_type : %d\n", png_ihdr.color_type);
-	printf ("compression : %d\n", png_ihdr.compression);
-	printf ("filter : %d\n", png_ihdr.filter);
-	printf ("interlace : %d\n", png_ihdr.interlace);
-	printf("current_chunk : %.4s\n", (char*)&current_chunk->type);
-	// if (get_conv_32(&current_chunk->type) != 0x49444154) // IDAT
-	// {
-	// 	ft_putendl_fd("Error : IDAT chunk expected.", 2);
-	// 	munmap(addr, file_size);
-	// 	return (0);
-	// }
-
-	source_size = png_ihdr.width * png_ihdr.height * png_ihdr.bytes_per_pixel + png_ihdr.height;
-	printf("source_size : %zu\n", source_size);
-	if (!(img_data = malloc(source_size)))
+	index_source = 0;
+	index_dest = 0;
+	while (index_dest < png_ihdr->width * png_ihdr->height)
 	{
-		ft_putendl_fd("Malloc error", 2);
-		return (0);
+		if (index_source % (png_ihdr->width * png_ihdr->bytes_per_pixel + 1) == 0)
+			index_source++;
+		if (png_ihdr->bytes_per_pixel == 4)
+			transp = 255 - img_data[index_source + 3];
+		else
+			transp = 0;
+		if (png_ihdr->bytes_per_pixel == 3 || png_ihdr->bytes_per_pixel == 4)
+			data->imgs[id_img].addr[index_dest] = get_color_code(img_data[index_source], img_data[index_source + 1], img_data[index_source + 2], transp);
+		else
+			data->imgs[id_img].addr[index_dest] = get_color_code(img_data[index_source], img_data[index_source], img_data[index_source], transp);
+		index_source += png_ihdr->bytes_per_pixel;
+		index_dest++;
 	}
-	png_inflate((void*)compressed_data, img_data);
+}
 
-	create_image(data, id_img, png_ihdr.width, png_ihdr.height);
+void		apply_all_filters(struct s_png_ihdr *png_ihdr, uint8_t *img_data)
+{
+	size_t	index_source;
+	size_t	index_dest;
+	size_t	source_size;
+	uint8_t	current_filter;
 
-	size_t	index_source = 0;
-	size_t	index_dest = 0;
-	printf("png_ihdr.width * png_ihdr.height * 4 : %d\n", png_ihdr.width * png_ihdr.height * 4);
-	printf("source_size : %zu\n", source_size);
-	printf("img_data[0] : %d\n", img_data[0]);
+	index_source = 0;
+	index_dest = 0;
+	source_size = png_ihdr->width * png_ihdr->height * png_ihdr->bytes_per_pixel + png_ihdr->height;
 	while (index_source < source_size)
 	{
-		if (index_source % (png_ihdr.width * png_ihdr.bytes_per_pixel + 1) == 0)
+		if (index_source % (png_ihdr->width * png_ihdr->bytes_per_pixel + 1) == 0)
 		{
 			current_filter = img_data[index_source];
 			index_source++;
 		}
-		img_data[index_source] = apply_filter(current_filter, img_data, &png_ihdr, index_source, img_data[index_source]);
+		img_data[index_source] = apply_filter(current_filter, img_data, png_ihdr, index_source, img_data[index_source]);
 		index_source++;
 	}
+}
 
-	uint32_t	transp;
-	index_source = 0;
-	index_dest = 0;
-	while (index_dest < png_ihdr.width * png_ihdr.height)
+uint8_t		*get_compressed_data(void *addr, size_t file_size)
+{
+	size_t				all_idats_size;
+	struct s_chunk_hdr	*current_chunk;
+	uint8_t				*compressed_data;
+	size_t				i;
+
+	all_idats_size = 0;
+	current_chunk = addr + 8;
+	while (get_conv_32(&(current_chunk = get_next_chunk(current_chunk))->type) != IEND)
 	{
-		if (index_source % (png_ihdr.width * png_ihdr.bytes_per_pixel + 1) == 0)
-			index_source++;
-		if (png_ihdr.bytes_per_pixel == 4)
-			transp = 255 - img_data[index_source + 3];
-		else
-			transp = 0;
-		if (png_ihdr.bytes_per_pixel == 3 || png_ihdr.bytes_per_pixel == 4)
-			data->imgs[id_img].addr[index_dest] = get_color_code(img_data[index_source], img_data[index_source + 1], img_data[index_source + 2], transp);
-		else
-			data->imgs[id_img].addr[index_dest] = get_color_code(img_data[index_source], img_data[index_source], img_data[index_source], transp);
-		index_source += png_ihdr.bytes_per_pixel;
-		index_dest++;
+		if (get_conv_32(&current_chunk->type) != IDAT)
+			return ((void*)(int64_t)print_and_ret("Only IDAT supported", addr, file_size, NULL));
+		all_idats_size += get_conv_32(&current_chunk->length);
 	}
+	if (!(compressed_data = malloc(all_idats_size)))
+		return ((void*)(int64_t)print_and_ret("Memory error", addr, file_size, NULL));
+	current_chunk = addr + 8;
+	i = 0;
+	while (get_conv_32(&(current_chunk = get_next_chunk(current_chunk))->type) != IEND)
+	{
+		ft_memcpy(compressed_data + i, (void*)current_chunk + 8, get_conv_32(&current_chunk->length));
+		i += get_conv_32(&current_chunk->length);
+	}
+	return (compressed_data);
+}
 
+uint8_t		initialize_values(void **addr, const char *name, off_t *file_size, struct s_png_ihdr *png_ihdr)
+{
+	if (!(*addr = init_png_parser(name, file_size)))
+		return (0);
+	if (*file_size < 8 || get_conv_64(*addr) != 0x89504E470D0A1A0Al)
+		return (print_and_ret("Invalid signature", *addr, *file_size, NULL));
+	if (!check_and_read_ihdr(*addr, png_ihdr))
+		return (print_and_ret("Error", *addr, *file_size, NULL));
+	return (1);
+}
 
+uint8_t		create_image_from_png(t_data *data, int id_img, const char *name, t_ivec2 *size)
+{
+	struct s_png_ihdr	png_ihdr;
+	void				*addr;
+	off_t				file_size;
+	uint8_t				*img_data;
+	uint8_t				*compressed_data;
+
+	(void)size;
+	if (!initialize_values(&addr, name, &file_size, &png_ihdr))
+		return (0);
+	if (!(compressed_data = get_compressed_data(addr, file_size)))
+		return (0);
+	munmap(addr, file_size);
+	if (!(img_data = malloc(png_ihdr.width * png_ihdr.height *
+		png_ihdr.bytes_per_pixel+ png_ihdr.height)))
+		return (print_and_ret("Memory error 2", NULL, file_size,
+			compressed_data));
+	png_inflate((void*)compressed_data, img_data);
+	free(compressed_data);
+	create_image(data, id_img, png_ihdr.width, png_ihdr.height);
+	apply_all_filters(&png_ihdr, img_data);
+	copy_source_in_img(data, &png_ihdr, id_img, img_data);
+	free(img_data);
 	return (1);
 }
 

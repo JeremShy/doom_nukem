@@ -220,5 +220,6 @@ void		*png_inflate(uint8_t *data, uint8_t *dst)
 	current.byte = 0;
 	while (!process_block(data + 2, dst, &index_in_img, &current))
 		;
+	printf("last index : %zu\n", index_in_img);
 	return (NULL);
 }

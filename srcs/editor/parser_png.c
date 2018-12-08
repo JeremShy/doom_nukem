@@ -43,16 +43,18 @@ static uint8_t	check_and_read_ihdr(void *addr, struct s_png_ihdr *png_ihdr)
 		return (0);
 	}
 	*png_ihdr = *((struct s_png_ihdr*)(addr + 16));
+
 	png_ihdr->width = get_conv_32(&png_ihdr->width);
 	png_ihdr->height = get_conv_32(&png_ihdr->height);
 
-	printf("image width : %u\n", png_ihdr->width);
-	printf("image height : %u\n", png_ihdr->height);
-	printf("bdp : %hhu\n", png_ihdr->bdp);
-	printf("color_type : %hhu\n", png_ihdr->color_type);
-	printf("compression : %hhu\n", png_ihdr->compression);
-	printf("filter : %hhu\n", png_ihdr->filter);
-	printf("interlace : %hhu\n", png_ihdr->interlace);
+	if (png_ihdr->color_type == 2)
+		png_ihdr->bytes_per_pixel = 3 * (png_ihdr->bdp >> 3);
+	else if (png_ihdr->color_type == 6)
+		png_ihdr->bytes_per_pixel = 4 * (png_ihdr->bdp >> 3);
+	else if (png_ihdr->color_type == 0)
+		png_ihdr->bytes_per_pixel = (png_ihdr->bdp >> 3);
+	else
+		png_ihdr->bytes_per_pixel = 0;
 	if (png_ihdr->compression != 0 || png_ihdr->filter != 0)
 	{
 		dprintf(2, "Unknown compression method or unknown filter.\n");
@@ -84,8 +86,10 @@ uint8_t		create_image_from_png(t_data *data, int id_img, const char *name, t_ive
 	off_t				file_size;
 	struct s_chunk_hdr	*current_chunk;
 	uint8_t				*img_data;
-	size_t				image_size;
+	size_t				source_size;
+	size_t				i;
 	uint8_t				current_filter;
+	uint8_t				*compressed_data;
 
 	(void)data;
 	(void)id_img;
@@ -103,7 +107,27 @@ uint8_t		create_image_from_png(t_data *data, int id_img, const char *name, t_ive
 		munmap(addr, file_size);
 		return (0);
 	}
-	current_chunk = get_next_chunk(addr + 8);
+	size_t	all_idats_size;
+	all_idats_size = 0;
+	current_chunk = addr + 8;
+	while (get_conv_32(&(current_chunk = get_next_chunk(current_chunk))->type) != 0x49454E44)
+	{
+		all_idats_size += get_conv_32(&current_chunk->length);
+	}
+	printf("all_idats : %zu\n", all_idats_size);
+	if (!(compressed_data = malloc(all_idats_size)))
+	{
+		ft_putendl_fd("Memory error 119", 2);
+		return (0);
+	}
+	current_chunk = addr + 8;
+	i = 0;
+	while (get_conv_32(&(current_chunk = get_next_chunk(current_chunk))->type) != 0x49454E44)
+	{
+		ft_memcpy(compressed_data + i, (void*)current_chunk + 8, get_conv_32(&current_chunk->length));
+		i += get_conv_32(&current_chunk->length);
+	}
+
 
 	printf ("width : %d\n", png_ihdr.width);
 	printf ("height : %d\n", png_ihdr.height);
@@ -113,46 +137,57 @@ uint8_t		create_image_from_png(t_data *data, int id_img, const char *name, t_ive
 	printf ("filter : %d\n", png_ihdr.filter);
 	printf ("interlace : %d\n", png_ihdr.interlace);
 	printf("current_chunk : %.4s\n", (char*)&current_chunk->type);
-	if (get_conv_32(&current_chunk->type) != 0x49444154) // IDAT
+	// if (get_conv_32(&current_chunk->type) != 0x49444154) // IDAT
+	// {
+	// 	ft_putendl_fd("Error : IDAT chunk expected.", 2);
+	// 	munmap(addr, file_size);
+	// 	return (0);
+	// }
+
+	source_size = png_ihdr.width * png_ihdr.height * png_ihdr.bytes_per_pixel + png_ihdr.height;
+	printf("source_size : %zu\n", source_size);
+	if (!(img_data = malloc(source_size)))
 	{
-		ft_putendl_fd("Error : IDAT chunk expected.", 2);
-		munmap(addr, file_size);
+		ft_putendl_fd("Malloc error", 2);
 		return (0);
 	}
-	image_size = png_ihdr.width * png_ihdr.height * ((png_ihdr.bdp / 8) * (png_ihdr.color_type == 6 ? 4 : 3)) + png_ihdr.height;
-	printf("image_size : %zu\n", image_size);
-	img_data = malloc(image_size);
-	png_inflate((void*)current_chunk + 8, img_data);
+	png_inflate((void*)compressed_data, img_data);
 
 	create_image(data, id_img, png_ihdr.width, png_ihdr.height);
 
-	size_t	i = 0;
-	size_t	j = 0;
+	size_t	index_source = 0;
+	size_t	index_dest = 0;
 	printf("png_ihdr.width * png_ihdr.height * 4 : %d\n", png_ihdr.width * png_ihdr.height * 4);
-	printf("image_size : %zu\n", image_size);
+	printf("source_size : %zu\n", source_size);
 	printf("img_data[0] : %d\n", img_data[0]);
-	while (i < image_size)
+	while (index_source < source_size)
 	{
-		if (j % (data->imgs[id_img].w * 4) == 0)
+		if (index_source % (png_ihdr.width * png_ihdr.bytes_per_pixel + 1) == 0)
 		{
-			current_filter = img_data[i];
-			i++;
-			printf("current_filter : %d\n", current_filter);
+			current_filter = img_data[index_source];
+			index_source++;
 		}
-
-		((uint8_t*)data->imgs[id_img].addr)[j] = img_data[i];
-		((uint8_t*)data->imgs[id_img].addr)[j] = apply_filter(current_filter, (uint8_t*)data->imgs[id_img].addr, &png_ihdr, j);
-		i++;
-		j++;
+		img_data[index_source] = apply_filter(current_filter, img_data, &png_ihdr, index_source, img_data[index_source]);
+		index_source++;
 	}
-	i = 0;
-	uint32_t	tmp;
-	while (i < png_ihdr.width * png_ihdr.height)
+
+	uint32_t	transp;
+	index_source = 0;
+	index_dest = 0;
+	while (index_dest < png_ihdr.width * png_ihdr.height)
 	{
-		tmp = data->imgs[id_img].addr[i];
-		tmp = (tmp << 24) | (tmp >> 8);
-		data->imgs[id_img].addr[i] = invert_transparency(tmp);
-		i++;
+		if (index_source % (png_ihdr.width * png_ihdr.bytes_per_pixel + 1) == 0)
+			index_source++;
+		if (png_ihdr.bytes_per_pixel == 4)
+			transp = 255 - img_data[index_source + 3];
+		else
+			transp = 0;
+		if (png_ihdr.bytes_per_pixel == 3 || png_ihdr.bytes_per_pixel == 4)
+			data->imgs[id_img].addr[index_dest] = get_color_code(img_data[index_source], img_data[index_source + 1], img_data[index_source + 2], transp);
+		else
+			data->imgs[id_img].addr[index_dest] = get_color_code(img_data[index_source], img_data[index_source], img_data[index_source], transp);
+		index_source += png_ihdr.bytes_per_pixel;
+		index_dest++;
 	}
 
 
@@ -163,3 +198,7 @@ uint8_t		create_image_from_png(t_data *data, int id_img, const char *name, t_ive
 /*	On a : RGBA
 	On veut : ARGB
 */
+
+// BGRA
+// RGBA
+// 

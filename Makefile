@@ -26,6 +26,7 @@ SRC_EDITOR_NAME =	main.c \
 					png/png_filter.c \
 					png/png_filter_tools.c \
 					png/png_inflate.c \
+					png/png_inflate_tools.c \
 					png/parser_png_tools.c
 
 SRC_GAME_NAME =		main.c \

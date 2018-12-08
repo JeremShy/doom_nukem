@@ -120,8 +120,15 @@ struct	s_huff_decode
 
 struct	s_bit_and_byte
 {
+	uint8_t		*data;
 	uint8_t		bit;
 	uint32_t	byte;
+};
+
+struct	s_png_img
+{
+	size_t	*index;
+	uint8_t	*data;
 };
 
 void			get_code_from_lengths(struct s_length_code *length_codes, size_t s);
@@ -136,6 +143,14 @@ int64_t				print_and_ret(const char *str, void *addr, off_t file_size, uint8_t *
 uint8_t				check_and_read_ihdr(void *addr, struct s_png_ihdr *png_ihdr);
 
 uint8_t				apply_filter(uint8_t filter, uint8_t *data, struct s_png_ihdr *png_ihdr, size_t i);
+
+void		create_fixed_huffman(struct s_huff_decode *b, struct s_huff_decode *c);
+void		create_dynamic_huffman(struct s_huff_decode *b, struct s_huff_decode *c, uint8_t *data, struct s_bit_and_byte *current);
+
+uint64_t		read_n_bits(uint8_t *data, struct s_bit_and_byte *current, size_t len);
+uint16_t		get_next_symbol(uint8_t *data, struct s_bit_and_byte *current, struct s_tree *tree);
+uint8_t			init_png_value(struct s_bit_and_byte	*current, struct s_huff_decode *b, struct s_huff_decode *c, uint8_t *final);
+void			get_len_list(uint8_t *data, struct s_bit_and_byte *current, struct s_huff_decode *dst, struct s_tree *a);
 
 
 uint8_t	left(uint8_t *data, size_t i, struct s_png_ihdr *png_ihdr);

@@ -19,15 +19,16 @@ SRC_EDITOR_NAME =	main.c \
 					delete.c \
 					binary_tools.c \
 					print_memory.c \
-					png/parser_png.c \
-					png/huffman_get_code_from_length.c \
-					png/create_arbre.c \
+	\
+					png/filter.c \
+					png/filter_2.c \
 					png/globals_inflate.c \
-					png/png_filter.c \
-					png/png_filter_tools.c \
-					png/png_inflate.c \
-					png/png_inflate_tools.c \
-					png/parser_png_tools.c
+					png/huffman_get_code_from_length.c \
+					png/inflate.c \
+					png/inflate_2.c \
+					png/parser.c \
+					png/parser_2.c \
+					png/tree.c \
 
 SRC_GAME_NAME =		main.c \
 					print_memory.c

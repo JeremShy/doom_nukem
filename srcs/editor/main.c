@@ -63,7 +63,7 @@ int main(int ac, char **av)
 		return (2);
 	if (!create_image(&data, IMG_WHITE_BG, WIN_SIZE_X, WIN_SIZE_Y))
 		return (3);
-	fill_img(&data.imgs[IMG_WHITE_BG], get_color_code(0xff, 0xff, 0xff, 0x0));
+	fill_img(&data.imgs[IMG_WHITE_BG], get_color_code(0xff, 0xff, 0xff, 0));
 
 	// if (!create_image_from_tga(&data, IMG_BACKGROUND, "docs/background.tga", NULL))
 	// 	return (2);

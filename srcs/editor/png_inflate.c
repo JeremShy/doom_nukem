@@ -140,6 +140,7 @@ static void		create_dynamic_huffman(struct s_huff_decode *b, struct s_huff_decod
 	get_len_list(data, current, c->len, c->size, a.tree);
 	get_code_from_lengths(c->len, c->size);
 	c->tree = create_tree(c->len, c->size);
+	delete_tree(a.tree);
 }
 
 void write_from_len_and_dist(uint8_t *data, uint16_t sym, struct s_bit_and_byte *current, size_t *index_in_img, uint8_t *image, struct s_huff_decode c)
@@ -172,7 +173,6 @@ uint8_t		init_png_value(uint8_t *data, struct s_bit_and_byte	*current, struct s_
 	ft_bzero(b->len, sizeof(struct s_length_code) * 288);
 	ft_bzero(c->len, sizeof(struct s_length_code) * 32);
 	*final = read_n_bits(data, current, 1);
-	printf("final = %d\n", *final);
 	compression_method = read_n_bits(data, current, 2);
 	if (compression_method == no_compression || compression_method == invalid)
 	{
@@ -207,6 +207,10 @@ uint8_t		process_block(uint8_t *data, uint8_t *image, size_t *index_in_img, stru
 		else if (sym > 256)
 			write_from_len_and_dist(data, sym, current, index_in_img, image, c);
 	}
+	delete_tree(b.tree);
+	delete_tree(c.tree);
+	free(b.len);
+	free(c.len);
 	return (final);
 }
 

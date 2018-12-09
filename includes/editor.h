@@ -5,6 +5,7 @@
 # include <doom_nukem.h>
 # include <sys/stat.h>
 # include <sys/mman.h>
+# include <ft_printf.h>
 
 # define WIN_SIZE_X 1600
 # define WIN_SIZE_Y 1050 // /!\ Can't modify
@@ -20,8 +21,9 @@
 # define FIRST_TEXTURE TEXTURE_1
 # define LAST_TEXTURE TEXTURE_4
 # define IMG_DRAWING 5
+# define IMG_WHITE_BG 6
 
-# define MAX_IMAGE (IMG_DRAWING + 1)
+# define MAX_IMAGE (IMG_WHITE_BG + 1)
 
 # define MAX_ELEMENT_NBR 1024
 # define MAX_POLYGON_EDGES 64
@@ -190,6 +192,13 @@ typedef struct	s_data
 }				t_data;
 
 /*
+** binary_tools.c
+*/
+uint32_t		get_conv_32(const uint32_t *nbr);
+uint64_t		get_conv_64(const uint64_t *nbr);
+uint8_t			reverse_byte_ptr(const uint8_t *input);
+uint8_t			reverse_byte(const uint8_t input);
+/*
 ** bresenham.c
 */
 void			draw_line(const t_ivec2 *p1, const t_ivec2 *p2, t_img *img, uint32_t color);
@@ -260,7 +269,7 @@ t_intersection	intersect_two_segments(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec
 ** intersection.c
 */
 uint32_t		nb_intersec_in_poly(const t_polygon *polygon, const t_ivec2 *new_point, const t_ivec2 *last_point);
-float			is_in_polygon(int x, int y, const t_polygon *poly);
+float			is_in_polygon(const t_ivec2 *point, const t_polygon *poly);
 uint8_t			is_point_in_polygon(const t_ivec2 *point, const t_polygon *polygon);
 
 /*
@@ -306,10 +315,15 @@ void			fill_img(t_img *img, uint32_t color);
 /*
 ** mlx_hook.c
 */
-t_element		*get_polygon_from_point(t_data *data, t_ivec2 point);
+t_element		*get_polygon_from_point(t_data *data, t_ivec2 *point);
 int				mouse_motion(int x, int y, t_data *data);
 int				mouse_press(int button, int x, int y, t_data *data);
 int				mouse_release(int button, int x, int y, t_data *data);
+
+/*
+** parser_png.c
+*/
+uint8_t			create_image_from_png(t_data *data, int id_img, const char *name, t_ivec2 *size);
 
 /*
 ** parser_tga.c
@@ -334,5 +348,7 @@ t_ivec2			get_grid_point(t_ivec2 point);
 uint32_t		get_nearest_point(t_data *data, t_ivec2 *point, int32_t *id);
 uint8_t			is_equ_ivec2(const t_ivec2 *p1, const t_ivec2 *p2);
 uint32_t		get_idpoint_from_addr(const t_ivec2 *point, t_data *data);
+
+t_data			data;
 
 #endif

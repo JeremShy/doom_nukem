@@ -4,7 +4,9 @@ static float	first_intersect_dist_in_poly(const t_polygon *polygon, const t_ivec
 {
 	uint32_t		current_edge;
 	float			dist;
+	float			tmp_dist;
 	t_intersection	intersec;
+	t_intersection	min;
 
 	current_edge = 0;
 	dist = -1;
@@ -12,11 +14,17 @@ static float	first_intersect_dist_in_poly(const t_polygon *polygon, const t_ivec
 	{
 		if ((intersec = intersect_two_segments(*polygon->edges[current_edge]->p1, *polygon->edges[current_edge]->p2, *last_point, *new_point)).intersect)
 		{
-			if (idist(new_point, &intersec.intersection_point) < dist || dist == -1)
-				dist = idist(new_point, &intersec.intersection_point);
+			tmp_dist = idist(new_point, &intersec.intersection_point);
+			if (tmp_dist < dist || dist == -1)
+			{
+				dist = tmp_dist;
+				min = intersec;
+			}
 		}
 		current_edge++;
 	}
+	put_pixel_to_image(&data.imgs[IMG_DRAWING], min.intersection_point.x, 
+		min.intersection_point.y, get_color_code(255,0,255,0));
 	return (dist);
 }
 
@@ -28,8 +36,7 @@ uint32_t nb_intersec_in_poly(const t_polygon *polygon, const t_ivec2 *new_point,
 
 	current_edge = 0;
 	nb_intersec = 0;
-
-	while (current_edge < polygon->nb_points - (polygon->finished ? 0: 1))
+	while (current_edge < polygon->nb_points - (polygon->finished ? 0 : 1))
 	{
 		if ((intersec = intersect_two_segments(*polygon->edges[current_edge]->p1, *polygon->edges[current_edge]->p2, *last_point, *new_point)).intersect)
 			nb_intersec++;
@@ -39,11 +46,11 @@ uint32_t nb_intersec_in_poly(const t_polygon *polygon, const t_ivec2 *new_point,
 }
 
 
-float		is_in_polygon(int x, int y, const t_polygon *polygon)
+float		is_in_polygon(const t_ivec2 *point, const t_polygon *polygon)
 {
-	if ((nb_intersec_in_poly(polygon, &(t_ivec2){x, y}, &(t_ivec2){-1, -1}) & 1) == 1)
+	if (nb_intersec_in_poly(polygon, point, &(t_ivec2){0, 0}) & 1)
 	{
-		return (first_intersect_dist_in_poly(polygon, &(t_ivec2){x, y}, &(t_ivec2){-1, -1}));
+		return (first_intersect_dist_in_poly(polygon, point, &(t_ivec2){0, 0}));
 	}
 	return (-1);
 }

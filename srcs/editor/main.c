@@ -1,4 +1,5 @@
 #include <editor.h>
+#include <zlib.h>
 
 uint8_t	create_image(t_data *data, int id, int w, int h)
 {
@@ -66,14 +67,16 @@ static uint8_t	ft_init_texture(t_data *data)
 	return (0);
 }
 
-int main()
+int main(int ac, char **av)
 {
-	t_data			data;
+	// t_data			data;
 
+	(void)av;
+	(void)ac;
 	ft_bzero(&data, sizeof(t_data));
 	if (!ft_init(&data))
 		return (1);
-	if (!create_image_from_tga(&data, IMG_BACKGROUND, "docs/new-background-2.tga", NULL))
+	if (!create_image_from_png(&data, IMG_BACKGROUND, "docs/new-background-2.png", NULL))
 		return (2);
 	if (ft_init_texture(&data))
 		return (3);

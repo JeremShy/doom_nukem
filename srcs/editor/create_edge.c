@@ -61,6 +61,7 @@ static void	edge_exists(t_data *data, uint32_t nb_elements, t_edge **edge)
 				poly->edges[j]->p2 = (*edge)->p2;
 				poly->edges[j]->p1 = (*edge)->p1;
 				(*edge)->used = 0;
+				(poly->edges[j]->used)++;
 				*edge = poly->edges[j];
 				(*edge)->type = data->input.wall_type;
 				return ;

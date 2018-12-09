@@ -16,7 +16,19 @@ SRC_EDITOR_NAME =	main.c \
 					edge_tools.c \
 					parser_tga.c \
 					editor_interactions.c \
-					delete.c
+					delete.c \
+					binary_tools.c \
+					print_memory.c \
+	\
+					png/filter.c \
+					png/filter_2.c \
+					png/globals_inflate.c \
+					png/huffman_get_code_from_length.c \
+					png/inflate.c \
+					png/inflate_2.c \
+					png/parser.c \
+					png/parser_2.c \
+					png/tree.c \
 
 SRC_GAME_NAME =		main.c \
 					print_memory.c
@@ -27,12 +39,13 @@ NAME_EDITOR = editor
 CC = gcc
 
 # CFLAGS = -Wall -Wextra -Werror
-CFLAGS = -Wall -Wextra -g -fsanitize=address
+CFLAGS = -Wall -Wextra -g
 
 MLX = minilibx_macos/libmlx.a 
 LIBFT = libft/libft.a
-LFLAGS = -framework OpenGL -framework AppKit $(LIBFT) $(MLX) -fsanitize=address
-INC = -I libft/ -I includes/ -I minilibx_macos/
+FT_PRINTF = ft_printf/libftprintf.a
+LFLAGS = -framework OpenGL -framework AppKit $(LIBFT) $(FT_PRINTF) $(MLX)
+INC = -I libft/ -I includes/ -I minilibx_macos/ -I ft_printf/includes
 
 OBJ_GAME_PATH = obj/game/
 OBJ_EDITOR_PATH = obj/editor/
@@ -51,12 +64,12 @@ OBJ_EDITOR = $(addprefix $(OBJ_EDITOR_PATH),$(OBJ_EDITOR_NAME))
 
 all : $(NAME_GAME) $(NAME_EDITOR)
 
-$(NAME_GAME) : $(LIBFT) $(MLX) $(OBJ_GAME_PATH) $(OBJ_GAME)
+$(NAME_GAME) : $(LIBFT) $(FT_PRINTF) $(MLX) $(OBJ_GAME_PATH) $(OBJ_GAME)
 	@echo ""
 	@$(CC) $(OBJ_GAME) $(LFLAGS) -o $@ 
 	@echo "\x1b[32;01m$@ SUCCESSFULLY CREATED !\x1b[32;00m"
 
-$(NAME_EDITOR) : $(LIBFT) $(MLX) $(OBJ_EDITOR_PATH) $(OBJ_EDITOR)
+$(NAME_EDITOR) : $(LIBFT) $(FT_PRINTF) $(MLX) $(OBJ_EDITOR_PATH) $(OBJ_EDITOR)
 	@echo ""
 	@$(CC) $(OBJ_EDITOR) $(LFLAGS) -o $@ 
 	@echo "\x1b[32;01m$@ SUCCESSFULLY CREATED !\x1b[32;00m"
@@ -66,6 +79,7 @@ $(OBJ_GAME_PATH):
 
 $(OBJ_EDITOR_PATH):
 	@mkdir -p $@
+	@mkdir -p $@/png
 
 
 $(OBJ_GAME_PATH)%.o: $(SRC_GAME_PATH)%.c
@@ -80,6 +94,10 @@ $(LIBFT) :
 	@make -C libft/
 	@echo "\033[32mLibrairies compiled\033[0m"
 
+$(FT_PRINTF) :
+	@make -C ft_printf/
+	@echo "\033[32mLibrairies compiled\033[0m"
+
 $(MLX) :
 	@make -C minilibx_macos/
 
@@ -88,11 +106,13 @@ $(MLX) :
 clean :
 	@rm -rf obj/
 	@make -C libft/ clean
+	@make -C ft_printf/ clean
 	@make -C minilibx_macos/ clean
 	@echo "\033[32mObjects deleted\nLibraries cleaned\033[0m"
 
 fclean : clean
 	@make -C libft/ fclean
+	@make -C ft_printf/ fclean
 	@rm -rf $(NAME_EDITOR)
 	@rm -rf $(NAME_GAME)
 	@echo "\033[32m$(NAME_EDITOR) deleted\033[0m"

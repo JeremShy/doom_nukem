@@ -51,6 +51,7 @@ static void	draw_texture(t_data *data)
 int			loop_hook(t_data *data)
 {
 	uint32_t i;
+
 	mlx_clear_window(data->mlx.mlx_ptr, data->mlx.win_ptr);
 	if (data->update_drawing)
 	{

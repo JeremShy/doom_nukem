@@ -8,25 +8,8 @@ void	delete_point(t_ivec2 *point, t_data *data)
 
 void	delete_edge(t_edge *edge, const t_data *data)
 {
-	uint32_t i;
-	uint32_t y;
-
-	y = 0;
-	while (y < data->nb_elements)
-	{
-		if (data->elements[y].enabled)
-		{
-			i = 0;
-			while (i < data->elements[y].polygon.nb_points)
-			{
-				if (edge == data->elements[y].polygon.edges[i])
-					return ;
-				i++;
-			}
-		}
-		y++;
-	}
-	edge->used = 0;
+	(void)data;
+	(edge->used)--;
 }
 
 

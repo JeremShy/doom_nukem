@@ -1,6 +1,6 @@
 #include <editor.h>
 
-t_element *get_polygon_from_point(t_data *data, t_ivec2 point)
+t_element *get_polygon_from_point(t_data *data, t_ivec2 *point)
 {
 	uint32_t		i;
 	float			dist;
@@ -11,9 +11,9 @@ t_element *get_polygon_from_point(t_data *data, t_ivec2 point)
 	dist = -1;
 	while (i < data->nb_elements)
 	{
-		if (data->elements[i].enabled && data->elements[i].clickable && data->elements[i].polygon.finished)
+		if (data->elements[i].enabled && data->elements[i].polygon.finished)
 		{
-			tmp_dist = is_in_polygon(point.x, point.y, &(data->elements[i].polygon));
+			tmp_dist = is_in_polygon(point, &(data->elements[i].polygon));
 			if (tmp_dist != -1 && (tmp_dist < dist || dist == -1))
 			{
 				dist = tmp_dist;
@@ -83,7 +83,7 @@ static int		drawing_zone(int x, int y, t_data *data)
 
 	if (data->input.mode == DELETE_SECTOR)
 	{
-		elem = get_polygon_from_point(data, (t_ivec2){x, y});
+		elem = get_polygon_from_point(data, &(t_ivec2){x, y});
 		if (elem)
 			delete_element(elem, data);
 		data->update_drawing = 1;
@@ -91,7 +91,7 @@ static int		drawing_zone(int x, int y, t_data *data)
 	else if (data->input.mode == SELECTING)
 	{
 		data->input.id_current_element = -1;
-		elem = get_polygon_from_point(data, (t_ivec2){x, y});
+		elem = get_polygon_from_point(data, &(t_ivec2){x, y});
 		if (elem)
 			data->input.id_current_element = elem->id;
 

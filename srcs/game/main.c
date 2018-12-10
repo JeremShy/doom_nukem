@@ -129,8 +129,8 @@ int main(int ac, char **av)
 	t_img			white_img;
 	t_tga_header	header;
 	uint32_t		*img_data;
-	
 	int i = 0xff;
+	
 	printf("%d\n", *(char*)&i);
 	if (ac != 2)
 	{

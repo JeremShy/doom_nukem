@@ -8,13 +8,20 @@
 # include <ft_printf.h>
 
 # define WIN_SIZE_X 1600
-# define WIN_SIZE_Y 900 // /!\ Can't modify
+# define WIN_SIZE_Y 1050 // /!\ Can't modify
 
 # define DRAWING_ZONE_WIDTH 1061
+# define DRAWING_ZONE_HEIGHT 900
 
 # define IMG_BACKGROUND 0
-# define IMG_DRAWING 1
-# define IMG_WHITE_BG 2
+# define TEXTURE_1 1
+# define TEXTURE_2 2
+# define TEXTURE_3 3
+# define TEXTURE_4 4
+# define FIRST_TEXTURE TEXTURE_1
+# define LAST_TEXTURE TEXTURE_4
+# define IMG_DRAWING 5
+# define IMG_WHITE_BG 6
 
 # define MAX_IMAGE (IMG_WHITE_BG + 1)
 
@@ -121,7 +128,7 @@ typedef struct			s_element
 	enum e_elem_type	type;
 
 	uint8_t				printable;
-	uint8_t				id_texture;
+	uint16_t			texture_wall;
 
 	uint8_t				clickable;
 	uint8_t				enabled;
@@ -129,11 +136,11 @@ typedef struct			s_element
 
 	uint16_t			texture_floor;
 	t_ivec2				angle_floor;
-	t_ivec2				height_floor;
+	int16_t				height_floor;
 
-	uint16_t			texture_ceiling;
+	uint16_t				texture_ceiling;
 	t_ivec2				angle_ceiling;
-	t_ivec2				height_ceiling;
+	int16_t				height_ceiling;
 
 	uint16_t			texture_up;
 	uint16_t			texture_down;
@@ -144,7 +151,7 @@ typedef struct			s_element
 
 typedef struct	s_input
 {
-	uint16_t			id_texture;
+	uint16_t			texture_wall;
 	enum e_edge_type	wall_type;
 	int32_t				id_current_element;
 	int32_t				id_current_point;
@@ -153,13 +160,17 @@ typedef struct	s_input
 	uint8_t				button[8];
 	uint8_t				key[300];
 
-	int8_t				ceiling_angle_y;
-	int8_t				ceiling_angle_x;
-	int8_t				ceiling_height;
-	int8_t				floor_angle_y;
-	int8_t				floor_angle_x;
-	int8_t				floor_height;
-	int8_t				light;
+	uint16_t			texture_floor;
+	t_ivec2				angle_floor;
+	int16_t				height_floor;
+
+	uint16_t				texture_ceiling;
+	t_ivec2				angle_ceiling;
+	int16_t				height_ceiling;
+
+	uint16_t			texture_up;
+	uint16_t			texture_down;
+	uint32_t			light;
 }				t_input;
 
 typedef struct	s_data
@@ -227,6 +238,11 @@ t_edge			*get_nearest_edge(const t_ivec2 *point, t_edge *edges, float *min);
 /*
 ** editor_interactions.c
 */
+void			wall_texture(uint8_t side, t_data *data);
+void			up_texture(uint8_t side, t_data *data);
+void			down_texture(uint8_t side, t_data *data);
+void			floor_texture(uint8_t side, t_data *data);
+void			ceiling_texture(uint8_t side, t_data *data);
 void			ceil_angle_y(uint8_t side, t_data *data);
 void			ceil_angle_x(uint8_t side, t_data *data);
 void			ceil_height(uint8_t side, t_data *data);
@@ -253,7 +269,7 @@ t_intersection	intersect_two_segments(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec
 ** intersection.c
 */
 uint32_t		nb_intersec_in_poly(const t_polygon *polygon, const t_ivec2 *new_point, const t_ivec2 *last_point);
-float			is_in_polygon(int x, int y, const t_polygon *poly);
+float			is_in_polygon(const t_ivec2 *point, const t_polygon *poly);
 uint8_t			is_point_in_polygon(const t_ivec2 *point, const t_polygon *polygon);
 
 /*
@@ -264,6 +280,9 @@ void			switch_select(t_data *data);
 void			switch_drawing(t_data *data);
 int				key_press(int keycode, t_data *data);
 int				key_release(int keycode, t_data *data);
+void			switch_delete_sector(t_data *data);
+void			switch_move_point(t_data *data);
+void			switch_wall_type(t_data *data);
 
 /*
 ** loop_hook.c
@@ -284,6 +303,7 @@ uint32_t		max(uint32_t a, uint32_t b);
 void			clamp(int32_t *point, int32_t min, int32_t max);
 void			fclamp(float *point, float min, float max);
 int32_t			clamp_value(int32_t value, int32_t min, int32_t max);
+void			sclamp(int16_t *point, int16_t min, int16_t max);
 
 /*
 ** mlx_img_func.c
@@ -295,7 +315,7 @@ void			fill_img(t_img *img, uint32_t color);
 /*
 ** mlx_hook.c
 */
-t_element		*get_polygon_from_point(t_data *data, t_ivec2 point);
+t_element		*get_polygon_from_point(t_data *data, t_ivec2 *point);
 int				mouse_motion(int x, int y, t_data *data);
 int				mouse_press(int button, int x, int y, t_data *data);
 int				mouse_release(int button, int x, int y, t_data *data);
@@ -328,5 +348,7 @@ t_ivec2			get_grid_point(t_ivec2 point);
 uint32_t		get_nearest_point(t_data *data, t_ivec2 *point, int32_t *id);
 uint8_t			is_equ_ivec2(const t_ivec2 *p1, const t_ivec2 *p2);
 uint32_t		get_idpoint_from_addr(const t_ivec2 *point, t_data *data);
+
+t_data			data;
 
 #endif

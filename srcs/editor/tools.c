@@ -23,7 +23,7 @@ t_ivec2		get_grid_point(t_ivec2 point)
 	point.x = point.x + ((point.x % GRID_ROUND < GRID_ROUND / 2) ? -point.x % GRID_ROUND : GRID_ROUND - point.x % GRID_ROUND);
 	point.y = point.y + ((point.y % GRID_ROUND < GRID_ROUND / 2) ? -point.y % GRID_ROUND : GRID_ROUND - point.y % GRID_ROUND);
 	clamp(&point.x, 10, DRAWING_ZONE_WIDTH);
-	clamp(&point.y, 10, WIN_SIZE_Y - 1 - 10);
+	clamp(&point.y, 10, DRAWING_ZONE_HEIGHT - 1 - 10);
 	return (point);
 }
 

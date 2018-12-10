@@ -2,7 +2,7 @@
 
 static int		pressed_backquote(t_data *data)
 {
-	if (data->input.id_current_element == -1)
+	if (data->input.id_current_element == -1 || (data->elements[data->input.id_current_element]).polygon.finished)
 		return (0);
 	data->update_drawing = 1;
 	delete_element(&data->elements[data->input.id_current_element], data);
@@ -10,7 +10,7 @@ static int		pressed_backquote(t_data *data)
 	return (1);
 }
 
-static void	switch_delete_sector(t_data *data)
+void	switch_delete_sector(t_data *data)
 {
 	if (data->input.mode == DELETE_SECTOR)
 		return ;
@@ -18,7 +18,7 @@ static void	switch_delete_sector(t_data *data)
 	data->input.mode = DELETE_SECTOR;
 }
 
-static void	switch_move_point(t_data *data)
+void	switch_move_point(t_data *data)
 {
 	if (data->input.mode == MOVE_POINT)
 		return ;
@@ -53,6 +53,14 @@ void	switch_drawing(t_data *data)
 	data->input.mode = DRAWING;
 }
 
+void	switch_wall_type(t_data *data)
+{
+	if (data->input.wall_type != PORTAL)
+		data->input.wall_type = PORTAL;
+	else
+		data->input.wall_type = SOLID;
+}
+
 int	key_press(int keycode, t_data *data)
 {
 	printf("keycode : %d\n", keycode);
@@ -68,7 +76,7 @@ int	key_press(int keycode, t_data *data)
 	else if (keycode == KEY_P)
 	{
 		if (data->input.mode == DRAWING)
-			data->input.wall_type = PORTAL;
+			switch_wall_type(data);
 	}
 	else if (keycode == KEY_X)
 		switch_delete_sector(data);

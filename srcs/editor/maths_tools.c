@@ -19,6 +19,12 @@ uint32_t	max(uint32_t a, uint32_t b)
 	return (a > b ? a : b);
 }
 
+void		sclamp(int16_t *point, int16_t min, int16_t max)
+{
+	*point < min ? (*point = min) : 0;
+	*point > max ? (*point = max) : 0;
+}
+
 void		clamp(int32_t *point, int32_t min, int32_t max)
 {
 	*point < min ? (*point = min) : 0;

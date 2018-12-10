@@ -4,7 +4,6 @@ uint8_t	load_textures(t_data *data, const char *extension, const char *folder)
 {
 	DIR				*dir;
 	struct dirent	*entry;
-	char			*last_dot;
 	char			buf[514];
 
 	if (!(dir = opendir(folder)))

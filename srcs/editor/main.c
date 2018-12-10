@@ -75,8 +75,11 @@ int main(int ac, char **av)
 {
 	t_data			data;
 
-	(void)av;
-	(void)ac;
+	if (ac != 2)
+	{
+		ft_printf("Usage: %s scene\n", av[0]);
+		return (1);
+	}
 	ft_bzero(&data.used_point, sizeof(data.used_point));
 	if (!ft_init(&data))
 		return (1);
@@ -84,6 +87,7 @@ int main(int ac, char **av)
 		return (2);
 	if (!ft_init_texture(&data))
 		return (3);
+	data.scene_name = av[1];
 	mlx_loop_hook(data.mlx.mlx_ptr, loop_hook, &data);
 	mlx_hook(data.mlx.win_ptr, 2, 0, key_press, &data);
 	mlx_hook(data.mlx.win_ptr, 3, 0, key_release, &data);

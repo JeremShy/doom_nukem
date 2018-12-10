@@ -165,7 +165,7 @@ typedef struct	s_input
 	t_ivec2				angle_floor;
 	int16_t				height_floor;
 
-	uint16_t				texture_ceiling;
+	uint16_t			texture_ceiling;
 	t_ivec2				angle_ceiling;
 	int16_t				height_ceiling;
 
@@ -177,6 +177,7 @@ typedef struct	s_input
 typedef struct	s_data
 {
 	t_mlx		mlx;
+	const char	*scene_name;
 
 	t_img		imgs[MAX_IMAGE];
 
@@ -348,6 +349,11 @@ void			print_click(t_data *data, uint16_t id);
 uint8_t			check_point(t_data *data, const t_ivec2 *point, t_ivec2 *exept);
 uint8_t			check_segment(t_data *data, const t_ivec2 *new_point, const t_ivec2 *last_point);
 
+/*
+** save_scene.c
+*/
+uint8_t			save_scene(t_data *data);
+size_t			calculate_file_size(t_data *data);
 /*
 ** tools.c
 */

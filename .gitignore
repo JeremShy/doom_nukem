@@ -9,7 +9,6 @@
 
 # Linker output
 *.ilk
-*.map
 *.exp
 
 # Precompiled Headers
@@ -50,6 +49,8 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+*.map
 doom-nukem
 *.DS_Store
 /editor

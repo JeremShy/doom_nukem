@@ -1,4 +1,16 @@
-SRC_EDITOR_NAME =	main.c \
+SRC_EDITOR_NAME =	 \
+					png/filter.c \
+					png/filter_2.c \
+					png/globals_inflate.c \
+					png/huffman_get_code_from_length.c \
+					png/inflate.c \
+					png/inflate_2.c \
+					png/resize.c \
+					png/parser.c \
+					png/parser_2.c \
+					png/tree.c \
+						\
+					main.c \
 					loop_hook.c \
 					mouse_hook.c \
 					key_hook.c \
@@ -20,17 +32,8 @@ SRC_EDITOR_NAME =	main.c \
 					binary_tools.c \
 					print_memory.c \
 					file_listing.c \
-	\
-					png/filter.c \
-					png/filter_2.c \
-					png/globals_inflate.c \
-					png/huffman_get_code_from_length.c \
-					png/inflate.c \
-					png/inflate_2.c \
-					png/resize.c \
-					png/parser.c \
-					png/parser_2.c \
-					png/tree.c \
+					calculate_file_size.c \
+					save_scene.c
 
 SRC_GAME_NAME =		main.c \
 					print_memory.c

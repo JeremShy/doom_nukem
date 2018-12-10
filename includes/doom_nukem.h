@@ -7,6 +7,7 @@
 # include <mlx.h>
 # include <stdint.h>
 # include <math.h>
+# include <types.h>
 
 # define KEY_ESCAPE 53
 # define KEY_BACKQUOTE 50
@@ -18,21 +19,5 @@
 # define KEY_L 37
 # define KEY_M 46
 # define KEY_O 31
-
-typedef struct	s_vec2 {
-	float	x;
-	float	y;
-}				t_vec2;
-
-typedef struct	s_ivec2 {
-	int	x;
-	int	y;
-}				t_ivec2;
-
-typedef struct	s_vec3 {
-	float	x;
-	float	y;
-	float	z;
-}				t_vec3;
 
 #endif

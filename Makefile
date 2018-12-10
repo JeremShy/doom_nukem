@@ -26,6 +26,7 @@ SRC_EDITOR_NAME =	main.c \
 					png/huffman_get_code_from_length.c \
 					png/inflate.c \
 					png/inflate_2.c \
+					png/resize.c \
 					png/parser.c \
 					png/parser_2.c \
 					png/tree.c \

@@ -136,7 +136,9 @@ void			*png_inflate(uint8_t *data, uint8_t *dst);
 struct s_tree	*create_tree(struct s_length_code *codes, size_t s);
 void			delete_tree(struct s_tree	*tree);
 
+void			resize_image(struct s_png_ihdr *png_ihdr, uint32_t *dest_img, uint8_t *img_data, t_ivec2 *size);
 
+void				copy_source_in_img(struct s_png_ihdr *png_ihdr, uint8_t *src_img, uint32_t *dest_img);
 void				*init_png_parser(const char *name, off_t *size);
 struct s_chunk_hdr	*get_next_chunk(void *current_chunk);
 int64_t				print_and_ret(const char *str, void *addr, off_t file_size, uint8_t *compressed_data);

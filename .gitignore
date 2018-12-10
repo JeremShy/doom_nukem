@@ -54,3 +54,5 @@ doom-nukem
 *.DS_Store
 /editor
 .DS_Store
+
+*.swp

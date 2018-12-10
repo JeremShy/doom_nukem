@@ -42,6 +42,8 @@ static uint8_t	ft_init(t_data *data)
 		data->nb_elements = 1;
 		data->input.light = 100;
 		data->input.texture_wall = 1;
+		data->input.texture_up = 1;
+		data->input.texture_down = 1;
 		data->update_drawing = 1;
 		fill_img(&data->imgs[IMG_DRAWING], get_color_code(0, 0, 0, 255));
 		return (1);
@@ -69,11 +71,12 @@ static uint8_t	ft_init_texture(t_data *data)
 
 int main(int ac, char **av)
 {
-	// t_data			data;
+	t_data			data;
 
 	(void)av;
 	(void)ac;
-	ft_bzero(&data, sizeof(t_data));
+	ft_bzero(&data.used_point, sizeof(data.used_point));
+	// ft_memset(&data, sizeof(t_data), '1');
 	if (!ft_init(&data))
 		return (1);
 	if (!create_image_from_png(&data, IMG_BACKGROUND, "docs/new-background-2.png", NULL))

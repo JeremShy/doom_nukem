@@ -4,11 +4,10 @@ void		wall_texture(uint8_t side, t_data *data)
 {
 	uint16_t *id;
 
-	if (data->input.id_current_element == -1)
-		id = &data->input.texture_wall;
+	if (data->input.current_edge == NULL || data->input.current_edge->type != SOLID)
+		return ;
 	else
-		id = &data->elements[data->input.id_current_element].texture_wall;
-	printf("id : %hu\n", *id);
+		id = &data->input.current_edge->texture_wall;
 	if (side == ARROW_RIGHT)
 	{
 		if (*id == LAST_TEXTURE)
@@ -29,11 +28,10 @@ void		up_texture(uint8_t side, t_data *data)
 {
 	uint16_t *id;
 
-	if (data->input.id_current_element == -1)
-		id = &data->input.texture_up;
+	if (data->input.current_edge == NULL || data->input.current_edge->type != PORTAL)
+		return ;
 	else
-		id = &data->elements[data->input.id_current_element].texture_up;
-	printf("id : %hu\n", *id);
+		id = &data->input.current_edge->texture_up;
 	if (side == ARROW_RIGHT)
 	{
 		if (*id == LAST_TEXTURE)
@@ -54,11 +52,10 @@ void		down_texture(uint8_t side, t_data *data)
 {
 	uint16_t *id;
 
-	if (data->input.id_current_element == -1)
-		id = &data->input.texture_down;
+	if (data->input.current_edge == NULL || data->input.current_edge->type != PORTAL)
+		return ;
 	else
-		id = &data->elements[data->input.id_current_element].texture_down;
-	printf("id : %hu\n", *id);
+		id = &data->input.current_edge->texture_down;
 	if (side == ARROW_RIGHT)
 	{
 		if (*id == LAST_TEXTURE)
@@ -80,10 +77,9 @@ void		floor_texture(uint8_t side, t_data *data)
 	uint16_t *id;
 
 	if (data->input.id_current_element == -1)
-		id = &data->input.texture_floor;
+		return ;
 	else
 		id = &data->elements[data->input.id_current_element].texture_floor;
-	printf("id : %hu\n", *id);
 	if (side == ARROW_RIGHT)
 	{
 		if (*id == LAST_TEXTURE)
@@ -105,10 +101,9 @@ void		ceiling_texture(uint8_t side, t_data *data)
 	uint16_t *id;
 
 	if (data->input.id_current_element == -1)
-		id = &data->input.texture_ceiling;
+		return ;
 	else
 		id = &data->elements[data->input.id_current_element].texture_ceiling;
-	printf("id : %hu\n", *id);
 	if (side == ARROW_RIGHT)
 	{
 		if (*id == LAST_TEXTURE)
@@ -130,7 +125,7 @@ void		ceil_angle_y(uint8_t side, t_data *data)
 	int32_t *angle_ceiling_y;
 
 	if (data->input.id_current_element == -1)
-		angle_ceiling_y = &data->input.angle_ceiling.y;
+		return ;
 	else
 		angle_ceiling_y = &data->elements[data->input.id_current_element].angle_ceiling.y;
 	if (side == ARROW_LEFT)
@@ -145,7 +140,7 @@ void		ceil_angle_x(uint8_t side, t_data *data)
 	int32_t *angle_ceiling_x;
 
 	if (data->input.id_current_element == -1)
-		angle_ceiling_x = &data->input.angle_ceiling.x;
+		return ;
 	else
 		angle_ceiling_x = &data->elements[data->input.id_current_element].angle_ceiling.x;
 	if (side == ARROW_LEFT)
@@ -160,7 +155,7 @@ void		ceil_height(uint8_t side, t_data *data)
 	int16_t *height_ceiling;
 
 	if (data->input.id_current_element == -1)
-		height_ceiling = &data->input.height_ceiling;
+		return ;
 	else
 		height_ceiling = &(data->elements[data->input.id_current_element].height_ceiling);
 	if (side == ARROW_LEFT)
@@ -175,7 +170,7 @@ void		floor_angle_y(uint8_t side, t_data *data)
 	int32_t *angle_floor_y;
 
 	if (data->input.id_current_element == -1)
-		angle_floor_y = &data->input.angle_floor.y;
+		return ;
 	else
 		angle_floor_y = &data->elements[data->input.id_current_element].angle_floor.y;
 	if (side == ARROW_LEFT)
@@ -190,7 +185,7 @@ void		floor_angle_x(uint8_t side, t_data *data)
 	int32_t *angle_floor_x;
 
 	if (data->input.id_current_element == -1)
-		angle_floor_x = &data->input.angle_floor.x;
+		return ;
 	else
 		angle_floor_x = &data->elements[data->input.id_current_element].angle_floor.x;
 	if (side == ARROW_LEFT)
@@ -205,7 +200,7 @@ void		floor_height(uint8_t side, t_data *data)
 	int16_t *height_floor;
 
 	if (data->input.id_current_element == -1)
-		height_floor = &data->input.height_floor;
+		return ;
 	else
 		height_floor = &data->elements[data->input.id_current_element].height_floor;
 	if (side == ARROW_LEFT)
@@ -220,7 +215,7 @@ void		light(uint8_t side, t_data *data)
 	uint32_t *light;
 
 	if (data->input.id_current_element == -1)
-		light = &data->input.light;
+		return ;
 	else
 		light = &data->elements[data->input.id_current_element].light;
 	if (side == ARROW_LEFT)

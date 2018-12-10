@@ -23,8 +23,6 @@ static float	first_intersect_dist_in_poly(const t_polygon *polygon, const t_ivec
 		}
 		current_edge++;
 	}
-	put_pixel_to_image(&data.imgs[IMG_DRAWING], min.intersection_point.x, 
-		min.intersection_point.y, get_color_code(255,0,255,0));
 	return (dist);
 }
 

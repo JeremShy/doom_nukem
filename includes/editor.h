@@ -108,9 +108,12 @@ typedef struct	s_edge
 {
 	uint8_t				used;
 	enum e_edge_type	type;
-	uint16_t			id_texture;
 	t_ivec2				*p1;
 	t_ivec2				*p2;
+
+	uint16_t			texture_up;
+	uint16_t			texture_down;
+	uint16_t			texture_wall;
 }				t_edge;
 
 typedef struct		s_polygon
@@ -128,7 +131,6 @@ typedef struct			s_element
 	enum e_elem_type	type;
 
 	uint8_t				printable;
-	uint16_t			texture_wall;
 
 	uint8_t				clickable;
 	uint8_t				enabled;
@@ -142,8 +144,6 @@ typedef struct			s_element
 	t_ivec2				angle_ceiling;
 	int16_t				height_ceiling;
 
-	uint16_t			texture_up;
-	uint16_t			texture_down;
 	uint32_t			light;
 
 	t_polygon			polygon;
@@ -153,8 +153,12 @@ typedef struct	s_input
 {
 	uint16_t			texture_wall;
 	enum e_edge_type	wall_type;
+
 	int32_t				id_current_element;
 	int32_t				id_current_point;
+
+	t_edge				*current_edge;
+
 	enum e_input_mode	mode;
 
 	uint8_t				button[8];
@@ -319,6 +323,7 @@ t_element		*get_polygon_from_point(t_data *data, t_ivec2 *point);
 int				mouse_motion(int x, int y, t_data *data);
 int				mouse_press(int button, int x, int y, t_data *data);
 int				mouse_release(int button, int x, int y, t_data *data);
+int				drawing_zone(int x, int y, t_data *data);
 
 /*
 ** parser_png.c
@@ -349,6 +354,6 @@ uint32_t		get_nearest_point(t_data *data, t_ivec2 *point, int32_t *id);
 uint8_t			is_equ_ivec2(const t_ivec2 *p1, const t_ivec2 *p2);
 uint32_t		get_idpoint_from_addr(const t_ivec2 *point, t_data *data);
 
-t_data			data;
+// t_data			data;
 
 #endif

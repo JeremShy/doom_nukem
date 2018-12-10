@@ -56,5 +56,7 @@ uint8_t		is_equ_ivec2(const t_ivec2 *p1, const t_ivec2 *p2)
 
 uint32_t	get_idpoint_from_addr(const t_ivec2 *point, t_data *data)
 {
+	if (!point)
+		return ((uint32_t)-1);
 	return (point - data->points);
 }

@@ -33,7 +33,10 @@ void	draw_polygon(t_polygon *polygon, t_data *data)
 	edge = 0;
 	while (edge < polygon->nb_points)
 	{
-		draw_line(polygon->edges[edge]->p1, polygon->edges[edge]->p2, &data->imgs[IMG_DRAWING], get_color_from_typewall(polygon->edges[edge]->type));
+		if (polygon->edges[edge]->p1 && polygon->edges[edge]->p2)
+			draw_line(polygon->edges[edge]->p1, polygon->edges[edge]->p2, &data->imgs[IMG_DRAWING], get_color_from_typewall(polygon->edges[edge]->type));
+		else
+			printf("edge = %d\n", edge);
 		edge++;
 	}
 }
@@ -51,6 +54,7 @@ void	switch_drawing(t_data *data)
 	if (data->input.mode == DRAWING)
 		return ;
 	data->input.mode = DRAWING;
+	data->input.id_current_element = -1;
 }
 
 void	switch_wall_type(t_data *data)
@@ -63,6 +67,8 @@ void	switch_wall_type(t_data *data)
 
 int	key_press(int keycode, t_data *data)
 {
+	static int s = 0;
+
 	printf("keycode : %d\n", keycode);
 	data->input.key[keycode] = 1;
 	if (keycode == KEY_ESCAPE)
@@ -86,6 +92,21 @@ int	key_press(int keycode, t_data *data)
 		liste_edges(data);
 	else if (keycode == KEY_M)
 		switch_move_point(data);
+	else if (keycode == KEY_O)
+	{
+		if (s == 0)
+			drawing_zone(437, 199, data);
+		else if (s == 1)
+			drawing_zone(316, 413, data);
+		else if (s == 2)
+			drawing_zone(581, 484, data);
+		else if (s == 3)
+			drawing_zone(460, 198, data);
+		else if (s == 4)
+			drawing_zone(433, 311, data);
+		printf("s = %d\n", s);
+		s++;
+	}
 	return (0);
 }
 

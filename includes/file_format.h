@@ -40,26 +40,28 @@ struct	s_header {
 };
 
 struct		s_wall {
-			uint16_t	id;
-			t_vec2		point;
-			uint16_t	texture;
-			uint16_t	next_sector; // -1 if a portal
+	uint16_t	id;
+	t_vec2		point;
+
+	uint16_t	texture;
+
+	uint16_t	texture_up;
+	uint16_t	texture_down;
+
+	uint16_t	next_sector; // -1 if a portal
 };
 
 struct	s_sector {
 	uint16_t			id;
 	uint16_t			walls_number;
 
-	t_vec3				normale_sol;
-	float				hauteur_sol;
-	uint16_t			texture_sol;
+	t_vec3				normal_floor;
+	float				height_floor;
+	uint16_t			texture_floor;
 
-	t_vec3				normale_plafond;
-	float				hauteur_plafond;
-	uint16_t			texture_plafond;
-
-	uint16_t			texture_up;
-	uint16_t			texture_down;
+	t_vec3				normal_ceiling;
+	float				height_ceiling;
+	uint16_t			texture_ceiling;
 
 	float				ambient_light;
 	uint32_t			next_sector;

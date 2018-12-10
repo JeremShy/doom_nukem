@@ -28,6 +28,23 @@ size_t			calculate_size_textures(t_data *data)
 	return (ret);
 }
 
+size_t			calculate_size_sectors(t_data *data)
+{
+	uint16_t	i;
+	size_t		ret;
+
+	ret = 0;
+	while (i < data->nb_elements)
+	{
+		if (data->elements[i].enabled)
+		{
+			ret += sizeof(struct s_sector) + data->elements[i].polygon.nb_points * sizeof(uint16_t);
+		}
+		i++;
+	}
+	return (ret);
+}
+
 size_t			calculate_file_size(t_data *data)
 {
 	size_t	ret;

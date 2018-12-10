@@ -139,7 +139,7 @@ typedef struct			s_element
 	t_ivec2				angle_floor;
 	int16_t				height_floor;
 
-	uint16_t				texture_ceiling;
+	uint16_t			texture_ceiling;
 	t_ivec2				angle_ceiling;
 	int16_t				height_ceiling;
 
@@ -223,6 +223,7 @@ void			bresenham_quadrant4(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
 
 size_t			calculate_size_audios(t_data *data);
 size_t			calculate_size_textures(t_data *data);
+size_t			calculate_size_sectors(t_data *data);
 size_t			calculate_file_size(t_data *data);
 
 /*

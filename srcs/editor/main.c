@@ -45,6 +45,7 @@ static uint8_t	ft_init(t_data *data)
 		data->input.texture_up = 1;
 		data->input.texture_down = 1;
 		data->update_drawing = 1;
+		data->nbr_textures = 0;
 		fill_img(&data->imgs[IMG_DRAWING], get_color_code(0, 0, 0, 255));
 		return (1);
 	}
@@ -58,14 +59,15 @@ static int		close_hook(t_data *data)
 }
 static uint8_t	ft_init_texture(t_data *data)
 {
-	if (!create_image_from_tga(data, TEXTURE_1, "docs/texture-bleu.tga", NULL))
-		return (1);
-	if (!create_image_from_tga(data, TEXTURE_2, "docs/texture-rouge.tga", NULL))
-		return (1);
-	if (!create_image_from_tga(data, TEXTURE_3, "docs/texture-jaune.tga", NULL))
-		return (1);
-	if (!create_image_from_tga(data, TEXTURE_4, "docs/moche.tga", NULL))
-		return (1);
+	return load_textures(data, ".png", "resources");
+	// if (!create_image_from_tga(data, TEXTURE_1, "docs/texture-bleu.tga", NULL))
+	// 	return (1);
+	// if (!create_image_from_tga(data, TEXTURE_2, "docs/texture-rouge.tga", NULL))
+	// 	return (1);
+	// if (!create_image_from_tga(data, TEXTURE_3, "docs/texture-jaune.tga", NULL))
+	// 	return (1);
+	// if (!create_image_from_tga(data, TEXTURE_4, "docs/moche.tga", NULL))
+	// 	return (1);
 	return (0);
 }
 
@@ -76,14 +78,12 @@ int main(int ac, char **av)
 	(void)av;
 	(void)ac;
 	ft_bzero(&data.used_point, sizeof(data.used_point));
-	// ft_memset(&data, sizeof(t_data), '1');
 	if (!ft_init(&data))
 		return (1);
 	if (!create_image_from_png(&data, IMG_BACKGROUND, "docs/new-background-2.png", NULL))
 		return (2);
-	if (ft_init_texture(&data))
+	if (!ft_init_texture(&data))
 		return (3);
-	ft_init_texture(&data);
 	mlx_loop_hook(data.mlx.mlx_ptr, loop_hook, &data);
 	mlx_hook(data.mlx.win_ptr, 2, 0, key_press, &data);
 	mlx_hook(data.mlx.win_ptr, 3, 0, key_release, &data);

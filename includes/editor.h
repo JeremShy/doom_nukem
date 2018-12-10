@@ -6,6 +6,7 @@
 # include <sys/stat.h>
 # include <sys/mman.h>
 # include <ft_printf.h>
+# include <dirent.h>
 
 # define WIN_SIZE_X 1600
 # define WIN_SIZE_Y 1050 // /!\ Can't modify
@@ -14,16 +15,12 @@
 # define DRAWING_ZONE_HEIGHT 900
 
 # define IMG_BACKGROUND 0
-# define TEXTURE_1 1
-# define TEXTURE_2 2
-# define TEXTURE_3 3
-# define TEXTURE_4 4
-# define FIRST_TEXTURE TEXTURE_1
-# define LAST_TEXTURE TEXTURE_4
-# define IMG_DRAWING 5
-# define IMG_WHITE_BG 6
+# define IMG_DRAWING 1
+# define IMG_START_TEXTURES 2
 
-# define MAX_IMAGE (IMG_WHITE_BG + 1)
+# define MAX_TEXTURES 255
+
+# define MAX_IMAGE (IMG_DRAWING + MAX_TEXTURES + 1)
 
 # define MAX_ELEMENT_NBR 1024
 # define MAX_POLYGON_EDGES 64
@@ -193,6 +190,8 @@ typedef struct	s_data
 
 	t_ivec2		points[MAX_POINTS_NBR];
 	uint8_t		used_point[MAX_POINTS_NBR];
+
+	uint16_t	nbr_textures;
 }				t_data;
 
 /*
@@ -254,6 +253,11 @@ void			floor_angle_y(uint8_t side, t_data *data);
 void			floor_angle_x(uint8_t side, t_data *data);
 void			floor_height(uint8_t side, t_data *data);
 void			light(uint8_t side, t_data *data);
+
+/*
+** file_listing.c
+*/
+uint8_t			load_textures(t_data *data, const char *extension, const char *folder);
 
 /*
 ** imaths.c

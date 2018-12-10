@@ -19,6 +19,7 @@ SRC_EDITOR_NAME =	main.c \
 					delete.c \
 					binary_tools.c \
 					print_memory.c \
+					file_listing.c \
 	\
 					png/filter.c \
 					png/filter_2.c \

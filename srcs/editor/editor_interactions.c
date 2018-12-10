@@ -10,15 +10,15 @@ void		wall_texture(uint8_t side, t_data *data)
 		id = &data->input.current_edge->texture_wall;
 	if (side == ARROW_RIGHT)
 	{
-		if (*id == LAST_TEXTURE)
-			*id = FIRST_TEXTURE;
+		if (*id == IMG_START_TEXTURES + data->nbr_textures - 1)
+			*id = IMG_START_TEXTURES;
 		else
 			*id += 1;
 	}
 	else
 	{
-		if (*id == FIRST_TEXTURE)
-			*id = LAST_TEXTURE;
+		if (*id == IMG_START_TEXTURES)
+			*id = IMG_START_TEXTURES + data->nbr_textures - 1;
 		else
 			*id -= 1;
 	}
@@ -34,15 +34,15 @@ void		up_texture(uint8_t side, t_data *data)
 		id = &data->input.current_edge->texture_up;
 	if (side == ARROW_RIGHT)
 	{
-		if (*id == LAST_TEXTURE)
-			*id = FIRST_TEXTURE;
+		if (*id == IMG_START_TEXTURES + data->nbr_textures - 1)
+			*id = IMG_START_TEXTURES;
 		else
 			*id += 1;
 	}
 	else
 	{
-		if (*id == FIRST_TEXTURE)
-			*id = LAST_TEXTURE;
+		if (*id == IMG_START_TEXTURES)
+			*id = IMG_START_TEXTURES + data->nbr_textures - 1;
 		else
 			*id -= 1;
 	}
@@ -58,15 +58,15 @@ void		down_texture(uint8_t side, t_data *data)
 		id = &data->input.current_edge->texture_down;
 	if (side == ARROW_RIGHT)
 	{
-		if (*id == LAST_TEXTURE)
-			*id = FIRST_TEXTURE;
+		if (*id == IMG_START_TEXTURES + data->nbr_textures - 1)
+			*id = IMG_START_TEXTURES;
 		else
 			*id += 1;
 	}
 	else
 	{
-		if (*id == FIRST_TEXTURE)
-			*id = LAST_TEXTURE;
+		if (*id == IMG_START_TEXTURES)
+			*id = IMG_START_TEXTURES + data->nbr_textures - 1;
 		else
 			*id -= 1;
 	}
@@ -82,15 +82,15 @@ void		floor_texture(uint8_t side, t_data *data)
 		id = &data->elements[data->input.id_current_element].texture_floor;
 	if (side == ARROW_RIGHT)
 	{
-		if (*id == LAST_TEXTURE)
-			*id = FIRST_TEXTURE;
+		if (*id == IMG_START_TEXTURES + data->nbr_textures - 1)
+			*id = IMG_START_TEXTURES;
 		else
 			*id += 1;
 	}
 	else
 	{
-		if (*id == FIRST_TEXTURE)
-			*id = LAST_TEXTURE;
+		if (*id == IMG_START_TEXTURES)
+			*id = IMG_START_TEXTURES + data->nbr_textures - 1;
 		else
 			*id -= 1;
 	}
@@ -106,15 +106,15 @@ void		ceiling_texture(uint8_t side, t_data *data)
 		id = &data->elements[data->input.id_current_element].texture_ceiling;
 	if (side == ARROW_RIGHT)
 	{
-		if (*id == LAST_TEXTURE)
-			*id = FIRST_TEXTURE;
+		if (*id == IMG_START_TEXTURES + data->nbr_textures - 1)
+			*id = IMG_START_TEXTURES;
 		else
 			*id += 1;
 	}
 	else
 	{
-		if (*id == FIRST_TEXTURE)
-			*id = LAST_TEXTURE;
+		if (*id == IMG_START_TEXTURES)
+			*id = IMG_START_TEXTURES + data->nbr_textures - 1;
 		else
 			*id -= 1;
 	}

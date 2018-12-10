@@ -27,6 +27,8 @@
 
 # define GRID_ROUND 25
 
+# define MAP_SIZE 100 // The saved map size
+
 # define MAX_POINTS_NBR MAX_ELEMENT_NBR * MAX_POLYGON_EDGES
 
 struct			s_data;
@@ -216,6 +218,20 @@ void			bresenham_quadrant3(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
 void			bresenham_quadrant4(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
 
 /*
+** calculate_nbs.c
+*/
+
+size_t			calculate_size_audios(t_data *data);
+size_t			calculate_size_textures(t_data *data);
+size_t			calculate_file_size(t_data *data);
+
+/*
+** calculate_nbs.c
+*/
+size_t			calculate_nb_edges(t_data *data);
+size_t			calculate_nb_sectors(t_data *data);
+
+/*
 ** create_edge.c
 */
 void			create_edge(t_data *data, t_ivec2 new_point);
@@ -353,7 +369,7 @@ uint8_t			check_segment(t_data *data, const t_ivec2 *new_point, const t_ivec2 *l
 ** save_scene.c
 */
 uint8_t			save_scene(t_data *data);
-size_t			calculate_file_size(t_data *data);
+
 /*
 ** tools.c
 */

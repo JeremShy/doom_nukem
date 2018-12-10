@@ -23,7 +23,7 @@ struct			s_audio
 };
 
 struct	s_header {
-	struct s_vec2	size;
+	struct s_ivec2	size;
 
 	struct s_vec2	player_pos;
 
@@ -33,10 +33,10 @@ struct	s_header {
 	uint16_t		sprites_number;
 	uint16_t		objects_number;
 
-	uint32_t		offset_walls;
-	uint32_t		offset_texture;
-	uint32_t		offset_audio;
-	uint32_t		offset_objects;
+	uint64_t		offset_walls;
+	uint64_t		offset_texture;
+	uint64_t		offset_audio;
+	uint64_t		offset_objects;
 };
 
 struct		s_wall {

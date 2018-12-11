@@ -72,7 +72,7 @@ int			loop_hook(t_data *data)
 	while (i < data->max_point_id)
 	{
 		if (data->used_point[i])
-			mlx_put_image_to_window(data->mlx.mlx_ptr, data->mlx.win_ptr, data->imgs[SQUARE_POINT].ptr, data->points[i].x - 10, data->points[i].y - 10);
+			mlx_put_image_to_window(data->mlx.mlx_ptr, data->mlx.win_ptr, data->imgs[SQUARE_POINT].ptr, data->points[i].x - data->imgs[SQUARE_POINT].w / 2, data->points[i].y - data->imgs[SQUARE_POINT].h / 2);
 		i++;
 	}
 	draw_texture(data);

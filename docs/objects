@@ -1,0 +1,41 @@
+type d'objets :
+{
+	Portes qui s'ouvrent avec une clé
+	Boutons qui ouvrent des portes
+	Ascenseurs
+	Murs empoisonnés qui nous tuent quand on marche dedans
+}
+
+
+Collectables :
+{
+	clé (pourquoi pas plusieurs types genre couleurs),
+	pieces,
+	(vie, munition, armes ?)
+}
+
+
+Structure :
+
+sprites {
+	fait_toujours_face ou pas,
+	images (une ou plusieurs)
+}
+
+Collectables {
+	id (genre 00 pour cle_bleue),
+	sprite,
+	position
+}
+
+
+Les edges(portals + walls) peuvent avoir des objets en parametres
+	Si ils en ont, il faut check les conditions de trigger des objets et les activer si besoin
+	Les ascenseurs peuvent avoir des parametres
+
+
+
+Objets (Presets) {
+	Image de preview
+	Son qui est joué
+}

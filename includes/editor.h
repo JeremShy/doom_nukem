@@ -104,6 +104,32 @@ typedef struct	s_intersection
 	t_ivec2		intersection_point;
 }				t_intersection;
 
+enum			obj_type
+{
+	DOOR_BUTTON,
+	ELEVATOR
+};
+
+enum			trigger_type
+{
+	ON_ENTER,
+	ON_KEYPRESS,
+};
+
+typedef struct		s_obj
+{
+	uint16_t			id;
+
+	t_ivec2				range;
+	t_ivec2				pos;
+
+	enum obj_type		type;
+	enum trigger_type	trigger;
+
+	uint32_t			params[4];
+}					t_obj;
+
+
 typedef struct	s_edge
 {
 	uint8_t				used;

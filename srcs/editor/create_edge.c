@@ -99,21 +99,15 @@ static void	add_seg(t_data *data, t_polygon *polygon, t_ivec2 *new_point, enum e
 {
 	if (p == BEGIN)
 	{
-		polygon->edges[0] = add_edge(data, (t_edge){1, data->input.wall_type, new_point, NULL, data->input.texture_up, data->input.texture_down, data->input.texture_wall});
+		polygon->edges[0] = add_edge(data, (t_edge){1, SOLID, new_point, NULL, data->input.texture_up, data->input.texture_down, data->input.texture_wall});
 		(polygon->nb_points)++;
-		put_pixel_to_image(&data->imgs[IMG_DRAWING], new_point->x,
-			new_point->y, get_color_from_typewall(data->input.wall_type));
 		return ;
 	}
-
-	// polygon->edges[polygon->nb_points - 1]->p2 = new_point;
 	polygon->edges[polygon->nb_points - 1]->p2 == NULL ? (polygon->edges[polygon->nb_points - 1]->p2 = new_point) : (polygon->edges[polygon->nb_points - 1]->p1 = new_point);
-
 	edge_exists(data, data->nb_elements, &polygon->edges[polygon->nb_points - 1]);
-
 	if (p == MIDDLE)
 	{
-		polygon->edges[polygon->nb_points] = add_edge(data, (t_edge){1, data->input.wall_type, polygon->edges[polygon->nb_points - 1]->p2, NULL, data->input.texture_up, data->input.texture_down, data->input.texture_wall});
+		polygon->edges[polygon->nb_points] = add_edge(data, (t_edge){1, SOLID, polygon->edges[polygon->nb_points - 1]->p2, NULL, data->input.texture_up, data->input.texture_down, data->input.texture_wall});
 		(polygon->nb_points)++;
 	}
 	else if (p == END)
@@ -121,8 +115,9 @@ static void	add_seg(t_data *data, t_polygon *polygon, t_ivec2 *new_point, enum e
 		polygon->finished = 1;
 		delete_point(new_point, data);
 	}
+	polygon->edges[polygon->nb_points - (p == MIDDLE ? 2 : 1)]->type = data->input.wall_type;
 	draw_line(polygon->edges[polygon->nb_points - (p == MIDDLE ? 2 : 1)]->p1, new_point, &data->imgs[IMG_DRAWING],
-		0xff40a0);
+		get_color_from_typewall(data->input.wall_type));
 }
 
 static t_ivec2 	*change_point(t_data *data, t_ivec2 *point)
@@ -159,7 +154,6 @@ void		create_edge(t_data *data, t_ivec2 click)
 		if (polygon->nb_points == 0)
 		{
 			printf("Beginning a new edge\n");
-
 			add_seg(data, polygon, ptr, BEGIN);
 		}
 		else if (polygon->nb_points > 2 && polygon->edges[0]->p1 == ptr)

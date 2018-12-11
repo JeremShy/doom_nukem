@@ -127,9 +127,9 @@ static int		options_zone(int button, int x, int y, t_data *data)
 	else if (x >= SQUARE_DRAW_SX && y >= SQUARE_DRAW_SY && x <= SQUARE_DRAW_EX && y <= SQUARE_DRAW_EY)
 		switch_drawing(data);
 	else if (x > WALL_TYPE_RED_SX && y > WALL_TYPE_RED_SY && x < WALL_TYPE_RED_EX && y < WALL_TYPE_RED_EY)
-		switch_wall_type(data);
+		data->input.wall_type = PORTAL;
 	else if (x > WALL_TYPE_WHITE_SX && y > WALL_TYPE_WHITE_SY && x < WALL_TYPE_WHITE_EX && y < WALL_TYPE_WHITE_EY)
-		switch_wall_type(data);
+		data->input.wall_type = SOLID;
 
 	if (data->input.mode == SELECTING && data->input.current_edge)
 	{

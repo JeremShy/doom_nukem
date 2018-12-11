@@ -57,6 +57,7 @@ static uint16_t	find_free_element(t_data *data)
 	e->texture_floor = IMG_START_TEXTURES;
 	e->texture_ceiling = IMG_START_TEXTURES;
 	e->polygon.nb_points = 0;
+	e->polygon.finished = 0;
 	e->id = i;
 	e->enabled = 1;
 	return (e->id);

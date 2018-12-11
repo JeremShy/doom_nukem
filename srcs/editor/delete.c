@@ -46,4 +46,9 @@ void	delete_element(t_element *elem, t_data *data)
 		delete_point(curr, data);
 		i++;
 	}
+	if (elem->id == data->nb_elements - 1)
+	{
+		while (data->nb_elements > 0 && !data->elements[data->nb_elements - 1].enabled)
+			(data->nb_elements)--;
+	}
 }

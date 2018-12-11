@@ -22,7 +22,7 @@ size_t			calculate_size_textures(t_data *data)
 	i = IMG_START_TEXTURES;
 	while (i < data->nbr_textures)
 	{
-		ret += sizeof(struct s_texture) + (data->imgs[i].w * data->imgs[i].h) * 4 * sizeof(uint8_t);
+		ret += sizeof(struct s_texture) + (data->imgs[i].w * data->imgs[i].h) * 4;
 		i++;
 	}
 	return (ret);

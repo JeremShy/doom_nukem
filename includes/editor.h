@@ -188,12 +188,14 @@ typedef struct	s_data
 	t_input		input;
 
 	uint32_t	nb_elements;
-	int32_t	max_point_id;
 	t_element	elements[MAX_ELEMENT_NBR];
 
 	t_edge		edges[MAX_POINTS_NBR];
+	int32_t		max_edge_id;
 
 	t_ivec2		points[MAX_POINTS_NBR];
+	int32_t		max_point_id;
+
 	uint8_t		used_point[MAX_POINTS_NBR];
 
 	uint16_t	nbr_textures;
@@ -249,7 +251,7 @@ void			liste_points(t_data *data);
 ** delete.c
 */
 void			delete_point(t_ivec2 *point, t_data *data);
-void			delete_edge(t_edge *edge, const t_data *data);
+void			delete_edge(t_edge *edge, t_data *data);
 void			delete_element(t_element *elem, t_data *data);
 
 /*

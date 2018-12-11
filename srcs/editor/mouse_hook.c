@@ -62,20 +62,8 @@ static uint16_t	find_free_element(t_data *data)
 	return (e->id);
 }
 
-// static void		update_input(t_data *data)
-// {
-// 	data->input.ceiling_angle_y;
-// 	data->input.ceiling_angle_x;
-// 	data->input.ceiling_height;
-// 	data->input.floor_angle_y;
-// 	data->input.floor_angle_x;
-// 	data->input.floor_height;
-// 	data->input.light;
-// }
-
 int		drawing_zone(int x, int y, t_data *data)
 {
-	// t_ivec2		p;
 	t_element	*elem;
 	t_edge		*edge;
 	float		dist;
@@ -214,13 +202,13 @@ static uint8_t	check_moving_point(t_data *data, t_ivec2 point, t_ivec2 *current)
 	int32_t j;
 
 	i = 0;
-	while (i < data->max_point_id)
+	while (i < data->max_edge_id)
 	{
 		if (data->edges[i].used)
 			if (data->edges[i].p1 == current || data->edges[i].p2 == current)
 			{
 				j = 0;
-				while (j < data->max_point_id)
+				while (j < data->max_edge_id)
 				{
 					if (data->edges[j].used)
 						if (data->edges[j].p1 != current && data->edges[j].p2 != current)

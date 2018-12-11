@@ -31,7 +31,7 @@ t_edge			*get_nearest_edge_except(const t_ivec2 *point, t_data *data, float *min
 
 	i = 0;
 	*min = -1;
-	while (i < data->max_point_id)
+	while (i < data->max_edge_id)
 	{
 		tmp = &data->edges[i];
 		if (tmp->used && tmp->p2 && tmp->p1 != exept && tmp->p2 != exept)
@@ -58,7 +58,7 @@ t_edge			*get_nearest_edge(const t_ivec2 *point, t_data *data, float *min)
 
 	i = 0;
 	*min = -1;
-	while (i < data->max_point_id)
+	while (i < data->max_edge_id)
 	{
 		tmp = &data->edges[i];
 		if (tmp->used && tmp->p2)

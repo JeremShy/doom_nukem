@@ -5,12 +5,21 @@ void	delete_point(t_ivec2 *point, t_data *data)
 	data->used_point[get_idpoint_from_addr(point, data)]--;
 	if (data->used_point[get_idpoint_from_addr(point, data)] > 127)
 		printf("ERROR on point %d\n", get_idpoint_from_addr(point, data));
+	if (get_idpoint_from_addr(point, data) == data->max_point_id - 1)
+	{
+		while (data->max_point_id > 0 && !data->used_point[data->max_point_id - 1])
+			(data->max_point_id)--;
+	}
 }
 
-void	delete_edge(t_edge *edge, const t_data *data)
+void	delete_edge(t_edge *edge, t_data *data)
 {
-	(void)data;
 	(edge->used)--;
+	if (edge - data->edges == data->max_edge_id - 1)
+	{
+		while (data->max_edge_id > 0 && !data->edges[data->max_edge_id - 1].used)
+			(data->max_edge_id)--;
+	}
 }
 
 void	delete_element(t_element *elem, t_data *data)

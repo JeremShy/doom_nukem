@@ -8,7 +8,7 @@ void	print_click(t_data *data, uint16_t id)
 
 uint8_t check_point(t_data *data, const t_ivec2 *point, t_ivec2 *exept)
 {
-	float			dist;
+	float	dist;
 
 	if (exept)
 		get_nearest_edge_except(point, data, &dist, exept);

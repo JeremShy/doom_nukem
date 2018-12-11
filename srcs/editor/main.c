@@ -42,10 +42,11 @@ static uint8_t	ft_init(t_data *data)
 		data->input.mode = DRAWING;
 		data->nb_elements = 1;
 		data->input.light = 100;
-		data->input.texture_wall = 1;
-		data->input.texture_up = 1;
-		data->input.texture_down = 1;
-		data->max_point_id = 1;
+		data->input.texture_wall = IMG_START_TEXTURES;
+		data->input.texture_up = IMG_START_TEXTURES;
+		data->input.texture_down = IMG_START_TEXTURES;
+		data->max_point_id = 0;
+		data->max_edge_id = 0;
 		data->update_drawing = 1;
 		data->nbr_textures = 0;
 		fill_img(&data->imgs[IMG_DRAWING], get_color_code(0, 0, 0, 255));

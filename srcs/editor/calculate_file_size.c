@@ -33,6 +33,7 @@ size_t			calculate_size_sectors(t_data *data)
 	uint16_t	i;
 	size_t		ret;
 
+	i = 0;
 	ret = 0;
 	while (i < data->nb_elements)
 	{

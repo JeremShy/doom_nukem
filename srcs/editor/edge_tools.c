@@ -22,7 +22,7 @@ static float	idist_seg_and_point(t_ivec2 p1, t_ivec2 p2, t_ivec2 p3)
 	return (dist);
 }
 
-t_edge			*get_nearest_edge_except(const t_ivec2 *point, t_edge *edges, float *min, t_ivec2 *exept)
+t_edge			*get_nearest_edge_except(const t_ivec2 *point, t_data *data, float *min, t_ivec2 *exept)
 {
 	int			i;
 	float		dist;
@@ -31,9 +31,9 @@ t_edge			*get_nearest_edge_except(const t_ivec2 *point, t_edge *edges, float *mi
 
 	i = 0;
 	*min = -1;
-	while (i < MAX_POINTS_NBR)
+	while (i < data->max_point_id)
 	{
-		tmp = &edges[i];
+		tmp = &data->edges[i];
 		if (tmp->used && tmp->p2 && tmp->p1 != exept && tmp->p2 != exept)
 		{
 			if ((dist = idist_seg_and_point(*tmp->p1, *tmp->p2, *point)) < *min || *min == -1)
@@ -46,10 +46,10 @@ t_edge			*get_nearest_edge_except(const t_ivec2 *point, t_edge *edges, float *mi
 	}
 	if (*min == -1)
 		return (NULL);
-	return (&edges[id]);
+	return (&data->edges[id]);
 }
 
-t_edge			*get_nearest_edge(const t_ivec2 *point, t_edge *edges, float *min)
+t_edge			*get_nearest_edge(const t_ivec2 *point, t_data *data, float *min)
 {
 	int			i;
 	float		dist;
@@ -58,9 +58,9 @@ t_edge			*get_nearest_edge(const t_ivec2 *point, t_edge *edges, float *min)
 
 	i = 0;
 	*min = -1;
-	while (i < MAX_POINTS_NBR)
+	while (i < data->max_point_id)
 	{
-		tmp = &edges[i];
+		tmp = &data->edges[i];
 		if (tmp->used && tmp->p2)
 		{
 			if ((dist = idist_seg_and_point(*tmp->p1, *tmp->p2, *point)) < *min || *min == -1)
@@ -73,5 +73,5 @@ t_edge			*get_nearest_edge(const t_ivec2 *point, t_edge *edges, float *min)
 	}
 	if (*min == -1)
 		return (NULL);
-	return (&edges[id]);
+	return (&data->edges[id]);
 }

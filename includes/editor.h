@@ -16,11 +16,12 @@
 
 # define IMG_BACKGROUND 0
 # define IMG_DRAWING 1
-# define IMG_START_TEXTURES 2
+# define SQUARE_POINT 2
+# define IMG_START_TEXTURES 3
 
 # define MAX_TEXTURES 255
 
-# define MAX_IMAGE (IMG_DRAWING + MAX_TEXTURES + 1)
+# define MAX_IMAGE (SQUARE_POINT + MAX_TEXTURES + 1)
 
 # define MAX_ELEMENT_NBR 1024
 # define MAX_POLYGON_EDGES 64
@@ -187,6 +188,7 @@ typedef struct	s_data
 	t_input		input;
 
 	uint32_t	nb_elements;
+	int32_t	max_point_id;
 	t_element	elements[MAX_ELEMENT_NBR];
 
 	t_edge		edges[MAX_POINTS_NBR];
@@ -253,8 +255,8 @@ void			delete_element(t_element *elem, t_data *data);
 /*
 ** edge_tools.c
 */
-t_edge			*get_nearest_edge_except(const t_ivec2 *point, t_edge *edges, float *min, t_ivec2 *exept);
-t_edge			*get_nearest_edge(const t_ivec2 *point, t_edge *edges, float *min);
+t_edge			*get_nearest_edge_except(const t_ivec2 *point, t_data *data, float *min, t_ivec2 *exept);
+t_edge			*get_nearest_edge(const t_ivec2 *point, t_data *data, float *min);
 
 /*
 ** editor_interactions.c

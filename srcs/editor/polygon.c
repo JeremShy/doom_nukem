@@ -11,9 +11,9 @@ uint8_t check_point(t_data *data, const t_ivec2 *point, t_ivec2 *exept)
 	float			dist;
 
 	if (exept)
-		get_nearest_edge_except(point, data->edges, &dist, exept);
+		get_nearest_edge_except(point, data, &dist, exept);
 	else
-		get_nearest_edge(point, data->edges, &dist);
+		get_nearest_edge(point, data, &dist);
 	if (dist != -1 && dist < 10)
 		return (0);
 	return (1);

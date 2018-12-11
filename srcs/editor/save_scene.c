@@ -5,7 +5,7 @@ void		fill_sectors(t_data *data, uint8_t *addr)
 {
 	struct s_sector	*current_sec;
 	struct s_wall	*current_wall;
-	int	i;
+	uint32_t	i;
 	int	wall_i; // (LOL)
 
 	i = 0;

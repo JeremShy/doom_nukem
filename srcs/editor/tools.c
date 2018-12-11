@@ -29,14 +29,14 @@ t_ivec2		get_grid_point(t_ivec2 point)
 
 uint32_t	get_nearest_point(t_data *data, t_ivec2 *point, int32_t *id)
 {
-	uint32_t	i;
+	int32_t	i;
 	uint32_t	dist;
 	uint32_t	tmp;
 
 	i = 0;
 	dist = -1u;
 	*id = -1;
-	while (i < MAX_POINTS_NBR)
+	while (i < data->max_point_id)
 	{
 		if (data->used_point[i] > 0)
 			if ((tmp = idist(point, &data->points[i])) < dist)

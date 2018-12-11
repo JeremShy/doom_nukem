@@ -45,6 +45,7 @@ static uint8_t	ft_init(t_data *data)
 		data->input.texture_wall = 1;
 		data->input.texture_up = 1;
 		data->input.texture_down = 1;
+		data->max_point_id = 1;
 		data->update_drawing = 1;
 		data->nbr_textures = 0;
 		fill_img(&data->imgs[IMG_DRAWING], get_color_code(0, 0, 0, 255));
@@ -60,8 +61,9 @@ static int		close_hook(t_data *data)
 }
 static uint8_t	ft_init_texture(t_data *data)
 {
+	if (!create_image_from_png(data, SQUARE_POINT, "docs/square.png", &(t_ivec2){21, 21}))
+		return (0);
 	return load_textures(data, ".png", "resources");
-	return (0);
 }
 
 int main(int ac, char **av)

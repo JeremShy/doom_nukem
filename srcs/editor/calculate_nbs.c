@@ -7,7 +7,7 @@ size_t	calculate_nb_edges(t_data *data)
 
 	i = 0;
 	ret = 0;
-	while (i < MAX_POINTS_NBR)
+	while (i < data->max_point_id)
 	{
 		if (data->edges[i].used)
 			ret++;

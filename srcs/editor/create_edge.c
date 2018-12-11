@@ -19,7 +19,7 @@ static uint8_t		create_edge_error(t_data *data, t_polygon	**polygon)
 
 static t_ivec2	*add_points(t_data *data, const t_ivec2 *new_point)
 {
-	uint32_t i;
+	int32_t i;
 
 	i = 0;
 	while (i < MAX_POINTS_NBR)
@@ -28,6 +28,8 @@ static t_ivec2	*add_points(t_data *data, const t_ivec2 *new_point)
 		{
 			data->points[i] = *new_point;
 			data->used_point[i] = 1;
+			if (i >= data->max_point_id)
+				data->max_point_id = i + 1;
 			return (&data->points[i]);
 		}
 		i++;

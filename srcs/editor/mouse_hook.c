@@ -91,7 +91,7 @@ int		drawing_zone(int x, int y, t_data *data)
 	{
 		data->input.id_current_element = -1;
 
-		if ((edge = get_nearest_edge(&(t_ivec2){x, y}, data->edges, &dist)) && dist < 6)
+		if ((edge = get_nearest_edge(&(t_ivec2){x, y}, data, &dist)) && dist < 6)
 		{
 			data->input.current_edge = edge;
 			data->input.id_current_element = -1;
@@ -210,17 +210,17 @@ static int		options_zone(int button, int x, int y, t_data *data)
 
 static uint8_t	check_moving_point(t_data *data, t_ivec2 point, t_ivec2 *current)
 {
-	uint32_t i;
-	uint32_t j;
+	int32_t i;
+	int32_t j;
 
 	i = 0;
-	while (i < MAX_POINTS_NBR)
+	while (i < data->max_point_id)
 	{
 		if (data->edges[i].used)
 			if (data->edges[i].p1 == current || data->edges[i].p2 == current)
 			{
 				j = 0;
-				while (j < MAX_POINTS_NBR)
+				while (j < data->max_point_id)
 				{
 					if (data->edges[j].used)
 						if (data->edges[j].p1 != current && data->edges[j].p2 != current)

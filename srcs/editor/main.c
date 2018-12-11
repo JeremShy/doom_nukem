@@ -22,6 +22,7 @@ uint8_t	create_image(t_data *data, int id, int w, int h)
 	{
 		img->h = h;
 		img->w = w;
+		printf("Created image : %d\n", id);
 		return (1);
 	}
 	return (0);
@@ -60,14 +61,6 @@ static int		close_hook(t_data *data)
 static uint8_t	ft_init_texture(t_data *data)
 {
 	return load_textures(data, ".png", "resources");
-	// if (!create_image_from_tga(data, TEXTURE_1, "docs/texture-bleu.tga", NULL))
-	// 	return (1);
-	// if (!create_image_from_tga(data, TEXTURE_2, "docs/texture-rouge.tga", NULL))
-	// 	return (1);
-	// if (!create_image_from_tga(data, TEXTURE_3, "docs/texture-jaune.tga", NULL))
-	// 	return (1);
-	// if (!create_image_from_tga(data, TEXTURE_4, "docs/moche.tga", NULL))
-	// 	return (1);
 	return (0);
 }
 

@@ -43,7 +43,7 @@ static void	draw_texture(t_data *data)
 		}
 		else
 		{
-		mlx_put_image_to_window(data->mlx.mlx_ptr, data->mlx.win_ptr, data->imgs[data->input.current_edge->texture_wall].ptr, WALL_TEXTURE_X, WALL_TEXTURE_Y);
+			mlx_put_image_to_window(data->mlx.mlx_ptr, data->mlx.win_ptr, data->imgs[data->input.current_edge->texture_wall].ptr, WALL_TEXTURE_X, WALL_TEXTURE_Y);
 		}
 	}
 }

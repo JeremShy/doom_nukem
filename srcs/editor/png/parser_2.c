@@ -56,7 +56,8 @@ struct s_chunk_hdr	*get_next_chunk(void *current_chunk)
 int64_t				print_and_ret(const char *str, void *addr, off_t file_size,
 	uint8_t *compressed_data)
 {
-	ft_putendl_fd(str, 2);
+	if (str)
+		ft_putendl_fd(str, 2);
 	munmap(addr, file_size);
 	free(compressed_data);
 	return (0);

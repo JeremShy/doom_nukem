@@ -90,7 +90,7 @@ static uint8_t	initialize_values(void **addr, const char *name,
 	if (*file_size < 8 || get_conv_64(*addr) != 0x89504E470D0A1A0Al)
 		return (print_and_ret("Invalid signature", *addr, *file_size, NULL));
 	if (!check_and_read_ihdr(*addr, png_ihdr))
-		return (print_and_ret("Error", *addr, *file_size, NULL));
+		return (print_and_ret(NULL, *addr, *file_size, NULL));
 	return (1);
 }
 

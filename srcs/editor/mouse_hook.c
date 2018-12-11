@@ -54,8 +54,8 @@ static uint16_t	find_free_element(t_data *data)
 		(data->nb_elements)++;
 	}
 	e->light = 100;
-	e->texture_floor = 1;
-	e->texture_ceiling = 2; 
+	e->texture_floor = IMG_START_TEXTURES;
+	e->texture_ceiling = IMG_START_TEXTURES;
 	e->polygon.nb_points = 0;
 	e->id = i;
 	e->enabled = 1;

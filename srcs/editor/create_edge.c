@@ -38,7 +38,7 @@ static t_ivec2	*add_points(t_data *data, const t_ivec2 *new_point)
 	exit(EXIT_FAILURE);
 }
 
-static void	edge_exists(t_data *data, uint32_t nb_elements, t_edge **edge)
+static int8_t	merge_edge(t_data *data, uint32_t nb_elements, t_edge **edge)
 {
 	uint32_t	i;
 	uint32_t	j;
@@ -60,18 +60,21 @@ static void	edge_exists(t_data *data, uint32_t nb_elements, t_edge **edge)
 		{
 			if (poly->edges[j] != *edge && same_edges(poly->edges[j]->p1, poly->edges[j]->p2, (*edge)->p1, (*edge)->p2))
 			{
+				if (poly->edges[j]->used > 1)
+					return (0);
 				poly->edges[j]->p2 = (*edge)->p2;
 				poly->edges[j]->p1 = (*edge)->p1;
 				(*edge)->used = 0;
 				(poly->edges[j]->used)++;
 				*edge = poly->edges[j];
 				(*edge)->type = data->input.wall_type;
-				return ;
+				return (1);
 			}
 			j++;
 		}
 		i++;
 	}
+	return (1);
 }
 
 static t_edge	*add_edge(t_data *data, const t_edge new_edge)
@@ -97,14 +100,29 @@ static t_edge	*add_edge(t_data *data, const t_edge new_edge)
 
 static void	add_seg(t_data *data, t_polygon *polygon, t_ivec2 *new_point, enum e_edge_position p)
 {
+	t_ivec2	**new;
+
 	if (p == BEGIN)
 	{
 		polygon->edges[0] = add_edge(data, (t_edge){1, SOLID, new_point, NULL, data->input.texture_up, data->input.texture_down, data->input.texture_wall});
 		(polygon->nb_points)++;
 		return ;
 	}
-	polygon->edges[polygon->nb_points - 1]->p2 == NULL ? (polygon->edges[polygon->nb_points - 1]->p2 = new_point) : (polygon->edges[polygon->nb_points - 1]->p1 = new_point);
-	edge_exists(data, data->nb_elements, &polygon->edges[polygon->nb_points - 1]);
+	if (polygon->edges[polygon->nb_points - 1]->p2 == NULL)
+	{
+		new = &(polygon->edges[polygon->nb_points - 1]->p2);
+		polygon->edges[polygon->nb_points - 1]->p2 = new_point;
+	}
+	else
+	{
+		new = &(polygon->edges[polygon->nb_points - 1]->p1);
+		polygon->edges[polygon->nb_points - 1]->p1 = new_point;
+	}
+	if (!merge_edge(data, data->nb_elements, &polygon->edges[polygon->nb_points - 1]))
+	{
+		*new = NULL;
+		return ;
+	}
 	if (p == MIDDLE)
 	{
 		polygon->edges[polygon->nb_points] = add_edge(data, (t_edge){1, SOLID, polygon->edges[polygon->nb_points - 1]->p2, NULL, data->input.texture_up, data->input.texture_down, data->input.texture_wall});

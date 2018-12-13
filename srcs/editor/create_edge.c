@@ -10,7 +10,6 @@ static uint8_t		create_edge_error(t_data *data, t_polygon	**polygon)
 	*polygon = &(data->elements[data->input.id_current_element].polygon);
 	if ((*polygon)->finished)
 	{
-		printf("%d\n", (*polygon)->finished);
 		ft_putendl_fd("Error: Polygon already Finished!", 2);
 		return (1);
 	}
@@ -86,7 +85,6 @@ static t_edge	*add_edge(t_data *data, const t_edge new_edge)
 	{
 		if (!data->edges[i].used)
 		{
-			printf("Adding an edge\n");
 			data->edges[i] = new_edge; // /!\ Copies everything from new edge to data->edges[i]
 			if (i == data->max_edge_id)
 				data->max_edge_id++;
@@ -143,10 +141,8 @@ static t_ivec2 	*change_point(t_data *data, t_ivec2 *point)
 	int32_t id;
 
 	// *point = get_grid_point(*point);
-	printf("Checking for points\n");
 	if (get_nearest_point(data, point, &id) < 13 && id != -1)
 	{
-		printf("clipping on a point\n");
 		point = &data->points[id];
 		data->used_point[id]++;
 		return (point);
@@ -171,7 +167,6 @@ void		create_edge(t_data *data, t_ivec2 click)
 	{
 		if (polygon->nb_points == 0)
 		{
-			printf("Beginning a new edge\n");
 			add_seg(data, polygon, ptr, BEGIN);
 		}
 		else if (polygon->nb_points > 2 && polygon->edges[0]->p1 == ptr)

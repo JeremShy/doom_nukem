@@ -49,7 +49,6 @@ uint32_t	get_nearest_point(t_data *data, t_ivec2 *point, int32_t *id)
 		}
 		i++;
 	}
-	printf("Nearest point is %d with dist %u\n", *id, dist);
 	return (dist);
 }
 

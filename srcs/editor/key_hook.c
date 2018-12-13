@@ -35,8 +35,6 @@ void	draw_polygon(t_polygon *polygon, t_data *data)
 	{
 		if (polygon->edges[edge]->p1 && polygon->edges[edge]->p2)
 			draw_line(polygon->edges[edge]->p1, polygon->edges[edge]->p2, &data->imgs[IMG_DRAWING], get_color_from_typewall(polygon->edges[edge]->type));
-		else
-			printf("edge = %d\n", edge);
 		edge++;
 	}
 }
@@ -104,7 +102,6 @@ int	key_press(int keycode, t_data *data)
 			drawing_zone(460, 198, data);
 		else if (s == 4)
 			drawing_zone(433, 311, data);
-		printf("s = %d\n", s);
 		s++;
 	}
 	return (0);

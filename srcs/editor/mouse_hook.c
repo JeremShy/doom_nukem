@@ -72,7 +72,6 @@ int		drawing_zone(int x, int y, t_data *data)
 		if (data->elements[data->input.id_current_element].polygon.finished)
 		{
 			data->elements[data->input.id_current_element].clickable = 1;
-			data->elements[data->input.id_current_element].on_click_func = print_click;
 			data->input.id_current_element = -1;
 		}
 	}

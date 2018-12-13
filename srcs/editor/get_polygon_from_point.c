@@ -105,16 +105,29 @@ t_element	*get_polygon_from_point(t_data *data, t_ivec2 *point)
 	touched_edge = find_a_nearby_polygon(data, &id, &dist, point);
 	if (dist == -1)
 		return (NULL);
-	printf("touched edge has id : %ld\n", touched_edge - data->edges);
 	if (touched_edge->used == 1)
+	{
+		printf("0 : Returning id : %d\n", id);
 		return (&data->elements[id]);
+	}
 	other_element = find_other_elem_with_edge(data, touched_edge, &data->elements[id]);
-	if (!is_in_polygon(point, &other_element->polygon, NULL))
+	if (is_in_polygon(point, &other_element->polygon, NULL) == -1)
+	{
+		printf("1 : Returning id : %d\n", id);
 		return (&data->elements[id]);
+	}
+	printf("other_element->id : %d\n", other_element->id);
+	printf("id : %d\n", id);
 	not_common_edge_1 = get_edge_not_common(&data->elements[id].polygon, &other_element->polygon);
 	not_common_edge_2 = get_edge_not_common(&other_element->polygon, &data->elements[id].polygon);
 	if (get_dist_middle_edge_and_point(not_common_edge_1, not_common_edge_2, point) == not_common_edge_1)
+	{
+		printf("2 : Returning id : %d\n", id);
 		return (&data->elements[id]);
+	}
 	else
+	{
+		printf("3 : Returning id : %d\n", other_element->id);
 		return (other_element);
+	}
 }

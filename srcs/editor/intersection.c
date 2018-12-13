@@ -1,6 +1,6 @@
 #include <editor.h>
 
-static float	first_intersect_dist_in_poly(const t_polygon *polygon, const t_ivec2 *new_point, const t_ivec2 *last_point)
+static float	first_intersect_dist_in_poly(const t_polygon *polygon, const t_ivec2 *new_point, const t_ivec2 *last_point, t_edge **touched_edge)
 {
 	uint32_t		current_edge;
 	float			dist;
@@ -19,6 +19,8 @@ static float	first_intersect_dist_in_poly(const t_polygon *polygon, const t_ivec
 			{
 				dist = tmp_dist;
 				min = intersec;
+				if (touched_edge)
+					*touched_edge = polygon->edges[current_edge];
 			}
 		}
 		current_edge++;
@@ -44,11 +46,11 @@ uint32_t nb_intersec_in_poly(const t_polygon *polygon, const t_ivec2 *new_point,
 }
 
 
-float		is_in_polygon(const t_ivec2 *point, const t_polygon *polygon)
+float		is_in_polygon(const t_ivec2 *point, const t_polygon *polygon, t_edge **touched_edge)
 {
 	if (nb_intersec_in_poly(polygon, point, &(t_ivec2){0, 0}) & 1)
 	{
-		return (first_intersect_dist_in_poly(polygon, point, &(t_ivec2){0, 0}));
+		return (first_intersect_dist_in_poly(polygon, point, &(t_ivec2){0, 0}, touched_edge));
 	}
 	return (-1);
 }

@@ -45,4 +45,3 @@ int32_t		clamp_value(int32_t value, int32_t min, int32_t max)
 		value = max;
 	return (value);
 }
-

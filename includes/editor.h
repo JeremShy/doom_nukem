@@ -234,6 +234,7 @@ uint32_t		get_conv_32(const uint32_t *nbr);
 uint64_t		get_conv_64(const uint64_t *nbr);
 uint8_t			reverse_byte_ptr(const uint8_t *input);
 uint8_t			reverse_byte(const uint8_t input);
+
 /*
 ** bresenham.c
 */
@@ -308,6 +309,17 @@ void			light(uint8_t side, t_data *data);
 uint8_t			load_textures(t_data *data, const char *extension, const char *folder);
 
 /*
+** fill_hash_maps.c
+*/
+uint16_t		*fill_hash_map_edges(t_data *data);
+uint16_t		*fill_hash_map_points(t_data *data);
+
+/*
+** get_polygon_from_point.c
+*/
+t_element		*get_polygon_from_point(t_data *data, t_ivec2 *point);
+
+/*
 ** imaths.c
 */
 t_ivec2			vec_from_points(const t_ivec2 *p1, const t_ivec2 *p2);
@@ -325,7 +337,7 @@ t_intersection	intersect_two_segments(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec
 ** intersection.c
 */
 uint32_t		nb_intersec_in_poly(const t_polygon *polygon, const t_ivec2 *new_point, const t_ivec2 *last_point);
-float			is_in_polygon(const t_ivec2 *point, const t_polygon *poly);
+float			is_in_polygon(const t_ivec2 *point, const t_polygon *poly, t_edge **touched_edge);
 uint8_t			is_point_in_polygon(const t_ivec2 *point, const t_polygon *polygon);
 
 /*
@@ -371,7 +383,6 @@ void			fill_img(t_img *img, uint32_t color);
 /*
 ** mlx_hook.c
 */
-t_element		*get_polygon_from_point(t_data *data, t_ivec2 *point);
 int				mouse_motion(int x, int y, t_data *data);
 int				mouse_press(int button, int x, int y, t_data *data);
 int				mouse_release(int button, int x, int y, t_data *data);

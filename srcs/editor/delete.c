@@ -5,7 +5,7 @@ void	delete_point(t_ivec2 *point, t_data *data)
 	data->used_point[get_idpoint_from_addr(point, data)]--;
 	if (data->used_point[get_idpoint_from_addr(point, data)] > 127)
 		printf("ERROR on point %d\n", get_idpoint_from_addr(point, data));
-	if (get_idpoint_from_addr(point, data) == data->max_point_id - 1)
+	if (point - data->points == data->max_point_id - 1)
 	{
 		while (data->max_point_id > 0 && !data->used_point[data->max_point_id - 1])
 			(data->max_point_id)--;

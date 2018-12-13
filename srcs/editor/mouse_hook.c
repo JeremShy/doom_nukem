@@ -1,32 +1,5 @@
 #include <editor.h>
 
-t_element *get_polygon_from_point(t_data *data, t_ivec2 *point)
-{
-	uint32_t		i;
-	float			dist;
-	int				id;
-	float			tmp_dist;
-
-	i = 0;
-	dist = -1;
-	while (i < data->nb_elements)
-	{
-		if (data->elements[i].enabled && data->elements[i].polygon.finished)
-		{
-			tmp_dist = is_in_polygon(point, &(data->elements[i].polygon));
-			if (tmp_dist != -1 && (tmp_dist < dist || dist == -1))
-			{
-				dist = tmp_dist;
-				id = i;
-			}
-		}
-		i++;
-	}
-	if (dist != -1)
-		return (&data->elements[id]);
-	return (NULL);
-}
-
 static uint16_t	find_free_element(t_data *data)
 {
 	uint32_t	i;

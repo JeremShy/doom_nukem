@@ -34,6 +34,8 @@ SRC_EDITOR_NAME =	 \
 					file_listing.c \
 					calculate_file_size.c \
 					calculate_nbs.c \
+					fill_hash_maps.c \
+					get_polygon_from_point.c \
 					save_scene.c
 
 SRC_GAME_NAME =		main.c \

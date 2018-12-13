@@ -21,7 +21,7 @@ struct			s_audio
 	uint16_t	id;
 	uint32_t	size;
 };
-
+					
 struct	s_header {
 	struct s_ivec2	size;
 
@@ -41,7 +41,9 @@ struct	s_header {
 
 struct		s_wall {
 	uint16_t	id;
-	t_vec2		point;
+	
+	uint16_t	p1;
+	uint16_t	p2;
 
 	uint16_t	texture;
 
@@ -64,7 +66,6 @@ struct	s_sector {
 	uint16_t			texture_ceiling;
 
 	float				ambient_light;
-	uint32_t			next_sector;
 
 	// uint16_t			walls[walls_number];
 };

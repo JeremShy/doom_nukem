@@ -1,6 +1,6 @@
 #include <editor.h>
 
-static float	first_intersect_dist_in_poly(const t_polygon *polygon, const t_ivec2 *new_point, const t_ivec2 *last_point, t_edge **touched_edge)
+float	first_intersect_dist_in_poly(const t_polygon *polygon, const t_ivec2 *new_point, const t_ivec2 *last_point, t_edge **touched_edge)
 {
 	uint32_t		current_edge;
 	float			dist;

@@ -1,5 +1,37 @@
 #include <editor.h>
 
+uint8_t		is_edge_in_polygon(t_polygon *poly, t_edge *edge)
+{
+	uint32_t i;
+
+	i = 0;
+	while (i < poly->nb_points)
+	{
+		if (poly->edges[i] == edge)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+void		update_poly_tab(t_data *data, enum e_poly_tab *poly_tab, t_edge *edge)
+{
+	uint32_t i;
+
+	i = 0;
+	while (i < data->max_element_id)
+	{
+		if (poly_tab[i] != OUT && data->elements[i].enabled && data->elements[i].polygon.finished)
+		{
+			if (is_edge_in_polygon(&data->elements[i].polygon, edge))
+				poly_tab[i] = IN;
+			else
+				poly_tab[i] = OUT;
+		}
+		i++;
+	}
+}
+
 t_element	*find_other_elem_with_edge(t_data *data, t_edge *edge, t_element *except)
 {
 	uint16_t	i;
@@ -79,55 +111,135 @@ t_edge		*get_edge_not_common(t_polygon *poly, t_polygon *other_poly)
 	return (NULL);
 }
 
-t_edge		*get_dist_middle_edge_and_point(t_edge *edge_1, t_edge *edge_2, t_ivec2 *point)
+t_edge		*find_next_edge(t_data *data, enum e_poly_tab *poly_tab, uint16_t *edge_id)
 {
-	float	dist_1;
-	float	dist_2;
-	t_ivec2	point_1;
-	t_ivec2	point_2;
+	uint32_t i;
 
-	point_1 = (t_ivec2){(edge_1->p1->x + edge_1->p2->x) / 2, (edge_1->p1->y + edge_1->p2->y) / 2};
-	point_2 = (t_ivec2){(edge_2->p1->x + edge_2->p2->x) / 2, (edge_2->p1->y + edge_2->p2->y) / 2};
-	dist_1 = idist(&point_1, point);
-	dist_2 = idist(&point_2, point);
-	return (dist_1 < dist_2 ? edge_1 : edge_2);
+	while (*edge_id < data->max_edge_id)
+	{
+		i = 0;
+		while (i < data->max_element_id)
+		{
+			if (poly_tab[i] == IN && is_edge_in_polygon(&data->elements[i].polygon, &data->edges[*edge_id]))
+			{
+				(*edge_id)++;
+				return (&data->edges[*edge_id - 1]);
+			}
+			i++;
+		}
+		(*edge_id)++;
+	}
+	return (NULL);
+}
+
+t_element		*get_result(t_data *data, enum e_poly_tab *poly_tab)
+{
+	uint32_t	i;
+
+	i = 0;
+	while (i < data->max_element_id)
+	{
+		if (poly_tab[i] == IN)
+			return (&data->elements[i]);
+		i++;
+	}
+	return (NULL);
+}
+uint16_t		poly_tab_nbr(t_data *data, enum e_poly_tab *poly_tab)
+{
+	uint32_t	i;
+	int	ret;
+
+	i = 0;
+	ret = 0;
+	while (i < data->max_element_id)
+	{
+		if (poly_tab[i] == IN)
+			ret++;
+		i++;
+	}
+	return (ret);
+}
+
+void		init_poly_tab(t_data *data, enum e_poly_tab	*poly_tab, t_ivec2 *point)
+{
+	uint32_t i;
+	i = 0;
+	while (i < data->max_element_id)
+	{
+		if (!data->elements[i].enabled || !data->elements[i].polygon.finished)
+		{
+			i++;
+			continue ;
+		}
+		if (is_in_polygon(point, &data->elements[i].polygon, NULL) != -1)
+			poly_tab[i] = IN;
+		else
+			poly_tab[i] = OUT;
+		i++;
+	}
+}
+
+t_edge		*find_nearest_edge_between_points(t_data *data, t_ivec2 *point, t_ivec2 *last, enum e_poly_tab *poly_tab)
+{
+	t_edge		*ret;
+	t_edge		*tmp_edge;
+	float		tmp_dist;
+	float		min;
+	uint32_t	i;
+
+	i = 0;
+	min = -1.f;
+	ret = NULL;
+	while (i < data->max_element_id)
+	{
+		if (poly_tab[i] == IN)
+		{
+			tmp_dist = first_intersect_dist_in_poly(&data->elements[i].polygon, point, last, &tmp_edge);
+			if ((tmp_dist < min || min == -1.f) && tmp_dist != -1)
+			{
+				min = tmp_dist;
+				ret = tmp_edge;
+			}
+		}
+		i++;
+	}
+	return (ret);
 }
 
 t_element	*get_polygon_from_point(t_data *data, t_ivec2 *point)
 {
-	float		dist;
-	int			id;
-	t_element	*other_element;
-	t_edge		*touched_edge;
-	t_edge		*not_common_edge_1;
-	t_edge		*not_common_edge_2;
+	t_edge			*touched_edge;
+	t_edge			*tmp;
+	t_ivec2			middle;
+	enum e_poly_tab	*poly_tab;
+	uint16_t		edge_id;
+	t_element		*rez;
 
-	touched_edge = find_a_nearby_polygon(data, &id, &dist, point);
-	if (dist == -1)
-		return (NULL);
-	if (touched_edge->used == 1)
+	poly_tab = malloc(sizeof(enum e_poly_tab) * data->max_element_id);
+	init_poly_tab(data, poly_tab, point);
+	edge_id = 0;
+	while (poly_tab_nbr(data, poly_tab) > 1)
 	{
-		printf("0 : Returning id : %d\n", id);
-		return (&data->elements[id]);
+		touched_edge = find_next_edge(data, poly_tab, &edge_id);
+		middle = find_middle_edge(touched_edge);
+		tmp = find_nearest_edge_between_points(data, point, &middle, poly_tab);
+		if (tmp && tmp != touched_edge)
+		{
+			printf("The edge %ld touches another polygon. continuing.\n", touched_edge - data->edges);
+			if (tmp == NULL)
+				printf("tmp is NULL\n");
+			else
+				printf("tmp id : %ld\n", tmp - data->edges);
+			continue ;
+		}
+		update_poly_tab(data, poly_tab, touched_edge);
 	}
-	other_element = find_other_elem_with_edge(data, touched_edge, &data->elements[id]);
-	if (is_in_polygon(point, &other_element->polygon, NULL) == -1)
-	{
-		printf("1 : Returning id : %d\n", id);
-		return (&data->elements[id]);
-	}
-	printf("other_element->id : %d\n", other_element->id);
-	printf("id : %d\n", id);
-	not_common_edge_1 = get_edge_not_common(&data->elements[id].polygon, &other_element->polygon);
-	not_common_edge_2 = get_edge_not_common(&other_element->polygon, &data->elements[id].polygon);
-	if (get_dist_middle_edge_and_point(not_common_edge_1, not_common_edge_2, point) == not_common_edge_1)
-	{
-		printf("2 : Returning id : %d\n", id);
-		return (&data->elements[id]);
-	}
+	rez = get_result(data, poly_tab);
+	free(poly_tab);
+	if (rez == NULL)
+		printf("No polygon found\n");
 	else
-	{
-		printf("3 : Returning id : %d\n", other_element->id);
-		return (other_element);
-	}
+		printf("Polygon %d found\n", rez->id);
+	return (rez);
 }

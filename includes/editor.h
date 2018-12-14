@@ -23,7 +23,7 @@
 
 # define MAX_IMAGE (SQUARE_POINT + MAX_TEXTURES + 1)
 
-# define MAX_ELEMENT_NBR 1024
+# define MAX_ELEMENT_NBR 256
 # define MAX_POLYGON_EDGES 64
 
 # define GRID_ROUND 25
@@ -49,6 +49,12 @@ typedef struct	s_img
 	int			h;
 	uint32_t	*addr;
 }				t_img;
+
+enum	e_poly_tab
+{
+	IN = 0,
+	OUT
+};
 
 enum	e_edge_position
 {
@@ -342,6 +348,7 @@ t_intersection	intersect_two_segments(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec
 /*
 ** intersection.c
 */
+float	first_intersect_dist_in_poly(const t_polygon *polygon, const t_ivec2 *new_point, const t_ivec2 *last_point, t_edge **touched_edge);
 uint32_t		nb_intersec_in_poly(const t_polygon *polygon, const t_ivec2 *new_point, const t_ivec2 *last_point);
 float			is_in_polygon(const t_ivec2 *point, const t_polygon *poly, t_edge **touched_edge);
 uint8_t			is_point_in_polygon(const t_ivec2 *point, const t_polygon *polygon);
@@ -378,7 +385,7 @@ void			clamp(int32_t *point, int32_t min, int32_t max);
 void			fclamp(float *point, float min, float max);
 int32_t			clamp_value(int32_t value, int32_t min, int32_t max);
 void			sclamp(int16_t *point, int16_t min, int16_t max);
-
+t_ivec2			find_middle_edge(t_edge *edge);
 /*
 ** mlx_img_func.c
 */

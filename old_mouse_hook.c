@@ -173,11 +173,8 @@ static uint8_t	check_moving_point(t_data *data, t_ivec2 point, t_ivec2 *current)
 {
 	int32_t i;
 	int32_t j;
-	t_ivec2 previous;
 
 	i = 0;
-	previous = *current;
-	*current = point;
 	while (i < data->max_edge_id)
 	{
 		if (data->edges[i].used)
@@ -193,23 +190,13 @@ static uint8_t	check_moving_point(t_data *data, t_ivec2 point, t_ivec2 *current)
 								data->edges[i].p1 == current ? *data->edges[i].p2 : point,
 								*data->edges[j].p1, *data->edges[j].p2
 							).intersect)
-							{
-								*current = previous;
 								return (0);
-							}
 					j++;
 				}
 			}
 		i++;
 	}
-	
-	if (check_all_points(data, current))
-	{
-		*current = previous;
-		return (1);
-	}
-	*current = previous;
-	return (0);
+	return (check_point(data, &point, current));
 }
 
 int		mouse_motion(int x, int y, t_data *data)

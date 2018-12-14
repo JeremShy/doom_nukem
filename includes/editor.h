@@ -416,6 +416,7 @@ uint8_t			create_image_from_tga(t_data *data, int id_img, const char *name, t_iv
 /*
 ** polygon.c
 */
+uint8_t			check_all_points(t_data *data, t_ivec2 *exept);
 uint8_t			check_point(t_data *data, const t_ivec2 *point, t_ivec2 *exept);
 uint8_t			check_segment(t_data *data, const t_ivec2 *new_point, const t_ivec2 *last_point);
 

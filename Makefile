@@ -37,6 +37,7 @@ SRC_EDITOR_NAME =	 \
 					fill_hash_maps.c \
 					get_polygon_from_point.c \
 					add_stuff.c \
+					find_next_sectors.c \
 					save_scene.c
 
 SRC_GAME_NAME =		main.c \

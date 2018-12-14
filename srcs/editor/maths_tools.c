@@ -50,3 +50,26 @@ t_ivec2		find_middle_edge(t_edge *edge)
 {
 	return ((t_ivec2){(edge->p1->x + edge->p2->x) / 2, (edge->p1->y + edge->p2->y) / 2});
 }
+
+float		norme(t_vec2 *v)
+{
+	return (sqrt(v->x * v->x + v->y * v->y));
+}
+
+t_vec2		mult_vect_scalar(t_vec2 *v, float f)
+{
+	t_vec2	rez;
+
+	rez.x = v->x * f;
+	rez.y = v->y * f;
+	return (rez);
+}
+
+void		normalize(t_vec2 *v)
+{
+	float	tmp;
+
+	tmp = norme(v);
+	v->x = v->x / tmp;
+	v->y = v->y / tmp;
+}

@@ -50,7 +50,8 @@ struct		s_wall {
 	uint16_t	texture_up;
 	uint16_t	texture_down;
 
-	uint16_t	next_sector; // -1 if a portal
+	uint16_t	next_sector_1; // -1 if a portal
+	uint16_t	next_sector_2; // -1 if a portal
 };
 
 struct	s_sector {
@@ -89,5 +90,8 @@ struct s_map {
 	struct s_object		objects[];
 };
 */
+
+void	find_next_sectors(t_data *data, struct s_wall *wall, struct s_edge *edge);
+
 
 #endif

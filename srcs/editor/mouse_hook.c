@@ -63,6 +63,11 @@ int		drawing_zone(int x, int y, t_data *data)
 				data->input.id_current_element = elem->id;
 				data->input.current_edge = NULL;
 		}
+		else
+		{
+			data->input.id_current_element = 0;
+			data->input.current_edge = NULL;
+		}
 	}
 	else if (data->input.mode == DRAWING)
 	{

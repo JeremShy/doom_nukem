@@ -34,7 +34,11 @@
 
 struct			s_data;
 struct			s_element;
+struct			s_wall;
+
 typedef void (*t_on_click_func)(struct s_data *data, uint16_t id);
+
+
 
 typedef struct	s_mlx
 {
@@ -327,6 +331,11 @@ uint16_t		*fill_hash_map_edges(t_data *data);
 uint16_t		*fill_hash_map_points(t_data *data);
 
 /*
+** find_next_sectors.c
+*/
+void	find_next_sectors(t_data *data, struct s_wall *wall, struct s_edge *edge);
+
+/*
 ** get_polygon_from_point.c
 */
 t_element		*get_polygon_from_point(t_data *data, t_ivec2 *point);
@@ -386,6 +395,10 @@ void			fclamp(float *point, float min, float max);
 int32_t			clamp_value(int32_t value, int32_t min, int32_t max);
 void			sclamp(int16_t *point, int16_t min, int16_t max);
 t_ivec2			find_middle_edge(t_edge *edge);
+float			norme(t_vec2 *v);
+t_vec2		mult_vect_scalar(t_vec2 *v, float f);
+void			normalize(t_vec2 *v);
+
 /*
 ** mlx_img_func.c
 */

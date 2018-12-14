@@ -9,9 +9,10 @@ void	put_pixel_to_image(t_img *img, int x, int y, uint32_t color)
 {
 	if (x < 0 || y < 0 || x >= img->w || y >= img->h)
 	{
-		dprintf(2, "Error 12. (put_pixel_to_image)\n");
-		dprintf(2, "{img, x, y, color : {%p, %d, %d, %#X}\n", img, x, y, color);
-		exit(EXIT_FAILURE);
+		return ;
+		// dprintf(2, "Error 12. (put_pixel_to_image)\n");
+		// dprintf(2, "{img, x, y, color : {%p, %d, %d, %#X}\n", img, x, y, color);
+		// exit(EXIT_FAILURE);
 	}
 	img->addr[x + y * img->w] = color;
 }

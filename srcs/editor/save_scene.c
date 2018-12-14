@@ -59,10 +59,17 @@ void	fill_walls(t_data *data, uint8_t *walls_addr, uint16_t *hash_map_edges, uin
 			{
 				current_wall->texture = data->edges[i].texture_wall;
 			}
-			else
+			else if (data->edges[i].type == PORTAL)
 			{
 				current_wall->texture_up = data->edges[i].texture_up;
 				current_wall->texture_down = data->edges[i].texture_down;
+				find_next_sectors(data, current_wall, &data->edges[i]);
+				printf("Wall[%d] : \n", i);
+				printf("next_sector_1 : %d, next_sector_2 : %d\n", current_wall->next_sector_1, current_wall->next_sector_2);
+			}
+			else
+			{
+				printf("WTF 69\n");
 			}
 		}
 		i++;
@@ -124,8 +131,7 @@ uint8_t		save_scene(t_data *data)
 	fill_header(data, addr);
 	fill_sectors(data, addr, hash_map_edges);
 
-	addr = addr + header->offset_walls;
-	fill_walls(data, addr, hash_map_edges, hash_map_points);
+	fill_walls(data, addr + header->offset_walls, hash_map_edges, hash_map_points);
 
 
 	write(fd, addr, file_size);

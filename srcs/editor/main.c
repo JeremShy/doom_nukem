@@ -67,6 +67,12 @@ static uint8_t	ft_init_texture(t_data *data)
 	return load_textures(data, ".png", "resources");
 }
 
+static void		create_first_sector(t_data *data)
+{
+	data->elements[0] = (t_element){0, WALL, 1, 1, 1, NULL, IMG_START_TEXTURES, {0, 0}, 0, IMG_START_TEXTURES, {0, 0}, 20, 100, (t_polygon){0, 1, {0}}};
+	data->max_element_id = 1;
+}
+
 int main(int ac, char **av)
 {
 	t_data			data;
@@ -84,6 +90,7 @@ int main(int ac, char **av)
 	if (!ft_init_texture(&data))
 		return (3);
 	data.scene_name = av[1];
+	create_first_sector(&data);
 	mlx_loop_hook(data.mlx.mlx_ptr, loop_hook, &data);
 	mlx_hook(data.mlx.win_ptr, 2, 0, key_press, &data);
 	mlx_hook(data.mlx.win_ptr, 3, 0, key_release, &data);

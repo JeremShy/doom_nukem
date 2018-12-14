@@ -107,7 +107,6 @@ t_edge		*get_edge_not_common(t_polygon *poly, t_polygon *other_poly)
 			return (poly->edges[i]);
 		i++;
 	}
-	printf("Je ense qu'il y a une serieux probleme quelque part\n");
 	return (NULL);
 }
 
@@ -225,21 +224,10 @@ t_element	*get_polygon_from_point(t_data *data, t_ivec2 *point)
 		middle = find_middle_edge(touched_edge);
 		tmp = find_nearest_edge_between_points(data, point, &middle, poly_tab);
 		if (tmp && tmp != touched_edge)
-		{
-			printf("The edge %ld touches another polygon. continuing.\n", touched_edge - data->edges);
-			if (tmp == NULL)
-				printf("tmp is NULL\n");
-			else
-				printf("tmp id : %ld\n", tmp - data->edges);
 			continue ;
-		}
 		update_poly_tab(data, poly_tab, touched_edge);
 	}
 	rez = get_result(data, poly_tab);
 	free(poly_tab);
-	if (rez == NULL)
-		printf("No polygon found\n");
-	else
-		printf("Polygon %d found\n", rez->id);
 	return (rez);
 }

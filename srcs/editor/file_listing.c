@@ -21,7 +21,7 @@ uint8_t	load_textures(t_data *data, const char *extension, const char *folder)
 			buf[ft_strlen(folder) + 1 + entry->d_namlen] = '\0';
 			ft_putstr_fd("Loading... ", 2);
 			ft_putendl_fd(buf, 2);
-			if (create_image_from_png(data, IMG_START_TEXTURES + data->nbr_textures, buf, NULL))
+			if (create_image_from_png(data, IMG_START_TEXTURES + data->nbr_textures, buf, &(t_ivec2){56, 50}))
 				(data->nbr_textures)++;
 		}
 	}

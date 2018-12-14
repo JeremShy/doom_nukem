@@ -38,8 +38,6 @@ static int8_t	merge_edge(t_data *data, t_edge **edge)
 		{
 			if (poly->edges[j] != *edge && same_edges(poly->edges[j]->p1, poly->edges[j]->p2, (*edge)->p1, (*edge)->p2))
 			{
-				if (poly->edges[j]->used > 1)
-					return (0);
 				poly->edges[j]->p2 = (*edge)->p2;
 				poly->edges[j]->p1 = (*edge)->p1;
 				(*edge)->used = 0;
@@ -121,6 +119,7 @@ static void	add_seg(t_data *data, t_polygon *polygon, t_ivec2 *new_point, enum e
 	if (!merge_edge(data, &polygon->edges[polygon->nb_points - 1]))
 	{
 		*new = NULL;
+		delete_point(new_point, data);
 		return ;
 	}
 	if (p == MIDDLE)

@@ -35,7 +35,7 @@ size_t			calculate_size_sectors(t_data *data)
 
 	i = 0;
 	ret = 0;
-	while (i < data->nb_elements)
+	while (i < data->max_element_id)
 	{
 		if (data->elements[i].enabled)
 		{

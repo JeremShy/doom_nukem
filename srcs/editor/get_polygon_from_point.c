@@ -6,7 +6,7 @@ t_element	*find_other_elem_with_edge(t_data *data, t_edge *edge, t_element *exce
 	uint16_t	j;
 
 	i = 0;
-	while (i < data->nb_elements)
+	while (i < data->max_element_id)
 	{
 		if (&data->elements[i] == except)
 		{
@@ -39,7 +39,7 @@ t_edge *find_a_nearby_polygon(t_data *data, int *id, float *dist, t_ivec2 *point
 
 	i = 0;
 	*dist = -1;
-	while (i < data->nb_elements)
+	while (i < data->max_element_id)
 	{
 		if (data->elements[i].enabled && data->elements[i].polygon.finished)
 		{

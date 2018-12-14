@@ -7,7 +7,7 @@ static uint16_t	find_free_element(t_data *data)
 
 	e = NULL;
 	i = 0;
-	while (i < data->nb_elements)
+	while (i < data->max_element_id)
 	{
 		if (!data->elements[i].enabled)
 		{
@@ -18,13 +18,13 @@ static uint16_t	find_free_element(t_data *data)
 	}
 	if (!e)
 	{
-		if (data->nb_elements + 1 >= MAX_ELEMENT_NBR)
+		if (data->max_element_id + 1 >= MAX_ELEMENT_NBR)
 		{
 			ft_putendl_fd("Error : Couldn't add an element.", 2);
 			exit(EXIT_FAILURE);
 		}
 		e = &(data->elements[i]);
-		(data->nb_elements)++;
+		(data->max_element_id)++;
 	}
 	e->light = 100;
 	e->texture_floor = IMG_START_TEXTURES;

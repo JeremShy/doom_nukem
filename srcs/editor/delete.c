@@ -30,7 +30,6 @@ void	delete_element(t_element *elem, t_data *data)
 
 
 	elem->enabled = 0;
-	i = 0;
 	if (elem->polygon.nb_points > 1)
 	{
 		if (elem->polygon.edges[0]->p1 == elem->polygon.edges[1]->p1 || elem->polygon.edges[0]->p1 == elem->polygon.edges[1]->p2)
@@ -39,7 +38,8 @@ void	delete_element(t_element *elem, t_data *data)
 			next = elem->polygon.edges[0]->p1;
 	}
 	else
-		next = NULL;
+		next = elem->polygon.edges[0]->p1 == NULL ? elem->polygon.edges[0]->p2 : elem->polygon.edges[0]->p1;
+	i = 0;
 	while (i < elem->polygon.nb_points)
 	{
 		if (next == elem->polygon.edges[i]->p1)
@@ -55,9 +55,9 @@ void	delete_element(t_element *elem, t_data *data)
 		delete_edge(elem->polygon.edges[i], data);
 		i++;
 	}
-	if (elem->id == data->nb_elements - 1)
+	if (elem->id == data->max_element_id - 1)
 	{
-		while (data->nb_elements > 0 && !data->elements[data->nb_elements - 1].enabled)
-			(data->nb_elements)--;
+		while (data->max_element_id > 0 && !data->elements[data->max_element_id - 1].enabled)
+			(data->max_element_id)--;
 	}
 }

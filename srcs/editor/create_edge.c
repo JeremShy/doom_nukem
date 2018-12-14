@@ -16,28 +16,7 @@ static uint8_t		create_edge_error(t_data *data, t_polygon	**polygon)
 	return (0);
 }
 
-static t_ivec2	*add_points(t_data *data, const t_ivec2 *new_point)
-{
-	int32_t i;
-
-	i = 0;
-	while (i < MAX_POINTS_NBR)
-	{
-		if (!data->used_point[i])
-		{
-			data->points[i] = *new_point;
-			data->used_point[i] = 1;
-			if (i == data->max_point_id)
-				data->max_point_id++;
-			return (&data->points[i]);
-		}
-		i++;
-	}
-	ft_putendl_fd("Error : No space left on Points", 2);
-	exit(EXIT_FAILURE);
-}
-
-static int8_t	merge_edge(t_data *data, uint32_t nb_elements, t_edge **edge)
+static int8_t	merge_edge(t_data *data, t_edge **edge)
 {
 	uint32_t	i;
 	uint32_t	j;
@@ -46,7 +25,7 @@ static int8_t	merge_edge(t_data *data, uint32_t nb_elements, t_edge **edge)
 	
 	elements = data->elements;
 	i = 0;
-	while (i < nb_elements)
+	while (i < data->max_element_id)
 	{
 		if (!elements[i].enabled)
 		{
@@ -76,29 +55,51 @@ static int8_t	merge_edge(t_data *data, uint32_t nb_elements, t_edge **edge)
 	return (1);
 }
 
-static t_edge	*add_edge(t_data *data, const t_edge new_edge)
+static uint8_t		check_same_poly(t_data *data, t_polygon *poly, uint8_t *hash)
 {
-	int32_t i;
+	int i;
+	i = 0;
+	while (i < poly->nb_points)
+	{
+		if (!hash[poly->edges[i] - data->edges])
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+uint8_t	polygon_already_exists(t_data *data, t_polygon *polygon)
+{
+	uint16_t	i;
+	uint8_t		*hash;
 
 	i = 0;
-	while (i < MAX_POINTS_NBR)
+	hash = malloc(data->max_edge_id);
+	ft_bzero(hash, data->max_edge_id);
+	while (i < polygon->nb_points)
 	{
-		if (!data->edges[i].used)
+		hash[polygon->edges[i] - data->edges] = 1;
+		i++;
+	}
+	i = 0;
+	while (i < data->max_element_id)
+	{
+		if (data->elements[i].enabled && &data->elements[i].polygon != polygon
+			&& data->elements[i].polygon.nb_points == polygon->nb_points)
 		{
-			data->edges[i] = new_edge; // /!\ Copies everything from new edge to data->edges[i]
-			if (i == data->max_edge_id)
-				data->max_edge_id++;
-			return (&data->edges[i]);
+			if (check_same_poly(data, &data->elements[i].polygon, hash))
+				return (1);
 		}
 		i++;
 	}
-	ft_putendl_fd("Error : No space left on Edge", 2);
-	exit(EXIT_FAILURE);
+	free(hash);
+	return (0);
 }
 
 static void	add_seg(t_data *data, t_polygon *polygon, t_ivec2 *new_point, enum e_edge_position p)
 {
 	t_ivec2	**new;
+	t_edge	*old_edge;
 
 	if (p == BEGIN)
 	{
@@ -116,7 +117,8 @@ static void	add_seg(t_data *data, t_polygon *polygon, t_ivec2 *new_point, enum e
 		new = &(polygon->edges[polygon->nb_points - 1]->p1);
 		polygon->edges[polygon->nb_points - 1]->p1 = new_point;
 	}
-	if (!merge_edge(data, data->nb_elements, &polygon->edges[polygon->nb_points - 1]))
+	old_edge = polygon->edges[polygon->nb_points - 1];
+	if (!merge_edge(data, &polygon->edges[polygon->nb_points - 1]))
 	{
 		*new = NULL;
 		return ;
@@ -128,6 +130,16 @@ static void	add_seg(t_data *data, t_polygon *polygon, t_ivec2 *new_point, enum e
 	}
 	else if (p == END)
 	{
+		if (polygon_already_exists(data, polygon))
+		{
+			printf("This polygon already exists !\n");
+			*new = NULL;
+			polygon->edges[polygon->nb_points - 1]->used--;
+			polygon->edges[polygon->nb_points - 1] = old_edge;
+			polygon->edges[polygon->nb_points - 1]->used++;
+			delete_point(new_point, data);
+			return ;
+		}
 		polygon->finished = 1;
 		delete_point(new_point, data);
 	}
@@ -136,7 +148,7 @@ static void	add_seg(t_data *data, t_polygon *polygon, t_ivec2 *new_point, enum e
 		get_color_from_typewall(data->input.wall_type));
 }
 
-static t_ivec2 	*change_point(t_data *data, t_ivec2 *point)
+static t_ivec2	*change_point(t_data *data, t_ivec2 *point)
 {
 	int32_t id;
 

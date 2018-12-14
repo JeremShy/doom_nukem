@@ -213,7 +213,7 @@ typedef struct	s_data
 	uint8_t		update_drawing;
 	t_input		input;
 
-	uint32_t	nb_elements;
+	uint32_t	max_element_id;
 	t_element	elements[MAX_ELEMENT_NBR];
 
 	t_edge		edges[MAX_POINTS_NBR];
@@ -226,6 +226,12 @@ typedef struct	s_data
 
 	uint16_t	nbr_textures;
 }				t_data;
+
+/*
+** add_stuff.c
+*/
+t_ivec2	*add_points(t_data *data, const t_ivec2 *new_point);
+t_edge	*add_edge(t_data *data, const t_edge new_edge);
 
 /*
 ** binary_tools.c

@@ -10,7 +10,7 @@ void		fill_sectors(t_data *data, uint8_t *addr, uint16_t *hash_map_edges)
 
 	i = 0;
 	current_sec = (struct s_sector*)(addr + sizeof(struct s_header));
-	while (i < data->nb_elements)
+	while (i < data->max_element_id)
 	{
 		if (data->elements[i].enabled)
 		{

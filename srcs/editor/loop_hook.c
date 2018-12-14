@@ -58,7 +58,7 @@ int			loop_hook(t_data *data)
 	{
 		fill_img(&data->imgs[IMG_DRAWING], get_color_code(0, 0, 0, 255));
 		i = 0;
-		while (i < (int)data->nb_elements)
+		while (i < (int)data->max_element_id)
 		{
 			if (data->elements[i].enabled)
 				draw_polygon(&data->elements[i].polygon, data);

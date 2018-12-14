@@ -36,6 +36,7 @@ SRC_EDITOR_NAME =	 \
 					calculate_nbs.c \
 					fill_hash_maps.c \
 					get_polygon_from_point.c \
+					add_stuff.c \
 					save_scene.c
 
 SRC_GAME_NAME =		main.c \

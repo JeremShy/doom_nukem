@@ -18,7 +18,7 @@ uint8_t check_segment(t_data *data, const t_ivec2 *new_point, const t_ivec2 *las
 	uint32_t		j;
 
 	j = 0;
-	while (j < data->nb_elements)
+	while (j < data->max_element_id)
 	{
 		if (data->elements[j].enabled)
 			if (nb_intersec_in_poly(&data->elements[j].polygon, new_point, last_point))

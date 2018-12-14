@@ -196,7 +196,7 @@ t_edge		*find_nearest_edge_between_points(t_data *data, t_ivec2 *point, t_ivec2 
 		if (poly_tab[i] == IN)
 		{
 			tmp_dist = first_intersect_dist_in_poly(&data->elements[i].polygon, point, last, &tmp_edge);
-			if ((tmp_dist < min || min == -1.f) && tmp_dist != -1)
+			if (tmp_dist != -1 && (tmp_dist < min || min == -1.f))
 			{
 				min = tmp_dist;
 				ret = tmp_edge;

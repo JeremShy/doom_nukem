@@ -76,14 +76,14 @@ void	fill_walls(t_data *data, uint8_t *walls_addr, uint16_t *hash_map_edges, uin
 	}
 }
 
-void	fill_header(t_data *data, uint8_t *addr)
+void	fill_header(t_data *data, uint8_t *addr, int16_t *hash_map_textures)
 {
 	struct s_header	*header;
 
 	header = (struct s_header*)addr;
 
 	header->size = (t_ivec2){MAP_SIZE, MAP_SIZE};
-	// header->player pos
+	// header->player points
 	header->sectors_number = calculate_nb_sectors(data);
 	header->walls_number = calculate_nb_edges(data);
 	header->texture_number = data->nbr_textures;
@@ -92,8 +92,31 @@ void	fill_header(t_data *data, uint8_t *addr)
 
 	header->offset_walls = sizeof(struct s_header) + calculate_size_sectors(data);
 	header->offset_texture = header->offset_walls + calculate_nb_edges(data) * sizeof(struct s_wall);
-	header->offset_audio = header->offset_texture + calculate_size_textures(data);
+	header->offset_audio = header->offset_texture + calculate_size_textures(data, hash_map_textures);
 	header->offset_objects = header->offset_audio + calculate_size_audios(data);
+}
+
+void	fill_textures(t_data *data, uint8_t *addr, int16_t *hash_map_textures)
+{
+	uint16_t			i;
+	uint16_t			current_in_file;
+	struct s_texture	*t;
+
+	i = IMG_START_TEXTURES;
+	current_in_file = 0;
+	t = (struct s_texture*)addr;
+	while (i < data->nbr_textures)
+	{
+		if (hash_map_textures[i] == current_in_file)
+		{
+			t->id = current_in_file;
+			t->size = (t_vec2){data->imgs[i].h, data->imgs[i].w};
+			ft_memcpy((uint8_t*)t + sizeof(struct s_texture), data->imgs[i].addr, data->imgs[i].h * data->imgs[i].w * 4);
+			t = t + sizeof(struct s_texture) + data->imgs[i].h * data->imgs[i].w * 4;
+			current_in_file++;
+		}
+		i++;
+	}
 }
 
 uint8_t		save_scene(t_data *data)
@@ -104,6 +127,7 @@ uint8_t		save_scene(t_data *data)
 	struct s_header	*header;
 	uint16_t		*hash_map_edges;
 	uint16_t		*hash_map_points;
+	int16_t			*hash_map_textures;
 
 	if (!(hash_map_edges = fill_hash_map_edges(data)))
 		return (0);
@@ -112,27 +136,39 @@ uint8_t		save_scene(t_data *data)
 		free(hash_map_edges);
 		return (0);
 	}
+	if (!(hash_map_textures = fill_hash_map_textures(data)))
+	{
+		free(hash_map_edges);
+		free(hash_map_points);
+		return (0);
+	}
 	if ((fd = open(data->scene_name, O_WRONLY | O_TRUNC | O_CREAT, 0644)) == -1)
 	{
 		ft_putendl_fd("Error : Couldn't open scene file for writing", 2);
+		free(hash_map_edges);
+		free(hash_map_points);
+		free(hash_map_textures);
 		return (0);
 	}
-	file_size = calculate_file_size(data);
+	file_size = calculate_file_size(data, hash_map_textures);
 	printf("file size : %zu\n", file_size);
 	if (!(addr = malloc(file_size)))
 	{
 		ft_putendl_fd("Memory error", 2);
+		free(hash_map_edges);
+		free(hash_map_points);
+		free(hash_map_textures);
 		return (0);
 	}
 	ft_bzero(addr, file_size);
 
 	header = (struct s_header*)addr;
 
-	fill_header(data, addr);
+	fill_header(data, addr, hash_map_textures);
 	fill_sectors(data, addr, hash_map_edges);
 
 	fill_walls(data, addr + header->offset_walls, hash_map_edges, hash_map_points);
-
+	fill_textures(data, addr + header->offset_texture, hash_map_textures);
 
 	write(fd, addr, file_size);
 	exit (0);

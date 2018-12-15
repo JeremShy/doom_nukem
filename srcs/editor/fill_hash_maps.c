@@ -1,5 +1,69 @@
 #include <editor.h>
 
+int16_t		*fill_hash_map_textures(t_data *data)
+{
+	int16_t		*hash_map_textures;
+	uint32_t	i;
+	int16_t		index_hash_map;
+
+	hash_map_textures = malloc(data->nbr_textures * sizeof(int16_t));
+	i = 0;
+	while (i < data->nbr_textures)
+	{
+		hash_map_textures[i] = -1;
+		i++;
+	}
+	index_hash_map = 0;
+	i = 0;
+	while (i < data->max_edge_id)
+	{
+		if (data->edges[i].used)
+		{
+			if (data->edges[i].type == PORTAL)
+			{
+				if (hash_map_textures[data->edges[i].texture_up] == -1)
+				{
+					hash_map_textures[data->edges[i].texture_up] = index_hash_map;
+					index_hash_map++;
+				}
+				if (hash_map_textures[data->edges[i].texture_down] == -1)
+				{
+					hash_map_textures[data->edges[i].texture_down] = index_hash_map;
+					index_hash_map++;
+				}
+			}
+			else
+			{
+				if (hash_map_textures[data->edges[i].texture_wall] == -1)
+				{
+					hash_map_textures[data->edges[i].texture_wall] = index_hash_map;
+					index_hash_map++;
+				}
+			}
+		}
+		i++;
+	}
+	i = 0;
+	while (i < data->max_element_id)
+	{
+		if (data->elements[i].enabled)
+		{
+			if (hash_map_textures[data->elements[i].texture_floor] == -1)
+			{
+				hash_map_textures[data->elements[i].texture_floor] = index_hash_map;
+				index_hash_map++;
+			}
+			if (hash_map_textures[data->elements[i].texture_ceiling] == -1)
+			{
+				hash_map_textures[data->elements[i].texture_ceiling] = index_hash_map;
+				index_hash_map++;
+			}
+		}
+		i++;
+	}
+	return (hash_map_textures);
+}
+
 uint16_t	*fill_hash_map_edges(t_data *data)
 {
 	uint16_t		*hash_map_edges;

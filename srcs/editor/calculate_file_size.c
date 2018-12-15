@@ -13,7 +13,7 @@ size_t	calculate_size_audios(t_data *data)
 	return (0);
 }
 
-size_t			calculate_size_textures(t_data *data)
+size_t			calculate_size_textures(t_data *data, int16_t *hash_map_textures)
 {
 	uint16_t	i;
 	size_t		ret;
@@ -22,7 +22,8 @@ size_t			calculate_size_textures(t_data *data)
 	i = IMG_START_TEXTURES;
 	while (i < data->nbr_textures)
 	{
-		ret += sizeof(struct s_texture) + (data->imgs[i].w * data->imgs[i].h) * 4;
+		if (hash_map_textures[i] != -1)
+			ret += sizeof(struct s_texture) + (data->imgs[i].w * data->imgs[i].h) * 4;
 		i++;
 	}
 	return (ret);
@@ -46,14 +47,14 @@ size_t			calculate_size_sectors(t_data *data)
 	return (ret);
 }
 
-size_t			calculate_file_size(t_data *data)
+size_t			calculate_file_size(t_data *data, int16_t *hash_map_textures)
 {
 	size_t	ret;
 
 	ret = sizeof(struct s_header);
 	ret += calculate_nb_sectors(data) * sizeof(struct s_sector);
 	ret += calculate_nb_edges(data) * sizeof(struct s_wall);
-	ret += calculate_size_textures(data);
+	ret += calculate_size_textures(data, hash_map_textures);
 	ret += calculate_size_audios(data);
 	ret += calculate_size_objects(data);
 	return (ret);

@@ -9,6 +9,8 @@
 ** v0.2
 */
 
+typedef struct s_data	t_data;
+
 struct			s_texture
 {
 	uint16_t	id;
@@ -91,7 +93,7 @@ struct s_map {
 };
 */
 
-void	find_next_sectors(t_data *data, struct s_wall *wall, struct s_edge *edge);
+void				find_next_sectors(t_data *data, struct s_wall *wall, struct s_edge *edge);
 
 
 #endif

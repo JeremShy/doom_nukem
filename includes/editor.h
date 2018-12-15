@@ -269,9 +269,9 @@ void			bresenham_quadrant4(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
 */
 
 size_t			calculate_size_audios(t_data *data);
-size_t			calculate_size_textures(t_data *data);
+size_t			calculate_size_textures(t_data *data, int16_t *hash_map_textures);
 size_t			calculate_size_sectors(t_data *data);
-size_t			calculate_file_size(t_data *data);
+size_t			calculate_file_size(t_data *data, int16_t *hash_map_textures);
 
 /*
 ** calculate_nbs.c
@@ -329,7 +329,7 @@ uint8_t			load_textures(t_data *data, const char *extension, const char *folder)
 */
 uint16_t		*fill_hash_map_edges(t_data *data);
 uint16_t		*fill_hash_map_points(t_data *data);
-
+int16_t			*fill_hash_map_textures(t_data *data);
 /*
 ** find_next_sectors.c
 */

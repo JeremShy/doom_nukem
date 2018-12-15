@@ -1,7 +1,7 @@
 #include <editor.h>
 #include <file_format.h>
 
-void		fill_sectors(t_data *data, uint8_t *addr, uint16_t *hash_map_edges)
+void		fill_sectors(t_data *data, uint8_t *addr, uint16_t *hash_map_edges, int16_t *hash_map_textures)
 {
 	struct s_sector	*current_sec;
 	uint16_t		*current_wall;
@@ -18,11 +18,12 @@ void		fill_sectors(t_data *data, uint8_t *addr, uint16_t *hash_map_edges)
 			current_sec->walls_number = data->elements[i].polygon.nb_points;
 			// current_sec->normal_floor = calculate normale floor
 			current_sec->height_floor = data->elements[i].height_floor;
-			current_sec->texture_floor = data->elements[i].texture_floor;
+			
+			current_sec->texture_floor = hash_map_textures[data->elements[i].texture_floor];
 
 			// current_sec->normal_ceiling = calculate normale ceiling
 			current_sec->height_ceiling = data->elements[i].height_ceiling;
-			current_sec->texture_ceiling = data->elements[i].texture_ceiling;
+			current_sec->texture_ceiling = hash_map_textures[data->elements[i].texture_ceiling];
 
 			current_sec->ambient_light = data->elements[i].light;
 
@@ -41,7 +42,7 @@ void		fill_sectors(t_data *data, uint8_t *addr, uint16_t *hash_map_edges)
 	}
 }
 
-void	fill_walls(t_data *data, uint8_t *walls_addr, uint16_t *hash_map_edges, uint16_t *hash_map_points)
+void	fill_walls(t_data *data, uint8_t *walls_addr, uint16_t *hash_map_edges, uint16_t *hash_map_points, int16_t *hash_map_textures)
 {
 	struct s_wall	*current_wall;
 	uint16_t		i;
@@ -61,8 +62,8 @@ void	fill_walls(t_data *data, uint8_t *walls_addr, uint16_t *hash_map_edges, uin
 			}
 			else if (data->edges[i].type == PORTAL)
 			{
-				current_wall->texture_up = data->edges[i].texture_up;
-				current_wall->texture_down = data->edges[i].texture_down;
+				current_wall->texture_up = hash_map_textures[data->edges[i].texture_up];
+				current_wall->texture_down = hash_map_textures[data->edges[i].texture_down];
 				find_next_sectors(data, current_wall, &data->edges[i]);
 				printf("Wall[%d] : \n", i);
 				printf("next_sector_1 : %d, next_sector_2 : %d\n", current_wall->next_sector_1, current_wall->next_sector_2);
@@ -82,13 +83,13 @@ void	fill_header(t_data *data, uint8_t *addr, int16_t *hash_map_textures)
 
 	header = (struct s_header*)addr;
 
-	header->size = (t_ivec2){MAP_SIZE, MAP_SIZE};
-	// header->player points
+	header->size = (t_ivec2){DRAWING_ZONE_WIDTH, DRAWING_ZONE_HEIGHT};
+	header->player_pos = (t_vec2){DRAWING_ZONE_WIDTH / 2, DRAWING_ZONE_HEIGHT / 2}; // TODO
 	header->sectors_number = calculate_nb_sectors(data);
 	header->walls_number = calculate_nb_edges(data);
-	header->texture_number = data->nbr_textures;
-	// header->sprites_number;
-	// header->objects_number;
+	header->texture_number = calculate_nb_textures(data, hash_map_textures);
+	header->sprites_number = 0; // TODO
+	header->objects_number = 0; // TODO
 
 	header->offset_walls = sizeof(struct s_header) + calculate_size_sectors(data);
 	header->offset_texture = header->offset_walls + calculate_nb_edges(data) * sizeof(struct s_wall);
@@ -105,15 +106,19 @@ void	fill_textures(t_data *data, uint8_t *addr, int16_t *hash_map_textures)
 	i = IMG_START_TEXTURES;
 	current_in_file = 0;
 	t = (struct s_texture*)addr;
-	while (i < data->nbr_textures)
+	while (i < data->nbr_textures + IMG_START_TEXTURES)
 	{
 		if (hash_map_textures[i] == current_in_file)
 		{
+			printf("Filling texture %d\n", current_in_file);
 			t->id = current_in_file;
-			t->size = (t_vec2){data->imgs[i].h, data->imgs[i].w};
-			ft_memcpy((uint8_t*)t + sizeof(struct s_texture), data->imgs[i].addr, data->imgs[i].h * data->imgs[i].w * 4);
-			t = t + sizeof(struct s_texture) + data->imgs[i].h * data->imgs[i].w * 4;
+			t->size = (t_vec2){data->imgs[i].original_h, data->imgs[i].original_w};
+
+			ft_memcpy((uint8_t*)t + sizeof(struct s_texture), data->imgs[i].original, data->imgs[i].original_h * data->imgs[i].original_w * 4);
+
+			t = (struct s_texture*)((uint8_t*)t + sizeof(struct s_texture) + data->imgs[i].original_h * data->imgs[i].original_w * 4);
 			current_in_file++;
+			i = IMG_START_TEXTURES - 1;
 		}
 		i++;
 	}
@@ -165,9 +170,9 @@ uint8_t		save_scene(t_data *data)
 	header = (struct s_header*)addr;
 
 	fill_header(data, addr, hash_map_textures);
-	fill_sectors(data, addr, hash_map_edges);
+	fill_sectors(data, addr, hash_map_edges, hash_map_textures);
 
-	fill_walls(data, addr + header->offset_walls, hash_map_edges, hash_map_points);
+	fill_walls(data, addr + header->offset_walls, hash_map_edges, hash_map_points, hash_map_textures);
 	fill_textures(data, addr + header->offset_texture, hash_map_textures);
 
 	write(fd, addr, file_size);

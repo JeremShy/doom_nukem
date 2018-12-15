@@ -31,3 +31,19 @@ size_t	calculate_nb_sectors(t_data *data)
 	}
 	return (ret);
 }
+
+size_t	calculate_nb_textures(t_data *data, int16_t *texture_hash_map)
+{
+	uint32_t	i;
+	size_t	ret;
+
+	i = 0;
+	ret = 0;
+	while (i < data->nbr_textures + IMG_START_TEXTURES)
+	{
+		if (texture_hash_map[i] != -1)
+			ret++;
+		i++;
+	}
+	return (ret);
+}

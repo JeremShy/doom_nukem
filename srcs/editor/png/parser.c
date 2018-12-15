@@ -117,7 +117,7 @@ uint8_t			create_image_from_png(t_data *data, int id_img,
 	!size ? size = &(t_ivec2){png_ihdr.width, png_ihdr.height} : 0;
 	create_image(data, id_img, size->x, size->y);
 	apply_all_filters(&png_ihdr, img_data);
-	resize_image(&png_ihdr, data->imgs[id_img].addr, img_data, size);
+	resize_image(&png_ihdr, &data->imgs[id_img], img_data, size);
 	free(img_data);
 	return (1);
 }

@@ -12,6 +12,7 @@
 # define IEND 0x49454E44
 
 typedef struct s_ivec2				t_ivec2;
+typedef struct s_img				t_img;
 
 struct								s_png_ihdr
 {
@@ -81,7 +82,7 @@ struct s_tree						*create_tree(
 void								delete_tree(struct s_tree	*tree);
 
 void								resize_image(struct s_png_ihdr *png_ihdr,
-	uint32_t *dest_img, uint8_t *img_data, t_ivec2 *size);
+	t_img *dest_img, uint8_t *img_data, t_ivec2 *size);
 
 void								copy_source_in_img(
 	struct s_png_ihdr *png_ihdr, uint8_t *src_img, uint32_t *dest_img);

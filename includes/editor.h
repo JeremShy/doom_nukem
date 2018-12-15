@@ -52,6 +52,10 @@ typedef struct	s_img
 	int			w;
 	int			h;
 	uint32_t	*addr;
+
+	int			original_w;
+	int			original_h;
+	uint32_t	*original;
 }				t_img;
 
 enum	e_poly_tab
@@ -278,7 +282,7 @@ size_t			calculate_file_size(t_data *data, int16_t *hash_map_textures);
 */
 size_t			calculate_nb_edges(t_data *data);
 size_t			calculate_nb_sectors(t_data *data);
-
+size_t			calculate_nb_textures(t_data *data, int16_t *texture_hash_map);
 /*
 ** create_edge.c
 */
@@ -357,7 +361,7 @@ t_intersection	intersect_two_segments(t_ivec2 a1, t_ivec2 a2, t_ivec2 b1, t_ivec
 /*
 ** intersection.c
 */
-float	first_intersect_dist_in_poly(const t_polygon *polygon, const t_ivec2 *new_point, const t_ivec2 *last_point, t_edge **touched_edge);
+float			first_intersect_dist_in_poly(const t_polygon *polygon, const t_ivec2 *new_point, const t_ivec2 *last_point, t_edge **touched_edge);
 uint32_t		nb_intersec_in_poly(const t_polygon *polygon, const t_ivec2 *new_point, const t_ivec2 *last_point);
 float			is_in_polygon(const t_ivec2 *point, const t_polygon *poly, t_edge **touched_edge);
 uint8_t			is_point_in_polygon(const t_ivec2 *point, const t_polygon *polygon);
@@ -396,7 +400,7 @@ int32_t			clamp_value(int32_t value, int32_t min, int32_t max);
 void			sclamp(int16_t *point, int16_t min, int16_t max);
 t_ivec2			find_middle_edge(t_edge *edge);
 float			norme(t_vec2 *v);
-t_vec2		mult_vect_scalar(t_vec2 *v, float f);
+t_vec2			mult_vect_scalar(t_vec2 *v, float f);
 void			normalize(t_vec2 *v);
 
 /*

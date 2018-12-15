@@ -1,5 +1,10 @@
 #include <editor.h>
 
+t_vec2		calculate_normale_with_angles(float angle_x, float angle_y)
+{
+	
+}
+
 void		swap(int *a, int *b)
 {
 	int tmp;

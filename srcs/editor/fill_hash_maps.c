@@ -6,9 +6,9 @@ int16_t		*fill_hash_map_textures(t_data *data)
 	uint32_t	i;
 	int16_t		index_hash_map;
 
-	hash_map_textures = malloc(data->nbr_textures * sizeof(int16_t));
+	hash_map_textures = malloc((data->nbr_textures + IMG_START_TEXTURES) * sizeof(int16_t));
 	i = 0;
-	while (i < data->nbr_textures)
+	while (i < data->nbr_textures + IMG_START_TEXTURES)
 	{
 		hash_map_textures[i] = -1;
 		i++;
@@ -61,7 +61,14 @@ int16_t		*fill_hash_map_textures(t_data *data)
 		}
 		i++;
 	}
+	i = 0;
+	while ((uint16_t)i < data->nbr_textures + IMG_START_TEXTURES)
+	{
+		printf("hash_map_textures[%d] = %d\n", i, hash_map_textures[i]);
+		i++;
+	}
 	return (hash_map_textures);
+
 }
 
 uint16_t	*fill_hash_map_edges(t_data *data)

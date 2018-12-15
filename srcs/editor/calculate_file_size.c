@@ -20,10 +20,10 @@ size_t			calculate_size_textures(t_data *data, int16_t *hash_map_textures)
 
 	ret = 0;
 	i = IMG_START_TEXTURES;
-	while (i < data->nbr_textures)
+	while (i < data->nbr_textures + IMG_START_TEXTURES)
 	{
 		if (hash_map_textures[i] != -1)
-			ret += sizeof(struct s_texture) + (data->imgs[i].w * data->imgs[i].h) * 4;
+			ret += sizeof(struct s_texture) + (data->imgs[i].original_w * data->imgs[i].original_h) * 4;
 		i++;
 	}
 	return (ret);

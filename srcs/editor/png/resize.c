@@ -65,7 +65,7 @@ static uint32_t	get_pixel_color(t_ivec2 size, uint32_t *src_img,
 	return (rez);
 }
 
-void			resize_image(struct s_png_ihdr *png_ihdr, uint32_t *dest_img,
+void			resize_image(struct s_png_ihdr *png_ihdr, t_img *dest_img,
 	uint8_t *img_data, t_ivec2 *size)
 {
 	int32_t		i;
@@ -81,15 +81,14 @@ void			resize_image(struct s_png_ihdr *png_ihdr, uint32_t *dest_img,
 		/ (float)size->y};
 	while (i < size->x * size->y)
 	{
-		dest_img[i] = get_pixel_color((t_ivec2){png_ihdr->width,
+		(dest_img->addr)[i] = get_pixel_color((t_ivec2){png_ihdr->width,
 			png_ihdr->height}, src_img, &count, &ratio);
 		count.x += ratio.x;
 		i++;
-		if (i % size->x == 0)
-		{
-			count.x = 0;
+		if (i % size->x == 0 && !(count.x = 0))
 			count.y += ratio.y;
-		}
 	}
-	free(src_img);
+	dest_img->original = src_img;
+	dest_img->original_w = png_ihdr->width;
+	dest_img->original_h = png_ihdr->height;
 }

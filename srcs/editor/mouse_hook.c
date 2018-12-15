@@ -208,7 +208,7 @@ static uint8_t	check_moving_point(t_data *data, t_ivec2 point, t_ivec2 *current)
 		i++;
 	}
 	
-	if (check_all_points(data, current))
+	if (check_all_points(data))
 	{
 		*current = previous;
 		return (1);

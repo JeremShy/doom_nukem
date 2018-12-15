@@ -16,12 +16,12 @@ void		fill_sectors(t_data *data, uint8_t *addr, uint16_t *hash_map_edges, int16_
 		{
 			current_sec->id = i;
 			current_sec->walls_number = data->elements[i].polygon.nb_points;
-			// current_sec->normal_floor = calculate normale floor
+			calculate_normale_with_angles(current_sec->normal_floor, data->elements[i].angle_floor.x, data->elements[i].angle_floor.y);
 			current_sec->height_floor = data->elements[i].height_floor;
 			
 			current_sec->texture_floor = hash_map_textures[data->elements[i].texture_floor];
 
-			// current_sec->normal_ceiling = calculate normale ceiling
+			calculate_normale_with_angles(current_sec->normal_ceiling, data->elements[i].angle_ceiling.x, data->elements[i].angle_ceiling.y);
 			current_sec->height_ceiling = data->elements[i].height_ceiling;
 			current_sec->texture_ceiling = hash_map_textures[data->elements[i].texture_ceiling];
 

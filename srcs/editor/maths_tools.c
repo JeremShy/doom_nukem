@@ -1,8 +1,20 @@
 #include <editor.h>
 
-t_vec2		calculate_normale_with_angles(float angle_x, float angle_y)
+void		calculate_normale_with_angles(t_vec3 normal, float angle_x, float angle_y)
 {
-	
+	t_mat4x4	rot_x;
+	t_mat4x4	rot_y;
+	t_vec4		vec;
+
+	ft_mat4x4_set_rotation(rot_x, angle_x, (t_vec3){1, 0, 0});
+	ft_mat4x4_set_rotation(rot_y, angle_y, (t_vec3){0, 1, 0});
+
+	ft_vec4_init(vec, (float[]){0, 0, 1, 0});
+	ft_mat4x4_mult_with_vec4 (vec, rot_x, vec);
+	ft_mat4x4_mult_with_vec4 (vec, rot_y, vec);
+	normal[0] = vec[0];
+	normal[1] = vec[1];
+	normal[2] = vec[2];
 }
 
 void		swap(int *a, int *b)

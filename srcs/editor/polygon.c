@@ -1,6 +1,6 @@
 #include <editor.h>
 
-uint8_t check_all_points(t_data *data, t_ivec2 *exept)
+uint8_t check_all_points(t_data *data)
 {
 	int i;
 	float	dist;

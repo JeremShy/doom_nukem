@@ -15,7 +15,7 @@ int16_t		*fill_hash_map_textures(t_data *data)
 	}
 	index_hash_map = 0;
 	i = 0;
-	while (i < data->max_edge_id)
+	while ((int)i < data->max_edge_id)
 	{
 		if (data->edges[i].used)
 		{

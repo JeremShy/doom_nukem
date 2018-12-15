@@ -8,6 +8,7 @@
 # include <stdint.h>
 # include <math.h>
 # include <types.h>
+# include <libftmatrices.h>
 
 # define KEY_ESCAPE 53
 # define KEY_BACKQUOTE 50

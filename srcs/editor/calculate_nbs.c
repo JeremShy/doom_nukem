@@ -32,6 +32,22 @@ size_t	calculate_nb_sectors(t_data *data)
 	return (ret);
 }
 
+size_t	calculate_nb_points(t_data *data)
+{
+	int32_t	i;
+	int			ret;
+
+	i = 0;
+	ret = 0;
+	while (i < data->max_point_id)
+	{
+		if (data->used_point[i])
+			ret++;
+		i++;
+	}
+	return (ret);
+}
+
 size_t	calculate_nb_textures(t_data *data, int16_t *texture_hash_map)
 {
 	uint32_t	i;

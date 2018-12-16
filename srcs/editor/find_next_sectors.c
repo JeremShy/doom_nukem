@@ -17,7 +17,7 @@ static uint16_t	get_new_id(t_data *data, uint16_t id)
 	return (ret);
 }
 
-void	find_next_sectors(t_data *data, struct s_wall *wall, struct s_edge *edge)
+void	find_next_sectors(t_data *data, struct s_ffwall *wall, struct s_edge *edge)
 {
 	t_vec2		vector;
 	t_vec2		normal;

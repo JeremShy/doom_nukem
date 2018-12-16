@@ -69,7 +69,7 @@ static uint8_t	ft_init_texture(t_data *data)
 
 static void		create_first_sector(t_data *data)
 {
-	data->elements[0] = (t_element){0, WALL, 1, 1, 1, NULL, IMG_START_TEXTURES, {0, 0}, 0, IMG_START_TEXTURES, {0, 0}, 20, 100, (t_polygon){0, 1, {0}}};
+	data->elements[0] = (t_element){0, 1, 1, 1, NULL, IMG_START_TEXTURES, {0, 0}, 0, IMG_START_TEXTURES, {0, 0}, 20, 100, (t_polygon){0, 1, {0}}};
 	data->max_element_id = 1;
 }
 

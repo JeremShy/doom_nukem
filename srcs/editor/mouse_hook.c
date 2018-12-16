@@ -100,7 +100,10 @@ static int		options_zone(int button, int x, int y, t_data *data)
 	else if (x >= SQUARE_DELETE_SX && y >= SQUARE_DELETE_SY && x <= SQUARE_DELETE_EX && y <= SQUARE_DELETE_EY)
 		switch_delete_sector(data);
 	else if (x >= SQUARE_SAVE_SX && y >= SQUARE_SAVE_SY && x <= SQUARE_SAVE_EX && y <= SQUARE_SAVE_EY)
+	{
+		pressed_backquote(data);
 		save_scene(data);
+	}
 	else if (x >= SQUARE_DRAW_SX && y >= SQUARE_DRAW_SY && x <= SQUARE_DRAW_EX && y <= SQUARE_DRAW_EY)
 		switch_drawing(data);
 	else if (x > WALL_TYPE_RED_SX && y > WALL_TYPE_RED_SY && x < WALL_TYPE_RED_EX && y < WALL_TYPE_RED_EY)

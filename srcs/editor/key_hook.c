@@ -1,6 +1,6 @@
 #include <editor.h>
 
-static int		pressed_backquote(t_data *data)
+int		pressed_backquote(t_data *data)
 {
 	if (data->input.id_current_element == -1 || (data->elements[data->input.id_current_element]).polygon.finished)
 		return (0);

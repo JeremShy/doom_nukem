@@ -9,6 +9,7 @@
 # include <math.h>
 # include <types.h>
 # include <libftmatrices.h>
+# include <lib_doom.h>
 
 # define KEY_ESCAPE 53
 # define KEY_BACKQUOTE 50
@@ -20,5 +21,12 @@
 # define KEY_L 37
 # define KEY_M 46
 # define KEY_O 31
+
+typedef struct	s_mlx
+{
+	void		*mlx_ptr;
+	void		*win_ptr;
+}				t_mlx;
+
 
 #endif

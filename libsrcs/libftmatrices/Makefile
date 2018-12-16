@@ -40,8 +40,7 @@ SRC_NAME = ft_mat4x4_set_identity.c \
 			ft_vec3_sub.c \
 			ft_vec3_add.c \
 			ft_vec3_cross.c \
-			ft_vec3_dot.c \
-			ft_vec3_copy.c
+			ft_vec3_dot.c
 
 OBJ_PATH = ./obj/
 

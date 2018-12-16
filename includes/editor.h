@@ -34,17 +34,9 @@
 
 struct			s_data;
 struct			s_element;
-struct			s_wall;
+struct			s_ffwall;
 
 typedef void (*t_on_click_func)(struct s_data *data, uint16_t id);
-
-
-
-typedef struct	s_mlx
-{
-	void		*mlx_ptr;
-	void		*win_ptr;
-}				t_mlx;
 
 typedef struct	s_img
 {
@@ -72,12 +64,6 @@ enum	e_edge_position
 };
 
 
-enum	e_elem_type
-{
-	WALL,
-	BUTTON
-};
-
 enum	e_edge_type
 {
 	SOLID,
@@ -92,25 +78,6 @@ enum	e_input_mode
 	DELETE_SECTOR,
 	MOVE_POINT
 };
-
-typedef struct	s_image_spec
-{
-	uint16_t	x_origin;
-	uint16_t	y_origin;
-	uint16_t	width;
-	uint16_t	height;
-	uint8_t		pixel_depth;
-	uint8_t		descriptor;
-}				t_image_spec;
-
-typedef struct	s_tga_header
-{
-	uint8_t			id_length;
-	uint8_t			color_map_type;
-	uint8_t			image_type;
-	uint8_t			color_map_spec[5];
-	t_image_spec	image_spec;
-}				t_tga_header;
 
 typedef struct	s_intersection
 {
@@ -167,8 +134,6 @@ typedef struct		s_polygon
 typedef struct			s_element
 {
 	uint16_t			id;
-
-	enum e_elem_type	type;
 
 	uint8_t				printable;
 
@@ -230,11 +195,11 @@ typedef struct	s_data
 	uint32_t	max_element_id;
 	t_element	elements[MAX_ELEMENT_NBR];
 
-	t_edge		edges[MAX_POINTS_NBR];
 	int32_t		max_edge_id;
+	t_edge		edges[MAX_POINTS_NBR];
 
-	t_ivec2		points[MAX_POINTS_NBR];
 	int32_t		max_point_id;
+	t_ivec2		points[MAX_POINTS_NBR];
 
 	uint8_t		used_point[MAX_POINTS_NBR];
 
@@ -269,10 +234,10 @@ void			bresenham_quadrant3(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
 void			bresenham_quadrant4(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
 
 /*
-** calculate_nbs.c
+** calculate_file_size.c
 */
-
 size_t			calculate_size_audios(t_data *data);
+size_t			calculate_size_points(t_data *data);
 size_t			calculate_size_textures(t_data *data, int16_t *hash_map_textures);
 size_t			calculate_size_sectors(t_data *data);
 size_t			calculate_file_size(t_data *data, int16_t *hash_map_textures);
@@ -283,6 +248,8 @@ size_t			calculate_file_size(t_data *data, int16_t *hash_map_textures);
 size_t			calculate_nb_edges(t_data *data);
 size_t			calculate_nb_sectors(t_data *data);
 size_t			calculate_nb_textures(t_data *data, int16_t *texture_hash_map);
+size_t			calculate_nb_points(t_data *data);
+
 /*
 ** create_edge.c
 */
@@ -337,7 +304,7 @@ int16_t			*fill_hash_map_textures(t_data *data);
 /*
 ** find_next_sectors.c
 */
-void	find_next_sectors(t_data *data, struct s_wall *wall, struct s_edge *edge);
+void	find_next_sectors(t_data *data, struct s_ffwall *wall, struct s_edge *edge);
 
 /*
 ** get_polygon_from_point.c
@@ -369,6 +336,7 @@ uint8_t			is_point_in_polygon(const t_ivec2 *point, const t_polygon *polygon);
 /*
 ** key_hook.c
 */
+int			pressed_backquote(t_data *data);
 void			draw_polygon(t_polygon *polygon, t_data *data);
 void			switch_select(t_data *data);
 void			switch_drawing(t_data *data);
@@ -391,18 +359,7 @@ uint8_t			create_image(t_data *data, int id, int w, int h);
 /*
 ** maths_tools.c
 */
-void			calculate_normale_with_angles(t_vec3 normal, float angle_x, float angle_y);
-void			swap(int *a, int *b);
-uint32_t		min(uint32_t a, uint32_t b);
-uint32_t		max(uint32_t a, uint32_t b);
-void			clamp(int32_t *point, int32_t min, int32_t max);
-void			fclamp(float *point, float min, float max);
-int32_t			clamp_value(int32_t value, int32_t min, int32_t max);
-void			sclamp(int16_t *point, int16_t min, int16_t max);
 t_ivec2			find_middle_edge(t_edge *edge);
-float			norme(t_vec2 *v);
-t_vec2			mult_vect_scalar(t_vec2 *v, float f);
-void			normalize(t_vec2 *v);
 
 /*
 ** mlx_img_func.c
@@ -423,13 +380,6 @@ int				drawing_zone(int x, int y, t_data *data);
 ** parser_png.c
 */
 uint8_t			create_image_from_png(t_data *data, int id_img, const char *name, t_ivec2 *size);
-
-/*
-** parser_tga.c
-*/
-uint32_t		*parse_tga(const char *name, t_tga_header *header);
-uint32_t		invert_transparency(uint32_t c);
-uint8_t			create_image_from_tga(t_data *data, int id_img, const char *name, t_ivec2 *size);
 
 /*
 ** polygon.c

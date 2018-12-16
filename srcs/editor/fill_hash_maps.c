@@ -120,6 +120,7 @@ uint16_t	*fill_hash_map_points(t_data *data)
 		}
 		else
 			hash_map_points[i] = (uint16_t)-1u;
+		printf("hash_map[%d] : %d\n", i, hash_map_points[i]);
 		i++;
 	}
 	return (hash_map_points);

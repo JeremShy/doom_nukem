@@ -26,7 +26,6 @@ SRC_EDITOR_NAME =	 \
 					imaths.c \
 					debug.c \
 					edge_tools.c \
-					parser_tga.c \
 					editor_interactions.c \
 					delete.c \
 					binary_tools.c \
@@ -41,7 +40,12 @@ SRC_EDITOR_NAME =	 \
 					save_scene.c
 
 SRC_GAME_NAME =		main.c \
-					print_memory.c
+					parse_map.c \
+					mlx_loop.c \
+					mlx_img_func.c \
+					bresenham.c \
+					bresenham_quadrants.c
+
 
 NAME_GAME = doom-nukem
 NAME_EDITOR = editor
@@ -51,12 +55,16 @@ CC = gcc
 # CFLAGS = -Wall -Wextra -Werror
 CFLAGS = -Wall -Wextra -g -fsanitize=address
 
-MLX = minilibx_macos/libmlx.a 
-LIBFT = libft/libft.a
-FT_PRINTF = ft_printf/libftprintf.a
-FT_MATRIX = libftmatrices/libftmatrices.a
-LFLAGS = -framework OpenGL -framework AppKit $(LIBFT) $(FT_PRINTF) $(MLX) $(FT_MATRIX) -fsanitize=address
-INC = -I libft/ -I includes/ -I minilibx_macos/ -I ft_printf/includes -I libftmatrices/includes
+LIB_PATH = libsrcs/
+
+MLX = $(LIB_PATH)minilibx_macos/libmlx.a 
+LIBFT = $(LIB_PATH)libft/libft.a
+FT_PRINTF = $(LIB_PATH)ft_printf/libftprintf.a
+FT_MATRIX = $(LIB_PATH)libftmatrices/libftmatrices.a
+FT_DOOM = $(LIB_PATH)libdoom/libdoom.a
+
+LFLAGS = -framework OpenGL -framework AppKit $(LIBFT) $(FT_PRINTF) $(MLX) $(FT_MATRIX) $(FT_DOOM) -fsanitize=address
+INC = -I $(LIB_PATH)libft/ -I includes/ -I $(LIB_PATH)minilibx_macos/ -I $(LIB_PATH)ft_printf/includes -I $(LIB_PATH)libftmatrices/includes -I $(LIB_PATH)libdoom/includes
 
 OBJ_GAME_PATH = obj/game/
 OBJ_EDITOR_PATH = obj/editor/
@@ -75,7 +83,7 @@ OBJ_EDITOR = $(addprefix $(OBJ_EDITOR_PATH),$(OBJ_EDITOR_NAME))
 
 all : $(NAME_GAME) $(NAME_EDITOR)
 
-$(NAME_GAME) : $(LIBFT) $(FT_PRINTF) $(FT_MATRIX) $(MLX) $(OBJ_GAME_PATH) $(OBJ_GAME)
+$(NAME_GAME) : $(LIBFT) $(FT_PRINTF) $(FT_MATRIX) $(MLX) $(FT_DOOM) $(OBJ_GAME_PATH) $(OBJ_GAME)
 	@echo ""
 	@$(CC) $(OBJ_GAME) $(LFLAGS) -o $@ 
 	@echo "\x1b[32;01m$@ SUCCESSFULLY CREATED !\x1b[32;00m"
@@ -102,34 +110,41 @@ $(OBJ_EDITOR_PATH)%.o: $(SRC_EDITOR_PATH)%.c
 	@$(CC) $(CFLAGS) $(INC) -o $@ -c $<
 
 $(LIBFT) :
-	@make -C libft/
-	@echo "\033[32mLibrairies compiled\033[0m"
+	@make -C $(LIB_PATH)libft/
+	@echo "\033[32mlibft compiled\033[0m"
 
 $(FT_MATRIX) :
-	@make -C libftmatrices/
-	@echo "\033[32mLibrairies compiled\033[0m"
+	@make -C $(LIB_PATH)libftmatrices/
+	@echo "\033[32mft_matrix compiled\033[0m"
 
 $(FT_PRINTF) :
-	@make -C ft_printf/
-	@echo "\033[32mLibrairies compiled\033[0m"
+	@make -C $(LIB_PATH)ft_printf/
+	@echo "\033[32mft_printf compiled\033[0m"
+
+$(FT_DOOM) :
+	@make -C $(LIB_PATH)libdoom/
+	@echo "\033[32mlib_doom compiled\033[0m"
 
 $(MLX) :
-	@make -C minilibx_macos/
+	@make -C $(LIB_PATH)minilibx_macos/
+	@echo "\033[32mMlx compiled\033[0m"
 
 .PHONY : all clean fclean re
 
 clean :
 	@rm -rf obj/
-	@make -C libft/ clean
-	@make -C ft_printf/ clean
-	@make -C libftmatrices/ clean
-	@make -C minilibx_macos/ clean
+	@make -C $(LIB_PATH)libft/ clean
+	@make -C $(LIB_PATH)ft_printf/ clean
+	@make -C $(LIB_PATH)libftmatrices/ clean
+	@make -C $(LIB_PATH)minilibx_macos/ clean
+	@make -C $(LIB_PATH)libdoom/ clean
 	@echo "\033[32mObjects deleted\nLibraries cleaned\033[0m"
 
 fclean : clean
-	@make -C libft/ fclean
-	@make -C ft_printf/ fclean
-	@make -C libftmatrices/ fclean
+	@make -C $(LIB_PATH)libft/ fclean
+	@make -C $(LIB_PATH)ft_printf/ fclean
+	@make -C $(LIB_PATH)libftmatrices/ fclean
+	@make -C $(LIB_PATH)libdoom/ fclean
 	@rm -rf $(NAME_EDITOR)
 	@rm -rf $(NAME_GAME)
 	@echo "\033[32m$(NAME_EDITOR) deleted\033[0m"

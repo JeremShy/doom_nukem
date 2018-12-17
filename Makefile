@@ -39,15 +39,18 @@ SRC_EDITOR_NAME =	 \
 					find_next_sectors.c \
 					save_scene.c
 
-SRC_GAME_NAME =		main.c \
+SRC_GAME_NAME =		parsing/parse_map.c \
+					parsing/simple_parse.c \
+					parsing/sector.c \
+					\
+					main.c \
 					mlx_loop.c \
 					mlx_img_func.c \
 					bresenham.c \
 					bresenham_quadrants.c \
-						\
-					parsing/parse_map.c \
-					parsing/simple_parse.c \
-					parsing/sector.c
+					mouse_hook.c \
+					flood_bunches.c \
+					points_angle.c
 
 
 NAME_GAME = doom-nukem

@@ -91,13 +91,14 @@ void	fill_header(t_data *data, uint8_t *addr, int16_t *hash_map_textures, uint32
 	header->magic = DOOM_MAGIC;
 	header->file_size = file_size;
 	header->size = (t_ivec2){DRAWING_ZONE_WIDTH, DRAWING_ZONE_HEIGHT};
-	header->player_pos = (t_vec2){DRAWING_ZONE_WIDTH / 2, DRAWING_ZONE_HEIGHT / 2}; // TODO
+
+	header->player_pos = (t_vec2){331, 674};
+	// header->player_pos = (t_vec2){DRAWING_ZONE_WIDTH / 2, DRAWING_ZONE_HEIGHT / 2}; // TODO
 
 	header->points_number = calculate_nb_points(data);
 	header->sectors_number = calculate_nb_sectors(data);
 	header->walls_number = calculate_nb_edges(data);
 	header->texture_number = calculate_nb_textures(data, hash_map_textures);
-
 
 	header->sprites_number = 0; // TODO
 	header->objects_number = 0; // TODO

@@ -28,6 +28,11 @@ typedef struct	s_vec3
 	float	z;
 }				t_vec3;
 
+typedef struct	s_vec2 {
+	float	x;
+	float	y;
+}				t_vec2;
+
 void	ft_mat4x4_set_identity(t_mat4x4 matrice);
 void	ft_mat4x4_set_zero(t_mat4x4 m);
 void	ft_mat4x4_set_projection(t_mat4x4 m, const float array[4]);
@@ -57,14 +62,19 @@ void	ft_vec4_print(const t_vec4 v);
 
 t_vec3	ft_vec3_init(const float tab[3]);
 void	ft_vec3_print(const t_vec3 v);
-
 t_vec3	ft_vec3_add(const t_vec3 v1, const t_vec3 v2);
 t_vec3	ft_vec3_sub(const t_vec3 v1, const t_vec3 v2);
 t_vec3	ft_vec3_cross(const t_vec3 v1, const t_vec3 v2);
 float	ft_vec3_dot(const t_vec3 u, const t_vec3 v);
-
-float	ft_vec3_get_magnitude(const t_vec3 vector);
+float	ft_vec3_get_norme(const t_vec3 vector);
 void	ft_vec3_normalize(t_vec3 *vector);
 
+void	ft_vec2_print(const t_vec2 v);
+t_vec2	ft_vec2_add(const t_vec2 v1, const t_vec2 v2);
+t_vec2	ft_vec2_sub(const t_vec2 v1, const t_vec2 v2);
+float	ft_vec2_dot(const t_vec2 u, const t_vec2 v);
+float	ft_vec2_get_norme(const t_vec2 vector);
+void	ft_vec2_normalize(t_vec2 *vector);
+t_vec2	ft_vec2_get_normal(t_vec2 v);
 
 #endif

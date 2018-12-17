@@ -1,7 +1,7 @@
 #include <game.h>
 
 
-static struct s_ffsector	*parse_sector(t_data *data, struct s_ffsector *file_sector, uint16_t i, void *addr)
+static struct s_ffsector	*parse_sector(t_data *data, struct s_ffsector *file_sector, uint16_t i)
 {
 	int			wall;
 	uint16_t	*wall_ptr;
@@ -27,7 +27,7 @@ static struct s_ffsector	*parse_sector(t_data *data, struct s_ffsector *file_sec
 	return ((void*)wall_ptr);
 }
 
-uint8_t						parse_sectors(t_data *data, struct s_ffsector *file_sector, void *addr)
+uint8_t						parse_sectors(t_data *data, struct s_ffsector *file_sector)
 {
 	uint16_t	i;
 
@@ -37,7 +37,7 @@ uint8_t						parse_sectors(t_data *data, struct s_ffsector *file_sector, void *a
 	i = 0;
 	while (i < data->nb_sectors)
 	{
-		file_sector = parse_sector(data, file_sector, i, addr);
+		file_sector = parse_sector(data, file_sector, i);
 		i++;
 	}
 	return (1);

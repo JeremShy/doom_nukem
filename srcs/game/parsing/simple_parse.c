@@ -12,7 +12,12 @@ uint8_t						parse_header(t_data *data, struct s_ffheader *header, off_t file_si
 	{
 		data->size.x = (float)header->size.x;
 		data->size.y = (float)header->size.y;
-		data->player.pos = header->player_pos;
+
+
+
+		data->player.pos.x = header->player_pos.x;
+		data->player.pos.y = header->player_pos.y;
+		data->player.pos.z = 0;
 
 		data->nb_sectors = header->sectors_number;
 		data->nb_points = header->points_number;

@@ -65,7 +65,7 @@ uint8_t		parse_map(t_data *data, const char *filename)
 		free(buf);
 	else if (!parse_edges(data, (struct s_ffwall *)(buf + header->offset_walls)))
 		free(buf);
-	else if (!parse_sectors(data, (struct s_ffsector*)(buf + sizeof(struct s_ffheader)), buf))
+	else if (!parse_sectors(data, (struct s_ffsector*)(buf + sizeof(struct s_ffheader))))
 		free(buf);
 	else if (!parse_textures(data, (struct s_fftexture*)(buf + header->offset_texture)))
 		free(buf);

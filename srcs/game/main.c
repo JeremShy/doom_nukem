@@ -47,9 +47,19 @@ int main(int ac, char **av)
 		ft_putendl_fd("Parse error.", 2);
 	else if (!ft_mlx_init(&data))
 		ft_putendl_fd("Init error.", 2);
+	else if (!(data.angle_dir_point = malloc(sizeof(float) * data.nb_points)))
+		ft_putendl_fd("Memory error.", 2);
+	else if (!(data.visible_edges = malloc(sizeof(uint8_t) * data.nb_edges)))
+		ft_putendl_fd("Memory error.", 2);
 	else
 	{
+		data.player.dir = (t_vec3){0, -1, 0};
+		mlx_mouse_hook(data.mlx.win_ptr, &mouse_hook, &data);
 		mlx_loop_hook(data.mlx.mlx_ptr, loop, &data);
+
+		printf("%f\n", radians_to_degrees(get_angle_player_point(&data.player, &(t_vec2){350, 600})));
+		// exit(0);
+
 		mlx_loop(data.mlx.mlx_ptr);
 	}
 	return (1);

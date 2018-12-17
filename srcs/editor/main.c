@@ -85,7 +85,7 @@ int main(int ac, char **av)
 	ft_bzero(&data.used_point, sizeof(data.used_point));
 	if (!ft_init(&data))
 		return (1);
-	if (!create_image_from_png(&data, IMG_BACKGROUND, "docs/new-background-2.png", NULL))
+	if (!create_image_from_png(&data, IMG_BACKGROUND, "docs/new-background-5.png", NULL))
 		return (2);
 	if (!ft_init_texture(&data))
 		return (3);

@@ -5,6 +5,7 @@
 # include <fcntl.h>
 # include <sys/stat.h>
 # include <sys/mman.h>
+# include <file_format.h>
 
 # define WIN_SIZE_X 1600
 # define WIN_SIZE_Y 900 // /!\ Can't modify
@@ -32,6 +33,13 @@ typedef struct		s_img
 	int			h;
 	uint32_t	*addr;
 }					t_img;
+
+typedef struct		s_texture
+{
+	int			w;
+	int			h;
+	uint32_t	*addr;
+}					t_texture;
 
 typedef struct		s_edge
 {
@@ -78,8 +86,8 @@ typedef struct		s_data
 	t_mlx			mlx;
 	t_img			screen;
 
-	t_img			imgs[MAX_TEXTURES];
-	uint16_t		nb_imgs;
+	t_texture			textures[MAX_TEXTURES];
+	uint16_t		nb_textures;
 
 	t_vec2			size;
 	
@@ -94,6 +102,23 @@ typedef struct		s_data
 	int32_t			nb_points;
 	t_vec2			*points;
 }					t_data;
+
+/*
+** parsing/parse_input.c
+*/
+uint8_t				parse_map(t_data *data, const char *filename);
+
+/*
+** parsing/sector.c
+*/
+uint8_t				parse_sectors(t_data *data, struct s_ffsector *file_sector, void *addr);
+
+/*
+** parsing/simple_map.c
+*/
+uint8_t				parse_points(t_data *data, t_ivec2 *points);
+uint8_t				parse_edges(t_data *data, struct s_ffwall *file_wall);
+uint8_t				parse_header(t_data *data, struct s_ffheader *header, off_t file_size);
 
 /*
 ** bresenham.c
@@ -119,12 +144,6 @@ int					loop(t_data *data);
 uint32_t			get_color_code(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 void				put_pixel_to_image(t_img *img, int x, int y, uint32_t color);
 void				fill_img(t_img *img, uint32_t color);
-
-/*
-** parse_input.c
-*/
-uint8_t				parse_map(t_data *data, const char *filename);
-
 
 
 #endif

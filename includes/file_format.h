@@ -17,7 +17,7 @@ typedef struct s_data	t_data;
 struct			s_fftexture
 {
 	uint16_t	id;
-		t_vec2		size;
+	t_vec2		size;
 //	uint32_t		data[size.x * size.y]; // r,g,b,a
 };
 

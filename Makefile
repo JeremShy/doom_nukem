@@ -40,11 +40,14 @@ SRC_EDITOR_NAME =	 \
 					save_scene.c
 
 SRC_GAME_NAME =		main.c \
-					parse_map.c \
 					mlx_loop.c \
 					mlx_img_func.c \
 					bresenham.c \
-					bresenham_quadrants.c
+					bresenham_quadrants.c \
+						\
+					parsing/parse_map.c \
+					parsing/simple_parse.c \
+					parsing/sector.c
 
 
 NAME_GAME = doom-nukem
@@ -95,6 +98,7 @@ $(NAME_EDITOR) : $(LIBFT) $(FT_PRINTF) $(MLX) $(OBJ_EDITOR_PATH) $(OBJ_EDITOR)
 
 $(OBJ_GAME_PATH):
 	@mkdir -p $@
+	@mkdir -p $@/parsing
 
 $(OBJ_EDITOR_PATH):
 	@mkdir -p $@

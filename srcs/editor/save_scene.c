@@ -6,15 +6,17 @@ void		fill_sectors(t_data *data, uint8_t *addr, uint16_t *hash_map_edges, int16_
 	struct s_ffsector	*current_sec;
 	uint16_t		*current_wall;
 	uint32_t		i;
+	uint32_t		current_id;
 	int				wall_i; // (LOL)
 
 	i = 0;
+	current_id = 0;
 	current_sec = (struct s_ffsector*)(addr + sizeof(struct s_ffheader));
 	while (i < data->max_element_id)
 	{
 		if (data->elements[i].enabled)
 		{
-			current_sec->id = i;
+			current_sec->id = current_id;
 			current_sec->walls_number = data->elements[i].polygon.nb_points;
 			current_sec->normal_floor = calculate_normale_with_angles(data->elements[i].angle_floor.x, data->elements[i].angle_floor.y);
 			current_sec->height_floor = data->elements[i].height_floor;
@@ -32,11 +34,11 @@ void		fill_sectors(t_data *data, uint8_t *addr, uint16_t *hash_map_edges, int16_
 			while (wall_i < data->elements[i].polygon.nb_points)
 			{
 				*current_wall = hash_map_edges[data->elements[i].polygon.edges[wall_i] - data->edges];
-				printf("writing : %u in the file.\n", *current_wall);
 				current_wall++;
 				wall_i++;
 			}
-			current_sec++;
+			current_sec = (void*)current_wall;
+			current_id++;
 		}
 		i++;
 	}

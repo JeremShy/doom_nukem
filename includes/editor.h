@@ -7,6 +7,8 @@
 # include <sys/mman.h>
 # include <ft_printf.h>
 # include <dirent.h>
+# include <fcntl.h>
+
 
 # define WIN_SIZE_X 1600
 # define WIN_SIZE_Y 1050 // /!\ Can't modify

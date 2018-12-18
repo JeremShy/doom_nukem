@@ -42,6 +42,8 @@ SRC_NAME = ft_mat4x4_set_identity.c \
 			ft_vec3_add.c \
 			ft_vec3_cross.c \
 			ft_vec3_to_vec4.c \
+			ft_vec3_scalar_mult.c \
+			ft_vec3_rotate.c \
 			ft_vec2_dot.c \
 			ft_vec2_print.c \
 			ft_vec2_get_norme.c \

@@ -70,6 +70,8 @@ float	ft_vec3_dot(const t_vec3 u, const t_vec3 v);
 float	ft_vec3_get_norme(const t_vec3 vector);
 void	ft_vec3_normalize(t_vec3 *vector);
 t_vec4	ft_vec3_to_vec4(const t_vec3 vector);
+t_vec3	ft_vec3_rotate(t_vec3 vec, float angle, t_vec3 axis);
+t_vec3	ft_vec3_scalar_mult(t_vec3 v, float f);
 
 void	ft_vec2_print(const t_vec2 v);
 t_vec2	ft_vec2_add(const t_vec2 v1, const t_vec2 v2);

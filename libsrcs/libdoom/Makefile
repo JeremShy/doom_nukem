@@ -1,7 +1,8 @@
 
 SRC_PATH = ./srcs/
 
-SRC_NAME = maths_tools.c
+SRC_NAME = 	maths_tools.c \
+			mlx_tools.c
 
 OBJ_PATH = ./obj/
 

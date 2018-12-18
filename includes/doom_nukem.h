@@ -21,6 +21,8 @@
 # define KEY_L 37
 # define KEY_M 46
 # define KEY_O 31
+# define KEY_LEFT 123
+# define KEY_RIGHT 124
 
 typedef struct	s_mlx
 {

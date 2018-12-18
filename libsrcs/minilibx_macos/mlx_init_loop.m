@@ -47,7 +47,7 @@ void *mlx_init()
   int		i;
 
   if ((new_mlx = malloc(sizeof(*new_mlx))) == NULL)
-    return ((void *)0);
+    return (NULL);
   new_mlx->win_list = NULL;
   new_mlx->img_list = NULL;
   new_mlx->loop_hook = NULL;
@@ -84,7 +84,6 @@ void *mlx_init()
   new_mlx->font->vertexes[4] = FONT_WIDTH;
   new_mlx->font->vertexes[5] = -FONT_HEIGHT-1;
   new_mlx->font->vertexes[7] = -FONT_HEIGHT-1;
-
   return ((void *)new_mlx);
 }
 

@@ -55,11 +55,6 @@ static uint8_t	ft_init(t_data *data)
 	return (0);
 }
 
-static int		close_hook(t_data *data)
-{
-	(void)data;
-	exit(EXIT_SUCCESS);
-}
 static uint8_t	ft_init_texture(t_data *data)
 {
 	if (!create_image_from_png(data, SQUARE_POINT, "docs/square.png", &(t_ivec2){21, 21}))

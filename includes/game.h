@@ -107,6 +107,8 @@ typedef struct			s_data
 
 	float				*angle_dir_point;
 	uint8_t				*visible_edges;
+	t_mat4x4			mat_rot_dir_left;
+	t_mat4x4			mat_rot_dir_right;
 }						t_data;
 
 /*
@@ -160,6 +162,8 @@ void					fill_img(t_img *img, uint32_t color);
 ** mouse_hook.c
 */
 int						mouse_hook(int button, int x, int y, t_data *data);
+int 					key_hook(int button, int x, int y, t_data *data);
+int						key_press(int keycode, t_data *data);
 
 /*
 ** points_angle.c

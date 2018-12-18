@@ -33,6 +33,7 @@ SRC_NAME = ft_mat4x4_set_identity.c \
 			ft_mat4x4_to_float_array.c \
 			ft_vec4_init.c \
 			ft_vec4_print.c \
+			ft_vec4_to_vec3.c \
 			ft_vec3_init.c \
 			ft_vec3_print.c \
 			ft_vec3_get_norme.c \
@@ -40,6 +41,7 @@ SRC_NAME = ft_mat4x4_set_identity.c \
 			ft_vec3_sub.c \
 			ft_vec3_add.c \
 			ft_vec3_cross.c \
+			ft_vec3_to_vec4.c \
 			ft_vec2_dot.c \
 			ft_vec2_print.c \
 			ft_vec2_get_norme.c \

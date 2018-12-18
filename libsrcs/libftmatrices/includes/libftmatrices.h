@@ -59,6 +59,7 @@ void	ft_mat4x4_to_float_array(float dest[16], const t_mat4x4 matrice);
 
 t_vec4	ft_vec4_init(const float tab[4]);
 void	ft_vec4_print(const t_vec4 v);
+t_vec3	ft_vec4_to_vec3(const t_vec4 vector);
 
 t_vec3	ft_vec3_init(const float tab[3]);
 void	ft_vec3_print(const t_vec3 v);
@@ -68,6 +69,7 @@ t_vec3	ft_vec3_cross(const t_vec3 v1, const t_vec3 v2);
 float	ft_vec3_dot(const t_vec3 u, const t_vec3 v);
 float	ft_vec3_get_norme(const t_vec3 vector);
 void	ft_vec3_normalize(t_vec3 *vector);
+t_vec4	ft_vec3_to_vec4(const t_vec3 vector);
 
 void	ft_vec2_print(const t_vec2 v);
 t_vec2	ft_vec2_add(const t_vec2 v1, const t_vec2 v2);

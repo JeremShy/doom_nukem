@@ -34,8 +34,8 @@ void	draw_fov_cone(t_data *data)
 	t_vec2	p1;
 	t_vec2	p2;
 
-	fov_left = ft_vec3_scalar_mult(ft_vec3_rotate(data->player.dir, -45, (t_vec3){0, 0, 1}), 2000);
-	fov_right = ft_vec3_scalar_mult(ft_vec3_rotate(data->player.dir, 45, (t_vec3){0, 0, 1}), 2000);
+	fov_left = ft_vec3_scalar_mult(ft_vec3_rotate(data->player.dir, -45, (t_vec3){0, 0, -1}), 2000);
+	fov_right = ft_vec3_scalar_mult(ft_vec3_rotate(data->player.dir, 45, (t_vec3){0, 0, -1}), 2000);
 	p1 = (t_vec2){data->player.pos.x + fov_left.x, data->player.pos.y + fov_left.y};
 	p2 = (t_vec2){data->player.pos.x + fov_right.x, data->player.pos.y + fov_right.y};
 	draw_line(&(t_ivec2){data->player.pos.x, data->player.pos.y}, &(t_ivec2){p1.x, p1.y}, &data->screen, get_color_code(255, 0, 0, 0));

@@ -12,8 +12,10 @@ float			get_angle_player_point(t_player *player, t_vec2 *point)
 	ft_vec2_normalize(&dir_point);
 	normal = ft_vec2_get_normal((t_vec2){player->dir.x, player->dir.y});
 	dot = ft_vec2_dot(dir_point, (t_vec2){player->dir.x, player->dir.y});
+	fclamp(&dot, -1, 1);
 	dot_normal = ft_vec2_dot(dir_point, normal);
 	angle = acos(dot) * (dot_normal > 0 ? 1 : -1);
+	printf("angle = %f, dot = %f, dot_normal = %f\n", angle, dot, dot_normal);
 	return (angle);
 }
 

@@ -53,8 +53,8 @@ int main(int ac, char **av)
 		ft_putendl_fd("Memory error.", 2);
 	else
 	{
-		ft_mat4x4_set_rotation(data.mat_rot_dir_right, -M_PI / 20, (t_vec3){0, 0, 1});
-		ft_mat4x4_set_rotation(data.mat_rot_dir_left, M_PI / 20, (t_vec3){0, 0, 1});
+		ft_mat4x4_set_rotation(data.mat_rot_dir_right, M_PI / 5, (t_vec3){0, 0, 1});
+		ft_mat4x4_set_rotation(data.mat_rot_dir_left, -M_PI / 5, (t_vec3){0, 0, 1});
 		data.player.dir = (t_vec3){0, -1, 0};
 		// mlx_mouse_hook(data.mlx.win_ptr, &mouse_hook, &data);
 		// mlx_loop_hook(data.mlx.mlx_ptr, loop_hook, &data);

@@ -13,16 +13,31 @@ void	draw_all_edges(t_data *data)
 	}
 }
 
+void	draw_sector(t_data *data, int i)
+{
+	uint32_t	color;
+	int j = 0;
+
+	while (j < data->sectors[i].nb_edges)
+	{
+		if (data->visible_edges[data->sectors[i].edges[j]->id])
+			color = get_color_code(0, 0xff, 0, 0);
+		else
+			color = get_color_code(0, 0, 0, 0);
+		draw_line(&(t_ivec2){data->sectors[i].edges[j]->p1->x, data->sectors[i].edges[j]->p1->y}, &(t_ivec2){data->sectors[i].edges[j]->p2->x, data->sectors[i].edges[j]->p2->y}, &data->screen, color);
+		j++;
+	}
+
+}
+
 void	draw_all_visible_edges(t_data *data)
 {
 	int	i;
 
-
 	i = 0;
-	while (i < data->nb_edges)
+	while (i < data->nb_sectors)
 	{
-		if (data->visible_edges[i])
-			draw_line(&(t_ivec2){data->edges[i].p1->x, data->edges[i].p1->y}, &(t_ivec2){data->edges[i].p2->x, data->edges[i].p2->y}, &data->screen, get_color_code(255, 255, 255, 0));
+		draw_sector(data, i);
 		i++;
 	}
 }
@@ -44,8 +59,6 @@ void	draw_fov_cone(t_data *data)
 
 int	loop(t_data *data)
 {
-	int		i;
-
 	fill_img(&data->screen, get_color_code(0, 0, 0, 0));
 
 	fill_hash_pt_fov(data);

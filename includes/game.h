@@ -112,6 +112,23 @@ typedef struct			s_data
 }						t_data;
 
 /*
+** : visible_edges :
+** : bit 0 -> visible 
+** : bit 1 -> deja utilisé
+**
+** : bit 2 - 7 : réservé
+*/
+
+typedef struct			s_bunch
+{
+	uint16_t	id_sector;
+
+	uint16_t	id_begin;
+	uint16_t	id_end;
+}
+						t_bunch;
+
+/*
 ** parsing/parse_input.c
 */
 uint8_t					parse_map(t_data *data, const char *filename);

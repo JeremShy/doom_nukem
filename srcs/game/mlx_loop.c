@@ -35,7 +35,7 @@ void	draw_all_visible_edges(t_data *data)
 	int	i;
 
 	i = 0;
-	while (i < data->nb_sectors)
+	while ((uint16_t)i < data->nb_sectors)
 	{
 		draw_sector(data, i);
 		i++;

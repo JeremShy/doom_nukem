@@ -84,6 +84,14 @@ typedef struct			s_player
 	t_vec3	dir;
 }						t_player;
 
+typedef struct			s_bunch
+{
+	uint16_t	id_sector;
+
+	uint16_t	id_begin;
+	uint16_t	id_end;
+}						t_bunch;
+
 typedef struct			s_data
 {
 	t_mlx				mlx;
@@ -109,6 +117,9 @@ typedef struct			s_data
 	uint8_t				*visible_edges;
 	t_mat4x4			mat_rot_dir_left;
 	t_mat4x4			mat_rot_dir_right;
+
+	int32_t				nb_bunches;
+	t_bunch				bunches[MAX_SECTOR_NBR * MAX_SECTOR_EDGES / 2];
 }						t_data;
 
 /*
@@ -119,14 +130,6 @@ typedef struct			s_data
 ** : bit 2 - 7 : réservé
 */
 
-typedef struct			s_bunch
-{
-	uint16_t	id_sector;
-
-	uint16_t	id_begin;
-	uint16_t	id_end;
-}
-						t_bunch;
 
 /*
 ** parsing/parse_input.c

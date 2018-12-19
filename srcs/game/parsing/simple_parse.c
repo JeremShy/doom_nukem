@@ -24,7 +24,7 @@ uint8_t						parse_header(t_data *data, struct s_ffheader *header, off_t file_si
 		data->nb_edges = header->walls_number;
 		data->nb_textures = header->texture_number;
 
-		printf("data->player.pos : {%d, %d]\n", data->player.pos.x, data->player.pos.y);
+		printf("data->player.pos : {%f, %f]\n", data->player.pos.x, data->player.pos.y);
 		printf("data->nb_sectors : %d\n", data->nb_sectors);
 		printf("data->nb_points : %d\n", data->nb_points);
 		printf("data->nb_edges : %d\n", data->nb_edges);

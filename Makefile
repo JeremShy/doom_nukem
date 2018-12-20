@@ -44,14 +44,14 @@ SRC_GAME_NAME =		parsing/parse_map.c \
 					parsing/sector.c \
 					\
 					main.c \
-					mlx_loop.c \
-					mlx_img_func.c \
 					bresenham.c \
 					bresenham_quadrants.c \
-					mouse_hook.c \
 					flood_bunches.c \
+					log.c \
+					mlx_loop.c \
+					mlx_img_func.c \
+					mouse_hook.c \
 					points_angle.c
-
 
 NAME_GAME = doom-nukem
 NAME_EDITOR = editor

@@ -41,6 +41,8 @@ int main(int ac, char **av)
 {
 	t_data	data;
 
+	init_log("log.log");
+
 	if (ac != 2)
 		ft_putendl_fd("Usage: ./doom_nukem map", 2);
 	else if (!parse_map(&data, av[1]))

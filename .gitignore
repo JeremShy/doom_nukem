@@ -58,4 +58,4 @@ doom-nukem
 .DS_Store
 
 *.swp
-
+*.log

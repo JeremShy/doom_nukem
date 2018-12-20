@@ -167,6 +167,12 @@ void					bresenham_quadrant4(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color)
 void					flood_bunches(t_data *data);
 
 /*
+** log.c
+*/
+void					init_log(const char *logfile);
+void					do_log(const char *str, ...);
+
+/*
 ** mlx_loop.c
 */
 int						loop(t_data *data);

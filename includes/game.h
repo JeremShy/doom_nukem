@@ -89,7 +89,7 @@ typedef struct			s_player
 
 typedef struct			s_bunch
 {
-	uint16_t	id_sector;
+	t_sector	*sector;
 
 	uint16_t	id_begin;
 	uint16_t	id_end;

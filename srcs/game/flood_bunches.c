@@ -64,12 +64,12 @@ int32_t	go_to_end_bunch(t_data *data, t_sector *sector, int32_t i)
 
 void	add_bunch(t_data *data, uint16_t id_sector, uint16_t id_begin, uint16_t id_end)
 {
-	data->bunches[data->nb_bunches].id_sector = id_sector;
+	data->bunches[data->nb_bunches].sector = &data->sectors[id_sector];
 	data->bunches[data->nb_bunches].id_begin = id_begin;
 	data->bunches[data->nb_bunches].id_end= id_end;
 
 	do_log("Creating bunch : %d\n", data->nb_bunches);
-	do_log("data->bunches[%d].id_sector = %d\n", data->nb_bunches, data->bunches[data->nb_bunches].id_sector);
+	do_log("data->bunches[%d].id_sector = %d\n", data->nb_bunches, id_sector);
 	do_log("data->bunches[%d].id_begin = %d\n", data->nb_bunches, data->bunches[data->nb_bunches].id_begin);
 	do_log("data->bunches[%d].id_end= %d\n", data->nb_bunches, data->bunches[data->nb_bunches].id_end);
 

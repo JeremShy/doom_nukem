@@ -33,8 +33,24 @@ static uint8_t	ft_mlx_init(t_data *data)
 	else if (!create_image(data, WIN_SIZE_X, WIN_SIZE_Y))
 		ft_putendl_fd("Error: Can't create image.", 2);
 	else
+	{
+		mlx_do_key_autorepeatoff(data->mlx.mlx_ptr);
 		return (1);
+	}
 	return (0);
+}
+
+void	init_data(t_data *data)
+{
+	struct timeval tp;
+
+	ft_mat4x4_set_rotation(data->mat_rot_dir_right, M_PI / 3, (t_vec3){0, 0, 1});
+	ft_mat4x4_set_rotation(data->mat_rot_dir_left, -M_PI / 3, (t_vec3){0, 0, 1});
+	data->player.dir = (t_vec3){0, -1, 0};
+	gettimeofday(&tp, NULL);
+	data->lasttime = tp.tv_sec * 1000 + tp.tv_usec / 1000;
+	ft_bzero(data->key, MAX_KEY + 1);
+	data->need_update = 1;
 }
 
 int main(int ac, char **av)
@@ -42,9 +58,8 @@ int main(int ac, char **av)
 	t_data	data;
 
 	init_log("log.log");
-
 	if (ac != 2)
-		ft_putendl_fd("Usage: ./doom_nukem map", 2);
+		ft_putendl_fd("Usage: ./doom_nukems map", 2);
 	else if (!parse_map(&data, av[1]))
 		ft_putendl_fd("Parse error.", 2);
 	else if (!ft_mlx_init(&data))
@@ -55,21 +70,16 @@ int main(int ac, char **av)
 		ft_putendl_fd("Memory error.", 2);
 	else
 	{
-		ft_mat4x4_set_rotation(data.mat_rot_dir_right, M_PI / 5, (t_vec3){0, 0, 1});
-		ft_mat4x4_set_rotation(data.mat_rot_dir_left, -M_PI / 5, (t_vec3){0, 0, 1});
-		data.player.dir = (t_vec3){0, -1, 0};
 		// mlx_mouse_hook(data.mlx.win_ptr, &mouse_hook, &data);
 		// mlx_loop_hook(data.mlx.mlx_ptr, loop_hook, &data);
 		mlx_hook(data.mlx.win_ptr, 2, 0, key_press, &data);
-		// mlx_hook(data.mlx.win_ptr, 3, 0, key_release, &data);
+		mlx_hook(data.mlx.win_ptr, 3, 0, key_release, &data);
 		// mlx_hook(data.mlx.win_ptr, 4, 0, mouse_press, &data);
 		// mlx_hook(data.mlx.win_ptr, 5, 0, mouse_release, &data);
 		// mlx_hook(data.mlx.win_ptr, 6, 1l << 6, mouse_motion, &data);
 		mlx_hook(data.mlx.win_ptr, 17, 3, close_hook, &data);
 		mlx_loop_hook(data.mlx.mlx_ptr, loop, &data);
-
-		printf("%f\n", radians_to_degrees(get_angle_player_point(&data.player, &(t_vec2){350, 600})));
-		// exit(0);
+		init_data(&data);
 		mlx_loop(data.mlx.mlx_ptr);
 	}
 	return (1);

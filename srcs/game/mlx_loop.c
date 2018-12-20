@@ -59,16 +59,33 @@ void	draw_fov_cone(t_data *data)
 
 int	loop(t_data *data)
 {
-	fill_img(&data->screen, get_color_code(0, 0, 0, 0));
+	struct timeval	tp;
+	static int		fps = 0;
+	static int		time = 0;
 
-	fill_hash_pt_fov(data);
-	flood_bunches(data);
-	draw_all_visible_edges(data);
-	draw_fov_cone(data);
+	gettimeofday(&tp, NULL);
+	data->deltatime = (tp.tv_sec * 1000 + tp.tv_usec / 1000) - data->lasttime;
+	data->lasttime = (tp.tv_sec * 1000 + tp.tv_usec / 1000);
+	handle_key_events(data);
+	if (data->need_update)
+	{
+		fill_img(&data->screen, get_color_code(0, 0, 0, 0));
+		fill_hash_pt_fov(data);
+		flood_bunches(data);
+		draw_all_visible_edges(data);
+		draw_fov_cone(data);
+	}
 	put_pixel_to_image(&data->screen, data->player.pos.x, data->player.pos.y, get_color_code(255, 255, 0, 0));
 	mlx_put_image_to_window(data->mlx.mlx_ptr, data->mlx.win_ptr, data->screen.ptr, 0, 0);
-
-	// exit(0);
-
+	fps++;
+	time += data->deltatime;
+	data->need_update = 0;
+	if (time > 1000)
+	{
+		time -= 1000;
+		printf("fps = %d\n", fps);
+		fps = 0;
+	}
 	return (0);
 }
+

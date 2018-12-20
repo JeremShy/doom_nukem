@@ -25,7 +25,6 @@ int32_t	go_to_next_visible_edge(t_data *data, t_sector *sector, int32_t i)
 	i++;
 	while (i < sector->nb_edges)
 	{
-		// printf("i : %d, sector->nb_edges : %d\n", i, sector->nb_edges);
 		if (data->visible_edges[sector->edges[i]->id])
 			return (i);
 		i++;
@@ -69,10 +68,10 @@ void	add_bunch(t_data *data, uint16_t id_sector, uint16_t id_begin, uint16_t id_
 	data->bunches[data->nb_bunches].id_begin = id_begin;
 	data->bunches[data->nb_bunches].id_end= id_end;
 
-	printf("Creating bunch : %d\n", data->nb_bunches);
-	printf("data->bunches[%d].id_sector = %d\n", data->nb_bunches, data->bunches[data->nb_bunches].id_sector);
-	printf("data->bunches[%d].id_begin = %d\n", data->nb_bunches, data->bunches[data->nb_bunches].id_begin);
-	printf("data->bunches[%d].id_end= %d\n", data->nb_bunches, data->bunches[data->nb_bunches].id_end);
+	do_log("Creating bunch : %d\n", data->nb_bunches);
+	do_log("data->bunches[%d].id_sector = %d\n", data->nb_bunches, data->bunches[data->nb_bunches].id_sector);
+	do_log("data->bunches[%d].id_begin = %d\n", data->nb_bunches, data->bunches[data->nb_bunches].id_begin);
+	do_log("data->bunches[%d].id_end= %d\n", data->nb_bunches, data->bunches[data->nb_bunches].id_end);
 
 	(data->nb_bunches)++;
 }

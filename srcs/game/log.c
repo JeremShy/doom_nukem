@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-FILE *f;
+FILE	*f;
 
 void	init_log(const char *logfile)
 {

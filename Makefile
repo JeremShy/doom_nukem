@@ -43,11 +43,13 @@ SRC_GAME_NAME =		parsing/parse_map.c \
 					parsing/simple_parse.c \
 					parsing/sector.c \
 					\
-					main.c \
 					bresenham.c \
 					bresenham_quadrants.c \
 					flood_bunches.c \
+					handle_key_events.c \
+					key_hook.c \
 					log.c \
+					main.c \
 					mlx_loop.c \
 					mlx_img_func.c \
 					mouse_hook.c \

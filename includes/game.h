@@ -6,6 +6,7 @@
 # include <sys/stat.h>
 # include <sys/mman.h>
 # include <file_format.h>
+# include <sys/time.h>
 
 # define WIN_SIZE_X 1600
 # define WIN_SIZE_Y 900 // /!\ Can't modify
@@ -19,6 +20,8 @@
 
 # define FOV (M_PI / 2)
 # define HALF_FOV (M_PI / 4)
+
+# define SPEED 50
 
 typedef struct s_sector t_sector;
 
@@ -94,6 +97,13 @@ typedef struct			s_bunch
 
 typedef struct			s_data
 {
+	int					deltatime;
+	int					lasttime;
+
+	uint8_t				need_update;
+
+	uint8_t				key[MAX_KEY + 1];
+
 	t_mlx				mlx;
 	t_img				screen;
 
@@ -167,6 +177,17 @@ void					bresenham_quadrant4(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color)
 void					flood_bunches(t_data *data);
 
 /*
+** handle_key_events.c
+*/
+void					handle_key_events(t_data *data);
+
+/*
+** key_hook.c
+*/
+int						key_release(int keycode, t_data *data);
+int						key_press(int keycode, t_data *data);
+
+/*
 ** log.c
 */
 void					init_log(const char *logfile);
@@ -188,8 +209,6 @@ void					fill_img(t_img *img, uint32_t color);
 ** mouse_hook.c
 */
 int						mouse_hook(int button, int x, int y, t_data *data);
-int 					key_hook(int button, int x, int y, t_data *data);
-int						key_press(int keycode, t_data *data);
 
 /*
 ** points_angle.c

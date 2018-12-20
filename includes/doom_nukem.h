@@ -13,6 +13,8 @@
 
 # define KEY_ESCAPE 53
 # define KEY_BACKQUOTE 50
+# define KEY_W 13
+# define KEY_A 0
 # define KEY_S 1
 # define KEY_D 2
 # define KEY_E 14
@@ -23,6 +25,8 @@
 # define KEY_O 31
 # define KEY_LEFT 123
 # define KEY_RIGHT 124
+
+# define MAX_KEY KEY_RIGHT
 
 typedef struct	s_mlx
 {

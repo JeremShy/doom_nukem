@@ -62,6 +62,7 @@ int	loop(t_data *data)
 	struct timeval	tp;
 	static int		fps = 0;
 	static int		time = 0;
+	// t_mat4x4		rez;
 
 	gettimeofday(&tp, NULL);
 	data->deltatime = (tp.tv_sec * 1000 + tp.tv_usec / 1000) - data->lasttime;
@@ -69,9 +70,13 @@ int	loop(t_data *data)
 	handle_key_events(data);
 	if (data->need_update)
 	{
+		// ft_mat4x4_set_look_at(data->look_at, data->player.pos, data->player.dir, (t_vec3){0, 0, 1});
+		// ft_mat4x4_mult(rez, data->look_at, data->projection);
 		fill_img(&data->screen, get_color_code(0, 0, 0, 0));
 		fill_hash_pt_fov(data);
 		flood_bunches(data);
+		// check_projection_point(data);
+		project_points_on_normal(data);
 		draw_all_visible_edges(data);
 		draw_fov_cone(data);
 	}

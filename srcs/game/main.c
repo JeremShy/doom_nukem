@@ -51,6 +51,7 @@ void	init_data(t_data *data)
 	data->lasttime = tp.tv_sec * 1000 + tp.tv_usec / 1000;
 	ft_bzero(data->key, MAX_KEY + 1);
 	data->need_update = 1;
+	ft_mat4x4_set_projection(data->projection, (float[]){FOV, (float)WIN_SIZE_X / WIN_SIZE_Y, 10, 1000});
 }
 
 int main(int ac, char **av)

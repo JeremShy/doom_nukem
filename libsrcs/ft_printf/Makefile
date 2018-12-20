@@ -155,9 +155,6 @@ $(NAME): $(OPATH) $(OBJ)
 	@echo "Building $@"
 	@$(AR) rc $@ $(OBJ)
 	@$(RANLIB) $@
-	@echo "\033[32m ╔════════════════╗"
-	@echo " ║  All is done ! ║"
-	@echo " ╚════════════════╝\033[0m"
 
 $(OPATH)/%.o: $(CPATH)/%.c
 	@$(CC) $(CFLAGS) -c $< -o $@ -I $(HPATH)
@@ -176,9 +173,5 @@ fclean: clean
 	@echo " \033[33m\033[4m\033[1m → Fclean rule \033[0m"
 	@echo "Deleting $(NAME)"
 	@$(RM) -f $(NAME)
-	@echo "\033[32m ╔═══════════════╗"
-	@echo " ║  All clear !  ║"
-	@echo " ╚═══════════════╝\033[0m"
-
 
 re: fclean all

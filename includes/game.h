@@ -123,13 +123,24 @@ typedef struct			s_data
 	int32_t				nb_points;
 	t_vec2				*points;
 
+	uint8_t				*used_points;
+	float				*project_normal;
+
+	int32_t				nb_points_screen;
+	t_vec2				*points_screen;
+
 	float				*angle_dir_point;
+
 	uint8_t				*visible_edges;
+
 	t_mat4x4			mat_rot_dir_left;
 	t_mat4x4			mat_rot_dir_right;
+	t_mat4x4			look_at;
+	t_mat4x4			projection;
 
 	int32_t				nb_bunches;
 	t_bunch				bunches[MAX_SECTOR_NBR * MAX_SECTOR_EDGES / 2];
+	t_bunch				sorted_bunches[MAX_SECTOR_NBR * MAX_SECTOR_EDGES / 2];
 }						t_data;
 
 /*
@@ -215,5 +226,10 @@ int						mouse_hook(int button, int x, int y, t_data *data);
 */
 float				get_angle_player_point(t_player *player, t_vec2 *point);
 void					fill_hash_pt_fov(t_data *data);
+
+/*
+** projection_point.c
+*/
+uint8_t		project_points_on_normal(t_data *data);
 
 #endif

@@ -45,6 +45,12 @@ uint8_t	parse_points(t_data *data, t_ivec2 *points)
 
 	if (!(data->points = malloc(data->nb_points * sizeof(struct s_ivec2))))
 		return (0);
+	if (!(data->points_screen = malloc(data->nb_points * sizeof(struct s_ivec2))))
+		return (0);
+	if (!(data->used_points = malloc(data->nb_points * sizeof(uint8_t))))
+		return (0);
+	if (!(data->project_normal = malloc(data->nb_points * sizeof(float))))
+		return (0);
 	i = 0;
 	while (i < data->nb_points)
 	{

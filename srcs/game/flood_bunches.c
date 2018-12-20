@@ -106,9 +106,15 @@ void	flood_bunches(t_data *data)
 	uint32_t	current_sector;
 
 	i = 0;
+	ft_bzero(data->used_points, data->nb_points);
 	while (i < data->nb_edges)
 	{
 		data->visible_edges[i] = can_see_edge(data, &data->edges[i]);
+		if (data->visible_edges[i])
+		{
+			data->used_points[data->edges[i].p1 - data->points] = 1;
+			data->used_points[data->edges[i].p2 - data->points] = 1;
+		}
 		i++;
 	}
 	current_sector = 0;

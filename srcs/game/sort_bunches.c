@@ -33,31 +33,29 @@ void	get_min_max(t_data *data, t_bunch *bunch, float *min, float *max)
 	int			i;
 	uint8_t		b;
 	t_sector	*sec;
-	float		p1_float;
-	float		p2_float;
+	float		p1;
+	float		p2;
 
 	sec = bunch->sector;
 	i = bunch->id_begin;
 	*min = data->project_normal[sec->edges[i]->p1 - data->points];
 	*max = data->project_normal[sec->edges[i]->p1 - data->points];
 	b = 1;
-	do_log("-----------------------\n");
 	while (b || i != (bunch->id_end + 1) % bunch->sector->nb_edges)
 	{
 		b = 0;
-		p1_float = data->project_normal[sec->edges[i]->p1 - data->points];
-		p2_float = data->project_normal[sec->edges[i]->p2 - data->points];
+		p1 = data->project_normal[sec->edges[i]->p1 - data->points];
+		p2 = data->project_normal[sec->edges[i]->p2 - data->points];
 
-		if (p1_float < *min)
-			*min = p1_float;
-		if (p1_float > *max)
-			*max = p1_float;
+		if (p1 < *min)
+			*min = p1;
+		if (p1 > *max)
+			*max = p1;
 
-		if (p2_float < *min)
-			*min = p2_float;
-		if (p2_float > *max)
-			*max = p2_float;
-		do_log("max : %f\n", *max);
+		if (p2 < *min)
+			*min = p2;
+		if (p2 > *max)
+			*max = p2;
 		i = (i + 1) % bunch->sector->nb_edges;
 	}
 }

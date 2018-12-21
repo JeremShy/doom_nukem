@@ -77,7 +77,11 @@ int	loop(t_data *data)
 		flood_bunches(data);
 		// check_projection_point(data);
 		project_points_on_normal(data);
+
 		draw_all_visible_edges(data);
+
+		compare_bunches(data, &data->bunches[0], &data->bunches[1]);
+
 		draw_fov_cone(data);
 	}
 	put_pixel_to_image(&data->screen, data->player.pos.x, data->player.pos.y, get_color_code(255, 255, 0, 0));

@@ -224,12 +224,17 @@ int						mouse_hook(int button, int x, int y, t_data *data);
 /*
 ** points_angle.c
 */
-float				get_angle_player_point(t_player *player, t_vec2 *point);
+float					get_angle_player_point(t_player *player, t_vec2 *point);
 void					fill_hash_pt_fov(t_data *data);
 
 /*
 ** projection_point.c
 */
-uint8_t		project_points_on_normal(t_data *data);
+uint8_t					project_points_on_normal(t_data *data);
+
+/*
+** sort_bunches.c
+*/
+int8_t					compare_bunches(t_data *data, t_bunch *b1, t_bunch *b2);
 
 #endif

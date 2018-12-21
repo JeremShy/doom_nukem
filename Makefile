@@ -54,7 +54,8 @@ SRC_GAME_NAME =		parsing/parse_map.c \
 					mlx_img_func.c \
 					mouse_hook.c \
 					points_angle.c \
-					projection_point.c
+					projection_point.c \
+					sort_bunches.c
 
 NAME_GAME = doom-nukem
 NAME_EDITOR = editor

@@ -193,6 +193,11 @@ void					flood_bunches(t_data *data);
 void					handle_key_events(t_data *data);
 
 /*
+** intersect_edges.c
+*/
+t_edge					*is_edges_intersect(t_data *data, t_edge *e1, t_edge *e2);
+
+/*
 ** key_hook.c
 */
 int						key_release(int keycode, t_data *data);

@@ -10,6 +10,7 @@ typedef struct s_data t_data;
 ** maths_tools.c
 */
 t_vec3		calculate_normale_with_angles(float angle_x, float angle_y);
+void		fswap(float *a, float *b);
 void		swap(int *a, int *b);
 uint32_t	min(uint32_t a, uint32_t b);
 uint32_t	max(uint32_t a, uint32_t b);

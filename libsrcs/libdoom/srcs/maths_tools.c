@@ -28,6 +28,15 @@ void		swap(int *a, int *b)
 	*b = tmp;
 }
 
+void		fswap(float *a, float *b)
+{
+	float tmp;
+
+	tmp = *a;
+	*a = *b;
+	*b = tmp;
+}
+
 uint32_t	min(uint32_t a, uint32_t b)
 {
 	return (a < b ? a : b);

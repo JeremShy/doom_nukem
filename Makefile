@@ -37,7 +37,7 @@ SRC_EDITOR_NAME =	 \
 					get_polygon_from_point.c \
 					add_stuff.c \
 					find_next_sectors.c \
-					save_scene.c
+					save_scene.c 
 
 SRC_GAME_NAME =		parsing/parse_map.c \
 					parsing/simple_parse.c \
@@ -46,6 +46,7 @@ SRC_GAME_NAME =		parsing/parse_map.c \
 					bresenham.c \
 					bresenham_quadrants.c \
 					flood_bunches.c \
+					intersect_edges.c \
 					handle_key_events.c \
 					key_hook.c \
 					log.c \

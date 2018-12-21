@@ -37,7 +37,8 @@ void	draw_all_visible_edges(t_data *data)
 	i = 0;
 	while ((uint16_t)i < data->nb_sectors)
 	{
-		draw_sector(data, i);
+		if ((data->bunches[0].sector == &data->sectors[i] || data->bunches[1].sector == &data->sectors[i]))
+			draw_sector(data, i);
 		i++;
 	}
 }
@@ -80,6 +81,7 @@ int	loop(t_data *data)
 
 		draw_all_visible_edges(data);
 
+		if (data->nb_bunches > 1)
 		compare_bunches(data, &data->bunches[0], &data->bunches[1]);
 
 		draw_fov_cone(data);

@@ -21,6 +21,7 @@ int32_t		clamp_value(int32_t value, int32_t min, int32_t max);
 float		norme(t_vec2 *v);
 t_vec2		mult_vect_scalar(t_vec2 *v, float f);
 void		normalize(t_vec2 *v);
+float		get_dist(const t_vec2 *p1, const t_vec2 *p2);
 
 /*
 ** mlx_tools.c

@@ -19,6 +19,11 @@ t_vec3		calculate_normale_with_angles(float angle_x, float angle_y)
 	return (normal);
 }
 
+float		get_dist(const t_vec2 *p1, const t_vec2 *p2)
+{
+	return (sqrt(pow(p1->x - p2->x, 2) + pow(p1->y - p2->y, 2)));
+}
+
 void		swap(int *a, int *b)
 {
 	int tmp;

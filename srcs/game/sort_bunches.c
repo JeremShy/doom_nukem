@@ -92,7 +92,7 @@ t_ivec2	find_e1_e2(t_data *data, t_bunch *b1, t_bunch *b2)
 		while (b || j != (b2->id_end + 1) % b2->sector->nb_edges)
 		{
 			b = 0;
-			if (edges_intersect_x(data, b1->sector->edges[i], b2->sector->edges[j]))
+			if (edges_intersect_x(data, b1->sector->edges[i], b2->sector->edges[j]) && b1->sector->edges[i] != b2->sector->edges[j])
 				return ((t_ivec2){b1->sector->edges[i]->id, b2->sector->edges[j]->id});
 			j = (j + 1) % b2->sector->nb_edges;
 		}
@@ -102,28 +102,56 @@ t_ivec2	find_e1_e2(t_data *data, t_bunch *b1, t_bunch *b2)
 	return ((t_ivec2){0, 0});
 }
 
+t_vec2	*point_in_commun(t_edge *e1, t_edge *e2)
+{
+	if (e1->p1 == e2->p1 || e1->p1 == e2->p2)
+		return (e1->p1);
+	else if (e1->p2 == e2->p1 || e1->p2 == e2->p2)
+		return (e1->p2);
+	return (NULL);
+
+}
+
 int8_t	handle_overlapping_bunches(t_data *data, t_bunch *b1, t_bunch *b2)
 {
 	t_edge	*e1;
 	t_edge	*e2;
-	t_ivec2	tmp;
+	t_ivec2	itmp;
+	t_vec2	*tmp;
+	float dist;
 
-	tmp = find_e1_e2(data, b1, b2);
-	if (!tmp.x && !tmp.y)
+	itmp = find_e1_e2(data, b1, b2);
+	if (!itmp.x && !itmp.y)
 		exit(EXIT_FAILURE);
-	e1 = &data->edges[tmp.x];
-	e2 = &data->edges[tmp.y];
-
-	// do_log("First intersecting edges : ")
-	if (is_edges_intersect(data, e1, e2) == e1)
+	e1 = &data->edges[itmp.x];
+	e2 = &data->edges[itmp.y];
+	if ((tmp = point_in_commun(e1, e2)))
 	{
-		draw_line(&(t_ivec2){e1->p1->x, e1->p1->y}, &(t_ivec2){e1->p2->x, e1->p2->y}, &data->screen, 0xff);
-		draw_line(&(t_ivec2){e2->p1->x, e2->p1->y}, &(t_ivec2){e2->p2->x, e2->p2->y}, &data->screen, 0xff0000);
+		dist = get_dist(&(t_vec2){data->player.pos.x, data->player.pos.y}, (tmp == e1->p1) ? e1->p2 : e1->p1);
+		if (get_dist(&(t_vec2){data->player.pos.x, data->player.pos.y}, (tmp == e2->p1) ? e2->p2 : e2->p1) < dist)
+		{
+			draw_line(&(t_ivec2){e2->p1->x, e2->p1->y}, &(t_ivec2){e2->p2->x, e2->p2->y}, &data->screen, 0xff);
+			draw_line(&(t_ivec2){e1->p1->x, e1->p1->y}, &(t_ivec2){e1->p2->x, e1->p2->y}, &data->screen, 0xff0000);
+		}
+		else
+		{
+			draw_line(&(t_ivec2){e1->p1->x, e1->p1->y}, &(t_ivec2){e1->p2->x, e1->p2->y}, &data->screen, 0xff);
+			draw_line(&(t_ivec2){e2->p1->x, e2->p1->y}, &(t_ivec2){e2->p2->x, e2->p2->y}, &data->screen, 0xff0000);
+		}
 	}
 	else
 	{
-		draw_line(&(t_ivec2){e2->p1->x, e2->p1->y}, &(t_ivec2){e2->p2->x, e2->p2->y}, &data->screen, 0xff);
-		draw_line(&(t_ivec2){e1->p1->x, e1->p1->y}, &(t_ivec2){e1->p2->x, e1->p2->y}, &data->screen, 0xff0000);
+		// do_log("First intersecting edges : ")
+		if (is_edges_intersect(data, e1, e2) == e1)
+		{
+			draw_line(&(t_ivec2){e1->p1->x, e1->p1->y}, &(t_ivec2){e1->p2->x, e1->p2->y}, &data->screen, 0xff);
+			draw_line(&(t_ivec2){e2->p1->x, e2->p1->y}, &(t_ivec2){e2->p2->x, e2->p2->y}, &data->screen, 0xff0000);
+		}
+		else
+		{
+			draw_line(&(t_ivec2){e2->p1->x, e2->p1->y}, &(t_ivec2){e2->p2->x, e2->p2->y}, &data->screen, 0xff);
+			draw_line(&(t_ivec2){e1->p1->x, e1->p1->y}, &(t_ivec2){e1->p2->x, e1->p2->y}, &data->screen, 0xff0000);
+		}
 	}
 	return (0);
 }

@@ -58,6 +58,7 @@ int main(int ac, char **av)
 {
 	t_data	data;
 
+	printf("zero = %f, %f", ft_vec2_sub((t_vec2){123, 456}, (t_vec2){123, 456}).x, ft_vec2_sub((t_vec2){123, 456}, (t_vec2){123, 456}).y);
 	init_log("log.log");
 	if (ac != 2)
 		ft_putendl_fd("Usage: ./doom_nukems map", 2);

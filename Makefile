@@ -45,7 +45,8 @@ SRC_GAME_NAME =		parsing/parse_map.c \
 					\
 					bresenham.c \
 					bresenham_quadrants.c \
-					flood_bunches.c \
+					fill_printed_edges.c \
+					cmp_edges_order.c \
 					intersect_edges.c \
 					handle_key_events.c \
 					key_hook.c \
@@ -56,7 +57,6 @@ SRC_GAME_NAME =		parsing/parse_map.c \
 					mouse_hook.c \
 					points_angle.c \
 					projection_point.c \
-					sort_bunches.c
 
 NAME_GAME = doom-nukem
 NAME_EDITOR = editor

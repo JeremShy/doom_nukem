@@ -87,14 +87,6 @@ typedef struct			s_player
 	t_vec3	dir;
 }						t_player;
 
-typedef struct			s_bunch
-{
-	t_sector	*sector;
-
-	uint16_t	id_begin;
-	uint16_t	id_end;
-}						t_bunch;
-
 typedef struct			s_data
 {
 	int					deltatime;
@@ -138,9 +130,8 @@ typedef struct			s_data
 	t_mat4x4			look_at;
 	t_mat4x4			projection;
 
-	int32_t				nb_bunches;
-	t_bunch				bunches[MAX_SECTOR_NBR * MAX_SECTOR_EDGES / 2];
-	t_bunch				sorted_bunches[MAX_SECTOR_NBR * MAX_SECTOR_EDGES / 2];
+	uint32_t				nb_printed_edges;
+	t_edge				*printed_edges[MAX_SECTOR_NBR * MAX_SECTOR_EDGES];
 }						t_data;
 
 /*
@@ -183,9 +174,14 @@ void					bresenham_quadrant3(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color)
 void					bresenham_quadrant4(t_ivec2 p1, t_ivec2 p2, t_img *img, uint32_t color);
 
 /*
-** flood_bunches.c
+** cmp_edges_order.c
 */
-void					flood_bunches(t_data *data);
+int8_t					cmp_edges_order(t_data *data, t_edge *e1, t_edge *e2);
+
+/*
+** fill_printed_edges.c
+*/
+void					fill_printed_edges(t_data *data);
 
 /*
 ** handle_key_events.c
@@ -236,10 +232,5 @@ void					fill_hash_pt_fov(t_data *data);
 ** projection_point.c
 */
 uint8_t					project_points_on_normal(t_data *data);
-
-/*
-** sort_bunches.c
-*/
-int8_t					compare_bunches(t_data *data, t_bunch *b1, t_bunch *b2);
 
 #endif

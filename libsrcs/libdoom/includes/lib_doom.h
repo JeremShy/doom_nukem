@@ -22,6 +22,7 @@ float		norme(t_vec2 *v);
 t_vec2		mult_vect_scalar(t_vec2 *v, float f);
 void		normalize(t_vec2 *v);
 float		get_dist(const t_vec2 *p1, const t_vec2 *p2);
+t_ivec2		vec2_to_ivec2(t_vec2 v);
 
 /*
 ** mlx_tools.c

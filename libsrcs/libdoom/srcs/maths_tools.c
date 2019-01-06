@@ -101,3 +101,9 @@ void		normalize(t_vec2 *v)
 	v->x = v->x / tmp;
 	v->y = v->y / tmp;
 }
+
+t_ivec2		vec2_to_ivec2(t_vec2 v)
+{
+	return ((t_ivec2){v.x, v.y});
+}
+

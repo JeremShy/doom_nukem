@@ -27,18 +27,61 @@ void	draw_sector(t_data *data, int i)
 		draw_line(&(t_ivec2){data->sectors[i].edges[j]->p1->x, data->sectors[i].edges[j]->p1->y}, &(t_ivec2){data->sectors[i].edges[j]->p2->x, data->sectors[i].edges[j]->p2->y}, &data->screen, color);
 		j++;
 	}
-
 }
 
-void	draw_all_visible_edges(t_data *data)
+t_edge	*find_next_to_print(t_data *data)
 {
-	int	i;
+	t_edge		*closest;
+	uint32_t	i;
+	uint32_t	iclosest;
+	t_edge		*cur;
 
+	closest = NULL;
+	iclosest = 0;
 	i = 0;
-	while ((uint16_t)i < data->nb_sectors)
+	while (i < data->nb_printed_edges)
 	{
-		if ((data->bunches[0].sector == &data->sectors[i] || data->bunches[1].sector == &data->sectors[i]))
-			draw_sector(data, i);
+		cur = data->printed_edges[i];
+		if (cur != NULL)
+		{
+			if (closest == NULL)
+			{
+				iclosest = i;
+				closest = cur;
+			}
+			else if (cmp_edges_order(data, cur, closest) < 0)
+			{
+				iclosest = i;
+				closest = cur;
+			}
+		}
+		i++;
+	}
+	if (closest)
+		data->printed_edges[iclosest] = NULL;
+	return (closest);
+}
+
+void	draw_edges(t_data *data)
+{
+	uint32_t	i;
+	t_edge		*to_print;
+
+	uint8_t	color;
+
+	color = 0xff;
+	fill_printed_edges(data);
+	i = 0;
+	printf("Nb printed edges : %d\n", data->nb_printed_edges);
+	while (i < data->nb_printed_edges)
+	{
+		if (!(to_print = find_next_to_print(data)))
+		{
+			printf("Error : to_print is null\n");
+			exit(0);
+		}
+		draw_line(&(t_ivec2){to_print->p1->x, to_print->p1->y}, &(t_ivec2){to_print->p2->x, to_print->p2->y}, &data->screen, get_color_code(color, color, color, 0));
+		color -= 0xff / data->nb_printed_edges;
 		i++;
 	}
 }
@@ -75,14 +118,10 @@ int	loop(t_data *data)
 		// ft_mat4x4_mult(rez, data->look_at, data->projection);
 		fill_img(&data->screen, get_color_code(0, 0, 0, 0));
 		fill_hash_pt_fov(data);
-		flood_bunches(data);
 		// check_projection_point(data);
 		project_points_on_normal(data);
 
-		draw_all_visible_edges(data);
-
-		if (data->nb_bunches > 1)
-		compare_bunches(data, &data->bunches[0], &data->bunches[1]);
+		draw_edges(data);
 
 		draw_fov_cone(data);
 	}

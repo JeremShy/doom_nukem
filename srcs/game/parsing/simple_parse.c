@@ -72,7 +72,6 @@ uint8_t	parse_edges(t_data *data, struct s_ffwall *file_wall)
 	while (i < data->nb_edges)
 	{
 		data->edges[i].id = i;
-		printf("filling edges[%d]\n", i);
 		data->edges[i].p1 = &(data->points[file_wall->p1]);
 		data->edges[i].p2 = &(data->points[file_wall->p2]);
 

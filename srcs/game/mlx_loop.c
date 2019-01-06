@@ -44,12 +44,7 @@ t_edge	*find_next_to_print(t_data *data)
 		cur = data->printed_edges[i];
 		if (cur != NULL)
 		{
-			if (closest == NULL)
-			{
-				iclosest = i;
-				closest = cur;
-			}
-			else if (cmp_edges_order(data, cur, closest) < 0)
+			if (closest == NULL || cmp_edges_order(data, cur, closest) < 0)
 			{
 				iclosest = i;
 				closest = cur;
@@ -66,8 +61,7 @@ void	draw_edges(t_data *data)
 {
 	uint32_t	i;
 	t_edge		*to_print;
-
-	uint8_t	color;
+	uint32_t	color;
 
 	color = 0xff;
 	fill_printed_edges(data);

@@ -31,29 +31,38 @@ void	draw_sector(t_data *data, int i)
 
 t_edge	*find_next_to_print(t_data *data)
 {
-	t_edge		*closest;
 	uint32_t	i;
+	t_edge		*closest;
 	uint32_t	iclosest;
 	t_edge		*cur;
 
 	closest = NULL;
-	iclosest = 0;
+	iclosest = 1;
 	i = 0;
+
 	while (i < data->nb_printed_edges)
 	{
 		cur = data->printed_edges[i];
 		if (cur != NULL)
 		{
-			if (closest == NULL || cmp_edges_order(data, cur, closest) < 0)
+			if (closest == NULL || (cmp_edges_order(data, cur, closest) < 0 && cmp_edges_order(data, closest, cur) > 0))
 			{
+				if (!closest)
+					do_log("initialisizing at %d\n", cur->id);
+				else
+					do_log("Changing from %d to %d\n", closest->id, cur->id);
 				iclosest = i;
 				closest = cur;
+				// i = 0;
 			}
 		}
 		i++;
 	}
 	if (closest)
+	{
+		do_log("Electing : %d\n", closest->id);
 		data->printed_edges[iclosest] = NULL;
+	}
 	return (closest);
 }
 
@@ -62,7 +71,9 @@ void	draw_edges(t_data *data)
 	uint32_t	i;
 	t_edge		*to_print;
 	uint32_t	color;
+	t_vec2		p;
 
+	// color = get_color_code(0, 0, 255, 0);
 	color = 0xff;
 	fill_printed_edges(data);
 	i = 0;
@@ -74,8 +85,19 @@ void	draw_edges(t_data *data)
 			printf("Error : to_print is null\n");
 			exit(0);
 		}
+		// draw_line(&(t_ivec2){to_print->p1->x, to_print->p1->y}, &(t_ivec2){to_print->p2->x, to_print->p2->y}, &data->screen, color);
 		draw_line(&(t_ivec2){to_print->p1->x, to_print->p1->y}, &(t_ivec2){to_print->p2->x, to_print->p2->y}, &data->screen, get_color_code(color, color, color, 0));
+		// if (color == get_color_code(0, 0, 255, 0))
+			// color = get_color_code(255, 0, 0, 0);
+		// else
+			// color = 0;
 		color -= 0xff / data->nb_printed_edges;
+
+		p = (t_vec2){(to_print->p1->x + to_print->p2->x) / 2, (to_print->p1->y + to_print->p2->y) / 2};
+		char *str;
+		asprintf(&str, "%hu", to_print->id);
+		mlx_string_put(data->mlx.mlx_ptr, data->mlx.win_ptr, p.x - 8, p.y - 8, get_color_code(0, 255, 0, 0), str);
+
 		i++;
 	}
 }
@@ -108,9 +130,11 @@ int	loop(t_data *data)
 	handle_key_events(data);
 	if (data->need_update)
 	{
+		do_log("New image --------------------------------------------\n-----------------------\n");
 		// ft_mat4x4_set_look_at(data->look_at, data->player.pos, data->player.dir, (t_vec3){0, 0, 1});
+		mlx_clear_window(data->mlx.mlx_ptr, data->mlx.win_ptr);
 		// ft_mat4x4_mult(rez, data->look_at, data->projection);
-		fill_img(&data->screen, get_color_code(0, 0, 0, 0));
+		fill_img(&data->screen, get_color_code(0, 0, 0, 255));
 		fill_hash_pt_fov(data);
 		// check_projection_point(data);
 		project_points_on_normal(data);

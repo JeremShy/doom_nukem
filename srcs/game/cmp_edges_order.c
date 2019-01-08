@@ -7,9 +7,9 @@ uint8_t interval_intersect(float a1, float a2, float b1, float b2)
 
 		mini = fmin(a1, a2);
 		maxi = fmax(a1, a2);
-		if (b1 < mini && b2 < mini)
+		if (b1 <= mini && b2 <= mini)
 				return (0);
-		if (b1 > maxi && b2 > maxi)
+		if (b1 >= maxi && b2 >= maxi)
 				return (0);
 		return (1);
 }
@@ -23,6 +23,15 @@ uint8_t edges_intersect_x(t_data *data, t_edge *e1, t_edge *e2)
 
 		e1p1 = data->project_normal[e1->p1 - data->points];
 		e1p2 = data->project_normal[e1->p2 - data->points];
+
+		if (fmax(e1p1, e1p2) - fmin(e1p1, e1p2) >= M_PI)
+		{
+			if (e1p1 < 0)
+				e1p1 = M_PI + (M_PI + e1p1);
+			else
+				e1p2 = M_PI + (M_PI + e1p2);
+		}
+
 		e2p1 = data->project_normal[e2->p1 - data->points];
 		e2p2 = data->project_normal[e2->p2 - data->points];
 		return (interval_intersect(e1p1, e1p2, e2p1, e2p2));

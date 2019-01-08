@@ -29,15 +29,6 @@ uint8_t		project_points_on_normal(t_data *data)
 		point = ft_vec2_sub(data->points[i], (t_vec2){data->player.pos.x, data->player.pos.y});
 		ft_vec2_normalize(&point);
 		data->project_normal[i] = get_angle(dir, norm, point);
-		do_log("angle for point : %d - %f\n", i, data->project_normal[i]);
-		if (data->edges[9].p1 == &data->points[i])
-			do_log("p1 of 9 : %f\n", data->project_normal[i]);
-		if (data->edges[9].p2 == &data->points[i])
-			do_log("p2 of 9 : %f\n", data->project_normal[i]);
-		if (data->edges[15].p1 == &data->points[i])
-			do_log("p1 of 15 : %f\n", data->project_normal[i]);
-		if (data->edges[15].p2 == &data->points[i])
-			do_log("p2 of 15 : %f\n", data->project_normal[i]);
 		i++;
 	}
 	return (1);

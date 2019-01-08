@@ -89,7 +89,13 @@ int8_t		cmp_edges_order(t_data *data, t_edge *e1, t_edge *e2)
 	dot1 = ft_vec2_dot(normal, v1);
 	dot2 = ft_vec2_dot(normal, v2);
 
-	if (dot1 * dot2 * tmp < 0)
+	// if (dot1 == 0 || dot2 == 0)
+	// {
+		// printf("v1 = {%f, %f}\nv2 = {%f, %f}\ndot1 = %f, dot2 = %f\n", v1.x, v1.y, v2.x, v2.y, dot1, dot2);
+		// exit(0);
+	// }
+
+	if (dot1 * dot2 * tmp <= 0)
 	{
 		// if (e1->id == 9 || e1->id == 10 || e2->id == 9 || e2->id == 10)
 			do_log("Returning -1\n");

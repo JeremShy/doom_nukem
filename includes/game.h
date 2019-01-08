@@ -46,6 +46,16 @@ typedef struct			s_texture
 	uint32_t			*addr;
 }						t_texture;
 
+struct print_wall_data
+{
+	uint32_t			id_p1;
+	uint32_t			id_p2;
+	float				angle_p1;
+	float				angle_p2;
+	float				dist_p1;
+	float				dist_p2;
+};
+
 typedef struct			s_edge
 {
 	uint16_t			id;
@@ -92,6 +102,9 @@ typedef struct			s_data
 	int					deltatime;
 	int					lasttime;
 
+	uint16_t			sup[WIN_SIZE_X];
+	uint16_t			sdown[WIN_SIZE_X];
+
 	uint8_t				need_update;
 
 	uint8_t				key[MAX_KEY + 1];
@@ -130,7 +143,7 @@ typedef struct			s_data
 	t_mat4x4			look_at;
 	t_mat4x4			projection;
 
-	uint32_t				nb_printed_edges;
+	uint32_t			nb_printed_edges;
 	t_edge				*printed_edges[MAX_SECTOR_NBR * MAX_SECTOR_EDGES];
 }						t_data;
 
@@ -227,6 +240,11 @@ int						mouse_hook(int button, int x, int y, t_data *data);
 */
 float					get_angle_player_point(t_player *player, t_vec2 *point);
 void					fill_hash_pt_fov(t_data *data);
+
+/*
+** print_wall.c
+*/
+void	print_wall(t_data *data, t_edge *edge);
 
 /*
 ** projection_point.c

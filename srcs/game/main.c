@@ -42,7 +42,7 @@ static uint8_t	ft_mlx_init(t_data *data)
 
 void	init_data(t_data *data)
 {
-	struct timeval tp;
+	struct timeval	tp;
 
 	ft_mat4x4_set_rotation(data->mat_rot_dir_right, M_PI / 3, (t_vec3){0, 0, 1});
 	ft_mat4x4_set_rotation(data->mat_rot_dir_left, -M_PI / 3, (t_vec3){0, 0, 1});

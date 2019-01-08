@@ -8,11 +8,13 @@ void	handle_key_events(t_data *data)
 
 	if (data->key[KEY_LEFT])
 	{
+		ft_mat4x4_set_rotation(data->mat_rot_dir_left, -M_PI / 3 * (SPEED / 1000.f) * data->deltatime, (t_vec3){0, 0, 1});
 		data->player.dir = ft_vec4_to_vec3(ft_mat4x4_mult_with_vec4(data->mat_rot_dir_left, ft_vec3_to_vec4(data->player.dir)));
 		data->need_update = 1;
 	}
 	if (data->key[KEY_RIGHT])
 	{
+		ft_mat4x4_set_rotation(data->mat_rot_dir_right, M_PI / 3 * (SPEED / 1000.f) * data->deltatime, (t_vec3){0, 0, 1});
 		data->player.dir = ft_vec4_to_vec3(ft_mat4x4_mult_with_vec4(data->mat_rot_dir_right, ft_vec3_to_vec4(data->player.dir)));
 		data->need_update = 1;
 	}

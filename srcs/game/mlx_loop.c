@@ -73,7 +73,6 @@ void	draw_edges(t_data *data)
 	uint32_t	color;
 	t_vec2		p;
 
-	// color = get_color_code(0, 0, 255, 0);
 	color = 0xff;
 	fill_printed_edges(data);
 	i = 0;
@@ -85,19 +84,13 @@ void	draw_edges(t_data *data)
 			printf("Error : to_print is null\n");
 			exit(0);
 		}
-		// draw_line(&(t_ivec2){to_print->p1->x, to_print->p1->y}, &(t_ivec2){to_print->p2->x, to_print->p2->y}, &data->screen, color);
 		draw_line(&(t_ivec2){to_print->p1->x, to_print->p1->y}, &(t_ivec2){to_print->p2->x, to_print->p2->y}, &data->screen, get_color_code(color, color, color, 0));
-		// if (color == get_color_code(0, 0, 255, 0))
-			// color = get_color_code(255, 0, 0, 0);
-		// else
-			// color = 0;
-		color -= 0xff / data->nb_printed_edges;
-
 		p = (t_vec2){(to_print->p1->x + to_print->p2->x) / 2, (to_print->p1->y + to_print->p2->y) / 2};
 		char *str;
 		asprintf(&str, "%hu", to_print->id);
 		mlx_string_put(data->mlx.mlx_ptr, data->mlx.win_ptr, p.x - 8, p.y - 8, get_color_code(0, 255, 0, 0), str);
-
+		print_wall(data, to_print);
+		color -= 0xff / data->nb_printed_edges;
 		i++;
 	}
 }
@@ -122,6 +115,7 @@ int	loop(t_data *data)
 	struct timeval	tp;
 	static int		fps = 0;
 	static int		time = 0;
+	int				y;
 	// t_mat4x4		rez;
 
 	gettimeofday(&tp, NULL);
@@ -130,6 +124,13 @@ int	loop(t_data *data)
 	handle_key_events(data);
 	if (data->need_update)
 	{
+		ft_bzero(data->sup, sizeof(data->sup));
+		y = 0;
+		while (y < WIN_SIZE_X)
+		{
+			data->sdown[y] = WIN_SIZE_Y;
+			y++;
+		}
 		do_log("New image --------------------------------------------\n-----------------------\n");
 		// ft_mat4x4_set_look_at(data->look_at, data->player.pos, data->player.dir, (t_vec3){0, 0, 1});
 		mlx_clear_window(data->mlx.mlx_ptr, data->mlx.win_ptr);

@@ -80,5 +80,7 @@ float	ft_vec2_dot(const t_vec2 u, const t_vec2 v);
 float	ft_vec2_get_norme(const t_vec2 vector);
 void	ft_vec2_normalize(t_vec2 *vector);
 t_vec2	ft_vec2_get_normal(t_vec2 v);
+float	ft_vec2_get_angle(t_vec2 u, t_vec2 v);
+
 
 #endif

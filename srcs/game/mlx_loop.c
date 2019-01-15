@@ -89,7 +89,7 @@ void	draw_edges(t_data *data)
 		char *str;
 		asprintf(&str, "%hu", to_print->id);
 		mlx_string_put(data->mlx.mlx_ptr, data->mlx.win_ptr, p.x - 8, p.y - 8, get_color_code(0, 255, 0, 0), str);
-		print_wall(data, to_print);
+		to_print->id == 0 ? print_wall(data, to_print) : 0;
 		color -= 0xff / data->nb_printed_edges;
 		i++;
 	}

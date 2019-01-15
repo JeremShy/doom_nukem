@@ -1,5 +1,7 @@
 #include <game.h>
 
+// TODO : Virer les matrices de rotation
+
 void	handle_key_events(t_data *data)
 {
 	t_vec2	speed;

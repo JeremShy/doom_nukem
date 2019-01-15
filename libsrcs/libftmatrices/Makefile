@@ -52,7 +52,8 @@ SRC_NAME = ft_mat4x4_set_identity.c \
 			ft_vec2_add.c \
 			ft_vec2_dot.c \
 			ft_vec2_sub.c \
-			ft_vec2_get_normal.c
+			ft_vec2_get_normal.c \
+			ft_vec2_get_angle.c
 
 OBJ_PATH = ./obj/
 
